@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="3Dvis" targetName="cnf3d2" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3b41a777-1209-4e2c-bb9f-a83692706b6a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Graph.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Graph.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Graph.h" beforeDir="false" afterPath="$PROJECT_DIR$/Graph.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cnf3d2.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/cnf3d2.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CMakeLists.txt" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\Users\Cormac\OneDrive\Family\Cormac\College\NUIG\Masters\Visualisations\3dVis\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="Make.Settings">
+    <option name="path" value="\\wsl$\Ubuntu-18.04\usr\bin\make" />
+  </component>
+  <component name="ProjectId" id="1UXEjxYOEr9EfpwZKlPLm6mM2Eu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="cf.advertisement.text.has.clang-format" value="true" />
+    <property name="last_opened_file_path" value="//wsl$/Ubuntu-18.04/usr/bin/make" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+  </component>
+  <component name="RunManager" selected="CMake Application.Debug">
+    <configuration name="Debug" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="cnf3d2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="3Dvis" TARGET_NAME="cnf3d2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="3Dvis" RUN_TARGET_NAME="cnf3d2">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="clean" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="clean" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.Debug" />
+      <item itemvalue="CMake Application.cnf3d2" />
+      <item itemvalue="Makefile.clean" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile.clean" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b41a777-1209-4e2c-bb9f-a83692706b6a" name="Default Changelist" comment="" />
+      <created>1575494678742</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1575494678742</updated>
+      <workItem from="1575494680197" duration="6083000" />
+      <workItem from="1575639829141" duration="1098000" />
+      <workItem from="1579225106113" duration="17000" />
+      <workItem from="1583524830439" duration="1363000" />
+      <workItem from="1585416205923" duration="5618000" />
+      <workItem from="1585497405026" duration="17370000" />
+      <workItem from="1585933233672" duration="5414000" />
+      <workItem from="1586025175606" duration="2035000" />
+      <workItem from="1586106957748" duration="3181000" />
+      <workItem from="1586530527365" duration="7848000" />
+      <workItem from="1586541928609" duration="520000" />
+      <workItem from="1586542520963" duration="95000" />
+      <workItem from="1586542630669" duration="681000" />
+      <workItem from="1586621556496" duration="1537000" />
+      <workItem from="1586623406359" duration="6310000" />
+      <workItem from="1586703123465" duration="3440000" />
+      <workItem from="1586709655598" duration="2858000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="873" y="359" key="#Notifications" timestamp="1585512248263">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="873" y="359" key="#Notifications/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1585512248263" />
+    <state x="736" y="356" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586542693612">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="736" y="356" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1586542693612" />
+    <state x="1048" y="504" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586541654542">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1048" y="504" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1586541654542" />
+    <state x="961" y="429" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1586709630083">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="961" y="429" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1586709630083" />
+    <state x="1374" y="517" key="FileChooserDialogImpl" timestamp="1586542555818">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1374" y="517" key="FileChooserDialogImpl/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1586542555818" />
+    <state x="915" y="284" key="FileChooserDialogImpl/3840.1245.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1579225117192" />
+    <state x="782" y="343" key="SettingsEditor" timestamp="1586709688995">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="782" y="343" key="SettingsEditor/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1586709688995" />
+    <state x="782" y="343" key="SettingsEditor/3840.1099.1536.816/0.0.2560.1400/3840.18.1920.1040@0.0.2560.1400" timestamp="1586109872776" />
+    <state x="976" y="432" width="612" height="536" key="find.popup" timestamp="1586025188031">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="976" y="432" width="612" height="536" key="find.popup/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1586025188031" />
+  </component>
+</project>
