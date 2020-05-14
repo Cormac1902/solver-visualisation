@@ -2,6 +2,7 @@
 // Created by corma on 30-Apr-20.
 //
 
+#include <vtkCamera.h>
 #include <vtkProperty.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
@@ -55,8 +56,17 @@ void Display::display() {
 
         actor->GetProperty()->SetColor(colors->GetColor3d("White").GetData());
 
+        // actor->GetProperty()->BackfaceCullingOn();
+
+        vtkSmartPointer<vtkCamera> camera =
+                vtkSmartPointer<vtkCamera>::New();
+        camera->SetPosition(0, 0, 20);
+        camera->SetFocalPoint(0, 0, 0);
+
         vtkSmartPointer<vtkRenderer> renderer =
                 vtkSmartPointer<vtkRenderer>::New();
+
+        renderer->SetActiveCamera(camera);
 
         renderWindow->AddRenderer(renderer);
         vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =

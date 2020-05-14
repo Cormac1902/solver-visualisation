@@ -694,6 +694,20 @@ cstdlib
 vector
 -
 
+/home/cormac/VTK/Common/DataModel/vtkRect.h
+vtkVector.h
+/home/cormac/VTK/Common/DataModel/vtkVector.h
+vtkMath.h
+/home/cormac/VTK/Common/DataModel/vtkMath.h
+
+/home/cormac/VTK/Common/DataModel/vtkVector.h
+vtkObject.h
+/home/cormac/VTK/Common/DataModel/vtkObject.h
+vtkTuple.h
+/home/cormac/VTK/Common/DataModel/vtkTuple.h
+cmath
+-
+
 /home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
 vtkCommonExecutionModelModule.h
 /home/cormac/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
@@ -755,6 +769,14 @@ vtkActor.h
 /home/cormac/VTK/Rendering/Core/vtkActor.h
 vtkPropCollection.h
 /home/cormac/VTK/Rendering/Core/vtkPropCollection.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/VTK/Rendering/Core/vtkCamera.h
+vtkObject.h
+/home/cormac/VTK/Rendering/Core/vtkObject.h
+vtkRect.h
+/home/cormac/VTK/Rendering/Core/vtkRect.h
 vtkRenderingCoreModule.h
 /home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
 
@@ -893,6 +915,8 @@ include/kwiml/int.h
 /home/cormac/VTK/Utilities/KWIML/vtkkwiml/include/kwiml/int.h
 
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Display.cpp
+vtkCamera.h
+-
 vtkProperty.h
 -
 vtkRenderer.h

@@ -84,6 +84,8 @@ CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/DataModel/vtkLine.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPointSet.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyData.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyDataInternals.h
+CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/DataModel/vtkRect.h
+CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/DataModel/vtkVector.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Common/Math/vtkTuple.h
@@ -93,6 +95,7 @@ CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkAbstract
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkAbstractMapper3D.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkActor.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkActorCollection.h
+CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkCamera.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkInteractorObserver.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkInteractorStyle.h
 CMakeFiles/cnf3d2.dir/Display.cpp.o: /home/cormac/VTK/Rendering/Core/vtkMapper.h
