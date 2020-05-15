@@ -8,33 +8,33 @@
 		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\patches\;CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\patches\99\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug"/>
+				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug"/>
+				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="cnf3d2">
-				<Option output="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/cnf3d2" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug"/>
+			<Target title="s_vis">
+				<Option output="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/s_vis" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="0"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add option="-DvtkRenderingCore_AUTOINIT_INCLUDE=&quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/CMakeFiles/vtkModuleAutoInit_ef581ebbf3812c41155eb6cbf7fd17d1.h&quot;"/>
+					<Add option="-DvtkRenderingCore_AUTOINIT_INCLUDE=&quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/vtkModuleAutoInit_ef581ebbf3812c41155eb6cbf7fd17d1.h&quot;"/>
 					<Add directory="/home/cormac/VTK-build/Common/Color"/>
 					<Add directory="/home/cormac/VTK/Common/Color"/>
 					<Add directory="/home/cormac/VTK-build/Common/Core"/>
@@ -89,20 +89,20 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 cnf3d2"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 s_vis"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="cnf3d2/fast">
-				<Option output="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/cnf3d2" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug"/>
+			<Target title="s_vis/fast">
+				<Option output="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/s_vis" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="0"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add option="-DvtkRenderingCore_AUTOINIT_INCLUDE=&quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/CMakeFiles/vtkModuleAutoInit_ef581ebbf3812c41155eb6cbf7fd17d1.h&quot;"/>
+					<Add option="-DvtkRenderingCore_AUTOINIT_INCLUDE=&quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/vtkModuleAutoInit_ef581ebbf3812c41155eb6cbf7fd17d1.h&quot;"/>
 					<Add directory="/home/cormac/VTK-build/Common/Color"/>
 					<Add directory="/home/cormac/VTK/Common/Color"/>
 					<Add directory="/home/cormac/VTK-build/Common/Core"/>
@@ -157,132 +157,132 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 cnf3d2/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 s_vis/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug"/>
+				<Option working_dir="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Display.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Display.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Graph.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Graph.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Interaction.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Interaction.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/InteractionCallback.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/InteractionCallback.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Node.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Node.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/SceneParameters.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/SceneParameters.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/SpaceGrid.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/SpaceGrid.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Vector.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Vector.h">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cnf3d2.cpp">
-			<Option target="cnf3d2"/>
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cnf3d2.cpp">
+			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/CMakeLists.txt">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/vtk-config-version.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/vtk-config-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/vtk-config.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/vtk-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/VTK-targets.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/VTK-targets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/VTK-vtk-module-find-packages.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/VTK-vtk-module-find-packages.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/VTK-vtk-module-properties.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/VTK-vtk-module-properties.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtk-config.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtk-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtk-find-package-helpers.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtk-find-package-helpers.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtk-prefix.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtk-prefix.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkCMakeBackports.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkCMakeBackports.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkEncodeString.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkEncodeString.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkExternalData.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkExternalData.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkHashSource.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkHashSource.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkModule.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkModule.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkModuleJson.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkModuleJson.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkModuleTesting.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkModuleTesting.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkObjectFactory.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkObjectFactory.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkTopologicalSort.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/vtkTopologicalSort.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/patches/99/FindOpenGL.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/patches/99/FindOpenGL.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\patches\99\"/>
 		</Unit>
-		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/patches/99/FindX11.cmake">
+		<Unit filename="/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/../../../../../../../../../../../../home/cormac/VTK-build/lib/cmake/vtk-9.0/patches/99/FindX11.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\..\..\..\..\home\cormac\VTK-build\lib\cmake\vtk-9.0\patches\99\"/>
 		</Unit>
 	</Project>

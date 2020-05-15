@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis
+CMAKE_SOURCE_DIR = /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/CMakeFiles /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named cnf3d2
+# Target rules for targets named s_vis
 
 # Build rule for target.
-cnf3d2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cnf3d2
-.PHONY : cnf3d2
+s_vis: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 s_vis
+.PHONY : s_vis
 
 # fast build rule for target.
-cnf3d2/fast:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/build
-.PHONY : cnf3d2/fast
+s_vis/fast:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/build
+.PHONY : s_vis/fast
 
 Display.o: Display.cpp.o
 
@@ -129,7 +129,7 @@ Display.o: Display.cpp.o
 
 # target to build an object file
 Display.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Display.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Display.cpp.o
 .PHONY : Display.cpp.o
 
 Display.i: Display.cpp.i
@@ -138,7 +138,7 @@ Display.i: Display.cpp.i
 
 # target to preprocess a source file
 Display.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Display.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Display.cpp.i
 .PHONY : Display.cpp.i
 
 Display.s: Display.cpp.s
@@ -147,7 +147,7 @@ Display.s: Display.cpp.s
 
 # target to generate assembly for a file
 Display.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Display.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Display.cpp.s
 .PHONY : Display.cpp.s
 
 Graph.o: Graph.cpp.o
@@ -156,7 +156,7 @@ Graph.o: Graph.cpp.o
 
 # target to build an object file
 Graph.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Graph.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Graph.cpp.o
 .PHONY : Graph.cpp.o
 
 Graph.i: Graph.cpp.i
@@ -165,7 +165,7 @@ Graph.i: Graph.cpp.i
 
 # target to preprocess a source file
 Graph.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Graph.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Graph.cpp.i
 .PHONY : Graph.cpp.i
 
 Graph.s: Graph.cpp.s
@@ -174,7 +174,7 @@ Graph.s: Graph.cpp.s
 
 # target to generate assembly for a file
 Graph.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Graph.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Graph.cpp.s
 .PHONY : Graph.cpp.s
 
 Interaction.o: Interaction.cpp.o
@@ -183,7 +183,7 @@ Interaction.o: Interaction.cpp.o
 
 # target to build an object file
 Interaction.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Interaction.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Interaction.cpp.o
 .PHONY : Interaction.cpp.o
 
 Interaction.i: Interaction.cpp.i
@@ -192,7 +192,7 @@ Interaction.i: Interaction.cpp.i
 
 # target to preprocess a source file
 Interaction.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Interaction.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Interaction.cpp.i
 .PHONY : Interaction.cpp.i
 
 Interaction.s: Interaction.cpp.s
@@ -201,7 +201,7 @@ Interaction.s: Interaction.cpp.s
 
 # target to generate assembly for a file
 Interaction.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Interaction.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Interaction.cpp.s
 .PHONY : Interaction.cpp.s
 
 InteractionCallback.o: InteractionCallback.cpp.o
@@ -210,7 +210,7 @@ InteractionCallback.o: InteractionCallback.cpp.o
 
 # target to build an object file
 InteractionCallback.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/InteractionCallback.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/InteractionCallback.cpp.o
 .PHONY : InteractionCallback.cpp.o
 
 InteractionCallback.i: InteractionCallback.cpp.i
@@ -219,7 +219,7 @@ InteractionCallback.i: InteractionCallback.cpp.i
 
 # target to preprocess a source file
 InteractionCallback.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/InteractionCallback.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/InteractionCallback.cpp.i
 .PHONY : InteractionCallback.cpp.i
 
 InteractionCallback.s: InteractionCallback.cpp.s
@@ -228,7 +228,7 @@ InteractionCallback.s: InteractionCallback.cpp.s
 
 # target to generate assembly for a file
 InteractionCallback.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/InteractionCallback.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/InteractionCallback.cpp.s
 .PHONY : InteractionCallback.cpp.s
 
 Node.o: Node.cpp.o
@@ -237,7 +237,7 @@ Node.o: Node.cpp.o
 
 # target to build an object file
 Node.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Node.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Node.cpp.o
 .PHONY : Node.cpp.o
 
 Node.i: Node.cpp.i
@@ -246,7 +246,7 @@ Node.i: Node.cpp.i
 
 # target to preprocess a source file
 Node.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Node.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Node.cpp.i
 .PHONY : Node.cpp.i
 
 Node.s: Node.cpp.s
@@ -255,7 +255,7 @@ Node.s: Node.cpp.s
 
 # target to generate assembly for a file
 Node.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Node.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Node.cpp.s
 .PHONY : Node.cpp.s
 
 SceneParameters.o: SceneParameters.cpp.o
@@ -264,7 +264,7 @@ SceneParameters.o: SceneParameters.cpp.o
 
 # target to build an object file
 SceneParameters.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/SceneParameters.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SceneParameters.cpp.o
 .PHONY : SceneParameters.cpp.o
 
 SceneParameters.i: SceneParameters.cpp.i
@@ -273,7 +273,7 @@ SceneParameters.i: SceneParameters.cpp.i
 
 # target to preprocess a source file
 SceneParameters.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/SceneParameters.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SceneParameters.cpp.i
 .PHONY : SceneParameters.cpp.i
 
 SceneParameters.s: SceneParameters.cpp.s
@@ -282,7 +282,7 @@ SceneParameters.s: SceneParameters.cpp.s
 
 # target to generate assembly for a file
 SceneParameters.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/SceneParameters.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SceneParameters.cpp.s
 .PHONY : SceneParameters.cpp.s
 
 SpaceGrid.o: SpaceGrid.cpp.o
@@ -291,7 +291,7 @@ SpaceGrid.o: SpaceGrid.cpp.o
 
 # target to build an object file
 SpaceGrid.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/SpaceGrid.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SpaceGrid.cpp.o
 .PHONY : SpaceGrid.cpp.o
 
 SpaceGrid.i: SpaceGrid.cpp.i
@@ -300,7 +300,7 @@ SpaceGrid.i: SpaceGrid.cpp.i
 
 # target to preprocess a source file
 SpaceGrid.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/SpaceGrid.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SpaceGrid.cpp.i
 .PHONY : SpaceGrid.cpp.i
 
 SpaceGrid.s: SpaceGrid.cpp.s
@@ -309,7 +309,7 @@ SpaceGrid.s: SpaceGrid.cpp.s
 
 # target to generate assembly for a file
 SpaceGrid.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/SpaceGrid.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SpaceGrid.cpp.s
 .PHONY : SpaceGrid.cpp.s
 
 Vector.o: Vector.cpp.o
@@ -318,7 +318,7 @@ Vector.o: Vector.cpp.o
 
 # target to build an object file
 Vector.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Vector.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Vector.cpp.o
 .PHONY : Vector.cpp.o
 
 Vector.i: Vector.cpp.i
@@ -327,7 +327,7 @@ Vector.i: Vector.cpp.i
 
 # target to preprocess a source file
 Vector.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Vector.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Vector.cpp.i
 .PHONY : Vector.cpp.i
 
 Vector.s: Vector.cpp.s
@@ -336,7 +336,7 @@ Vector.s: Vector.cpp.s
 
 # target to generate assembly for a file
 Vector.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/Vector.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Vector.cpp.s
 .PHONY : Vector.cpp.s
 
 cnf3d2.o: cnf3d2.cpp.o
@@ -345,7 +345,7 @@ cnf3d2.o: cnf3d2.cpp.o
 
 # target to build an object file
 cnf3d2.cpp.o:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/cnf3d2.cpp.o
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/cnf3d2.cpp.o
 .PHONY : cnf3d2.cpp.o
 
 cnf3d2.i: cnf3d2.cpp.i
@@ -354,7 +354,7 @@ cnf3d2.i: cnf3d2.cpp.i
 
 # target to preprocess a source file
 cnf3d2.cpp.i:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/cnf3d2.cpp.i
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/cnf3d2.cpp.i
 .PHONY : cnf3d2.cpp.i
 
 cnf3d2.s: cnf3d2.cpp.s
@@ -363,7 +363,7 @@ cnf3d2.s: cnf3d2.cpp.s
 
 # target to generate assembly for a file
 cnf3d2.cpp.s:
-	$(MAKE) -f CMakeFiles/cnf3d2.dir/build.make CMakeFiles/cnf3d2.dir/cnf3d2.cpp.s
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/cnf3d2.cpp.s
 .PHONY : cnf3d2.cpp.s
 
 # Help Target
@@ -373,7 +373,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... cnf3d2"
+	@echo "... s_vis"
 	@echo "... edit_cache"
 	@echo "... Display.o"
 	@echo "... Display.i"

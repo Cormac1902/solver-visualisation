@@ -914,7 +914,7 @@ inttypes.h
 include/kwiml/int.h
 /home/cormac/VTK/Utilities/KWIML/vtkkwiml/include/kwiml/int.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Display.cpp
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp
 vtkCamera.h
 -
 vtkProperty.h
@@ -928,13 +928,13 @@ vtkNamedColors.h
 vtkLine.h
 -
 Display.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Display.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
 Graph.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Graph.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 Interaction.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Interaction.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Display.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
 vtkVertexGlyphFilter.h
 -
 vtkPolyDataMapper.h
@@ -942,9 +942,9 @@ vtkPolyDataMapper.h
 vtkRenderWindow.h
 -
 Graph.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Graph.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Graph.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 map
 -
 vector
@@ -954,23 +954,23 @@ vtkSmartPointer.h
 vtkPolyData.h
 -
 Node.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Node.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Interaction.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
 vtkInteractorStyleTrackballCamera.h
 -
 vtkObjectFactory.h
 -
 vtkRenderWindowInteractor.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/vtkRenderWindowInteractor.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/vtkRenderWindowInteractor.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Node.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 set
 -
 Vector.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Vector.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/3dVis/Vector.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
 math.h
 -
 ostream

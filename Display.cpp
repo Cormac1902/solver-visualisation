@@ -48,13 +48,20 @@ void Display::display() {
         vtkSmartPointer<vtkActor> actor =
                 vtkSmartPointer<vtkActor>::New();
         actor->SetMapper(mapper);
-        actor->GetProperty()->SetPointSize(10);
-        actor->GetProperty()->SetLineWidth(5);
 
         vtkSmartPointer<vtkNamedColors> colors =
                 vtkSmartPointer<vtkNamedColors>::New();
 
-        actor->GetProperty()->SetColor(colors->GetColor3d("White").GetData());
+        actor->GetProperty()->SetColor(colors->GetColor3d("cyan_white").GetData());
+
+        actor->GetProperty()->SetEdgeVisibility(1);
+        actor->GetProperty()->SetEdgeColor(0.9,0.9,0.4);
+        actor->GetProperty()->SetLineWidth(12);
+        actor->GetProperty()->SetPointSize(24);
+        actor->GetProperty()->SetRenderLinesAsTubes(1);
+        actor->GetProperty()->SetRenderPointsAsSpheres(1);
+        actor->GetProperty()->SetVertexVisibility(1);
+        actor->GetProperty()->SetVertexColor(0.5,1.0,0.8);
 
         // actor->GetProperty()->BackfaceCullingOn();
 
@@ -234,7 +241,16 @@ void Display::reshape(int w, int h) {
 
 void Display::changeGraph(int i) {
 
-    std::cout << "Displaying graph " << i + 1 << std::endl;
+    std::string graphMessage;
+
+    if (i == 0) {
+        graphMessage = "non-coarsened graph";
+    } else {
+        graphMessage = "coarsened graph ";
+        graphMessage.append(std::to_string(i));
+    }
+    std::cout << "Displaying " << graphMessage << std::endl;
+
             // layout & display next finer graph
     // graph_stack[i]->init_positions_from_graph(graph_stack[i + 1], k);
     //      graph_stack[curr_L]->init_positions_at_random();

@@ -40,7 +40,7 @@ find_package(VTK COMPONENTS
         RenderingOpenGL2
         InteractionStyle)
 
-add_executable(cnf3d2 MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
+add_executable(s_vis MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
 
 if (VTK_FOUND)
     message(STATUS "VTK_VERSION: ${VTK_VERSION}")
@@ -50,15 +50,15 @@ if (VTK_FOUND)
     else ()
         # vtk_module_autoinit is needed
         vtk_module_autoinit(
-                TARGETS cnf3d2
+                TARGETS s_vis
                 MODULES ${VTK_LIBRARIES}
         )
     endif ()
-    target_link_libraries(cnf3d2 PRIVATE ${VTK_LIBRARIES})
+    target_link_libraries(s_vis PRIVATE ${VTK_LIBRARIES})
 else ()
     message("Skipping VTK ${VTK_NOT_FOUND_MESSAGE}")
 endif ()
 
-target_link_libraries(cnf3d2 PRIVATE
+target_link_libraries(s_vis PRIVATE
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES})
