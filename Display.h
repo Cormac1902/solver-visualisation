@@ -11,21 +11,13 @@
 #include "Graph.h"
 
 class Display {
-//    static vtkSmartPointer<vtkVertexGlyphFilter> vertexFilter;
-//    static vtkSmartPointer<vtkPolyData> polydata;
     static vtkSmartPointer<vtkPolyDataMapper> mapper;
     static vtkSmartPointer<vtkRenderWindow> renderWindow;
 
     static void display();
     static void switchDisplay();
     static void setupNodes(Graph3D *g);
-
-    static void motion(int x, int y);
-    static void mouse(int button, int state, int x, int y);
-    static void reshape(int w, int h);
-    static void idle();
-    static void changeGraph(int i);
-    static void keyboard(unsigned char key, int x, int y);
+    static void changeGraph(unsigned i);
 
     friend class Interaction;
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
-project(3Dvis)
+project(solver-visualisation)
 
 set(SOURCE_FILES Vector.cpp
         Node.cpp
