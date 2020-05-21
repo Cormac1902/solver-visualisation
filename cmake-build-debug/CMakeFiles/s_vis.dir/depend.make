@@ -234,7 +234,6 @@ CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Utilities/KWIML/vtkkwiml/int.
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../Graph.cpp
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../Graph.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../Node.h
-CMakeFiles/s_vis.dir/Graph.cpp.o: ../SceneParameters.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../SpaceGrid.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../Vector.h
 
@@ -381,9 +380,6 @@ CMakeFiles/s_vis.dir/InteractionCallback.cpp.o: ../InteractionCallback.h
 CMakeFiles/s_vis.dir/Node.cpp.o: ../Node.cpp
 CMakeFiles/s_vis.dir/Node.cpp.o: ../Node.h
 CMakeFiles/s_vis.dir/Node.cpp.o: ../Vector.h
-
-CMakeFiles/s_vis.dir/SceneParameters.cpp.o: ../SceneParameters.cpp
-CMakeFiles/s_vis.dir/SceneParameters.cpp.o: ../SceneParameters.h
 
 CMakeFiles/s_vis.dir/SpaceGrid.cpp.o: ../Node.h
 CMakeFiles/s_vis.dir/SpaceGrid.cpp.o: ../SpaceGrid.cpp

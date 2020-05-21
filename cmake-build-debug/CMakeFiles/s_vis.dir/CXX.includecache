@@ -54,7 +54,15 @@ vtkTypeList.h
 vtkAutoInit.h
 /home/cormac/VTK-build/Filters/Core/vtkAutoInit.h
 
+/home/cormac/VTK-build/Filters/General/vtkFiltersGeneralModule.h
+
 /home/cormac/VTK-build/Filters/Sources/vtkFiltersSourcesModule.h
+
+/home/cormac/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK-build/Interaction/Style/vtkRenderingCoreModule.h
+vtkAutoInit.h
+/home/cormac/VTK-build/Interaction/Style/vtkAutoInit.h
 
 /home/cormac/VTK-build/Rendering/Core/vtkRenderingCoreModule.h
 vtkFiltersCoreModule.h
@@ -111,6 +119,12 @@ vtkObjectFactory.h
 /home/cormac/VTK/Common/Core/vtkObjectFactory.h
 algorithm
 -
+
+/home/cormac/VTK/Common/Core/vtkCallbackCommand.h
+vtkCommand.h
+/home/cormac/VTK/Common/Core/vtkCommand.h
+vtkCommonCoreModule.h
+/home/cormac/VTK/Common/Core/vtkCommonCoreModule.h
 
 /home/cormac/VTK/Common/Core/vtkCollection.h
 vtkCommonCoreModule.h
@@ -578,6 +592,12 @@ vtkConfigure.h
 windows.h
 -
 
+/home/cormac/VTK/Common/Core/vtkWindow.h
+vtkCommonCoreModule.h
+/home/cormac/VTK/Common/Core/vtkCommonCoreModule.h
+vtkObject.h
+/home/cormac/VTK/Common/Core/vtkObject.h
+
 /home/cormac/VTK/Common/Core/vtkWrappingHints.h
 
 /home/cormac/VTK/Common/DataModel/vtkAbstractCellLinks.h
@@ -724,6 +744,20 @@ cstdlib
 vector
 -
 
+/home/cormac/VTK/Common/DataModel/vtkRect.h
+vtkVector.h
+/home/cormac/VTK/Common/DataModel/vtkVector.h
+vtkMath.h
+/home/cormac/VTK/Common/DataModel/vtkMath.h
+
+/home/cormac/VTK/Common/DataModel/vtkVector.h
+vtkObject.h
+/home/cormac/VTK/Common/DataModel/vtkObject.h
+vtkTuple.h
+/home/cormac/VTK/Common/DataModel/vtkTuple.h
+cmath
+-
+
 /home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
 vtkCommonExecutionModelModule.h
 /home/cormac/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
@@ -750,11 +784,23 @@ cmath
 cstdlib
 -
 
+/home/cormac/VTK/Filters/General/vtkVertexGlyphFilter.h
+vtkFiltersGeneralModule.h
+/home/cormac/VTK/Filters/General/vtkFiltersGeneralModule.h
+vtkPolyDataAlgorithm.h
+/home/cormac/VTK/Filters/General/vtkPolyDataAlgorithm.h
+
 /home/cormac/VTK/Filters/Sources/vtkPointSource.h
 vtkFiltersSourcesModule.h
 /home/cormac/VTK/Filters/Sources/vtkFiltersSourcesModule.h
 vtkPolyDataAlgorithm.h
 /home/cormac/VTK/Filters/Sources/vtkPolyDataAlgorithm.h
+
+/home/cormac/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
+vtkInteractionStyleModule.h
+/home/cormac/VTK/Interaction/Style/vtkInteractionStyleModule.h
+vtkInteractorStyle.h
+/home/cormac/VTK/Interaction/Style/vtkInteractorStyle.h
 
 /home/cormac/VTK/Rendering/Core/vtkAbstractMapper.h
 vtkAlgorithm.h
@@ -779,6 +825,26 @@ vtkActor.h
 /home/cormac/VTK/Rendering/Core/vtkActor.h
 vtkPropCollection.h
 /home/cormac/VTK/Rendering/Core/vtkPropCollection.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/VTK/Rendering/Core/vtkCamera.h
+vtkObject.h
+/home/cormac/VTK/Rendering/Core/vtkObject.h
+vtkRect.h
+/home/cormac/VTK/Rendering/Core/vtkRect.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/VTK/Rendering/Core/vtkInteractorObserver.h
+vtkObject.h
+/home/cormac/VTK/Rendering/Core/vtkObject.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/VTK/Rendering/Core/vtkInteractorStyle.h
+vtkInteractorObserver.h
+/home/cormac/VTK/Rendering/Core/vtkInteractorObserver.h
 vtkRenderingCoreModule.h
 /home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
 
@@ -821,6 +887,26 @@ vtkRenderingCoreModule.h
 /home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
 vtkProp.h
 /home/cormac/VTK/Rendering/Core/vtkProp.h
+
+/home/cormac/VTK/Rendering/Core/vtkProperty.h
+vtkObject.h
+/home/cormac/VTK/Rendering/Core/vtkObject.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
+map
+-
+string
+-
+
+/home/cormac/VTK/Rendering/Core/vtkRenderWindow.h
+vtkNew.h
+/home/cormac/VTK/Rendering/Core/vtkNew.h
+vtkRenderingCoreModule.h
+/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
+vtkSmartPointer.h
+/home/cormac/VTK/Rendering/Core/vtkSmartPointer.h
+vtkWindow.h
+/home/cormac/VTK/Rendering/Core/vtkWindow.h
 
 /home/cormac/VTK/Rendering/Core/vtkRenderWindowInteractor.h
 vtkCommand.h
@@ -884,6 +970,34 @@ inttypes.h
 include/kwiml/int.h
 /home/cormac/VTK/Utilities/KWIML/vtkkwiml/include/kwiml/int.h
 
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp
+vtkCamera.h
+-
+vtkProperty.h
+-
+vtkRenderer.h
+-
+vtkRenderWindowInteractor.h
+-
+vtkNamedColors.h
+-
+vtkLine.h
+-
+Display.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+Interaction.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+vtkVertexGlyphFilter.h
+-
+vtkPolyDataMapper.h
+-
+vtkRenderWindow.h
+-
+Graph.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
+
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.cpp
 iostream
 -
@@ -899,8 +1013,6 @@ Graph.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 SpaceGrid.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h
-SceneParameters.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.h
 vtkCellArray.h
 -
 vtkPoints.h
@@ -940,15 +1052,45 @@ vtkPolyData.h
 Node.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.cpp
+Interaction.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+Display.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+vtkInteractorStyleTrackballCamera.h
+-
+vtkObjectFactory.h
+-
+vtkRenderWindowInteractor.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/vtkRenderWindowInteractor.h
+
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.cpp
+InteractionCallback.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.h
+
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.h
+vtkCallbackCommand.h
+-
+vtkRenderWindowInteractor.h
+-
+Interaction.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.cpp
+Node.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
+
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 set
 -
 Vector.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
 
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.h
-GL/glut.h
--
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.cpp
+SpaceGrid.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h
 
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h
 vector
@@ -958,9 +1100,19 @@ map
 Node.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.cpp
+cstdlib
+-
+Vector.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
+
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
 math.h
 -
 ostream
 -
+
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cnf3d2.cpp
+Display.h
+/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
 

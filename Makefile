@@ -27,8 +27,7 @@ realclean: clean
 
 
 # dependencies generated with 'make depend'
-Graph.o: Graph.cpp Graph.h Node.h Vector.h SpaceGrid.h SceneParameters.h
+Graph.o: Graph.cpp Graph.h Node.h Vector.h SpaceGrid.h
 Node.o: Node.cpp Node.h Vector.h
-SceneParameters.o: SceneParameters.cpp SceneParameters.h
 SpaceGrid.o: SpaceGrid.cpp SpaceGrid.h Node.h Vector.h
 Vector.o: Vector.cpp Vector.h

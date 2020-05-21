@@ -5,7 +5,6 @@
 #include <cassert>
 #include "Graph.h"
 #include "SpaceGrid.h"
-#include "SceneParameters.h"
 #include <vtkCellArray.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
@@ -24,7 +23,7 @@
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
-void Graph3D::add_node(const Node3D& n) {
+void Graph3D::add_node(const Node3D &n) {
     assert(nodes.find(n.id()) == nodes.end()); // node not already present
 
     nodes[n.id()] = n;
@@ -42,7 +41,7 @@ void Graph3D::add_match(int node, int matched) {
     }
 }
 
-void Graph3D::insert_edge(int x, int y, EdgeAttribute a) {
+void Graph3D::insert_edge(long x, long y, EdgeAttribute a) {
     // assertion: nodes x and y exist
     assert(nodes.find(x) != nodes.end() && nodes.find(y) != nodes.end());
 
@@ -90,17 +89,17 @@ void Graph3D::build_from_cnf(istream &is) {
 
         if (!clause.empty()) {
             // insert nodes
-            for (vector<long>::iterator i = clause.begin(); i != clause.end(); i++)
-                if (nodes.find(*i) == nodes.end()) { // node not yet present
-                    n.set_id(*i);
+            for (long &i : clause)
+                if (nodes.find(i) == nodes.end()) { // node not yet present
+                    n.set_id(i);
                     add_node(n);
                     allMatching[n.id()] = {};
                 }
 
             // insert edges
             EdgeAttribute a = (clause.size() == 2 ? NT_2_CLAUSE : NT_3_PLUS_CLAUSE);
-            for (vector<long>::iterator i = clause.begin(); i != clause.end(); i++)
-                for (vector<long>::iterator j = clause.begin(); j != i; j++)
+            for (auto i = clause.begin(); i != clause.end(); i++)
+                for (auto j = clause.begin(); j != i; j++)
                     if (*i != *j)
                         insert_edge(*i, *j, a);
         }
@@ -137,10 +136,9 @@ int Graph3D::independent_components(vector<int> *one_of_each_component) {
             Node3D *node = node_stack.top();
             node_stack.pop();
             node->mark = 1;
-            for (set<ExtNode3D>::iterator i = node->neighbors().begin();
-                 i != node->neighbors().end(); i++) {
-                if (i->first->mark == 0)
-                    node_stack.push(i->first);
+            for (const auto &i : node->neighbors()) {
+                if (i.first->mark == 0)
+                    node_stack.push(i.first);
             }
         }
     }
@@ -152,7 +150,7 @@ int Graph3D::independent_components(vector<int> *one_of_each_component) {
     return nr_components;
 }
 
-Graph3D *Graph3D::coarsen(void) {
+Graph3D *Graph3D::coarsen() {
     map<int, Node3D>::iterator i;
     set<ExtNode3D>::iterator j;
     int curr_min_weight;
@@ -164,7 +162,7 @@ Graph3D *Graph3D::coarsen(void) {
         if (node_1.mark != 0)
             continue;   // already paired
         curr_min_weight = INT_MAX;
-        curr_min_weight_node = NULL;
+        curr_min_weight_node = nullptr;
         for (j = node_1.neighbors().begin(); j != node_1.neighbors().end(); j++) {
             // search 'best' matching neighbor, i.e. one with lowest weight
             Node3D *node_2_ptr = j->first;
@@ -175,7 +173,7 @@ Graph3D *Graph3D::coarsen(void) {
                 curr_min_weight_node = node_2_ptr;
             }
         }
-        if (curr_min_weight_node == NULL)
+        if (curr_min_weight_node == nullptr)
             curr_min_weight_node = &node_1; // no partner found: match node with itself
 
         // enter pairing
@@ -207,7 +205,7 @@ Graph3D *Graph3D::coarsen(void) {
 
     }
     // b) set up edges
-    int new_node_1_id, new_node_2_id;
+    long new_node_1_id, new_node_2_id;
     for (i = nodes.begin(); i != nodes.end(); i++) {
         Node3D &node = i->second;
         k = matching.find(node.id());
@@ -223,15 +221,15 @@ Graph3D *Graph3D::coarsen(void) {
     return result;
 }
 
-void Graph3D::init_positions_at_random(void) {
-    for (map<int, Node3D>::iterator i = nodes.begin(); i != nodes.end(); i++)
-        i->second.set_pos(Vector3D::init_random());
+void Graph3D::init_positions_at_random() {
+    for (auto &node : nodes)
+        node.second.set_pos(Vector3D::init_random());
 }
 
 void Graph3D::init_coarsest_graph_positions(double k) {
     assert(nodes.size() == 2);
 
-    map<int, Node3D>::iterator i = nodes.begin();
+    auto i = nodes.begin();
     i->second.set_pos(-k / 2.0, 0.0, 0.0);
     i++;
     i->second.set_pos(k / 2.0, 0.0, 0.0);
@@ -244,17 +242,16 @@ void Graph3D::init_positions_from_graph(Graph3D *g, double k) {
     Vector3D offset;
     auto f_k = 0.001 * k;
 
-    for (auto i = matching.begin(); i != matching.end(); i++) {
+    for (auto &i : matching) {
         // copy already computed positions
-        if (i->first == i->second) {
-            nodes[i->first].set_pos(g->nodes[i->second].position());
-            cout << "same: " << g->nodes[i->second].position() << endl;
-        }
-        else {
+        if (i.first == i.second) {
+            nodes[i.first].set_pos(g->nodes[i.second].position());
+            cout << "same: " << g->nodes[i.second].position() << endl;
+        } else {
             offset = f_k * Vector3D::init_random().normalize();
-            nodes[i->first].set_pos(g->nodes[i->second].position() + offset);
-            nodes[i->second].set_pos(g->nodes[i->second].position() - offset);
-            cout << "offset: " << g->nodes[i->second].position() + offset << endl;
+            nodes[i.first].set_pos(g->nodes[i.second].position() + offset);
+            nodes[i.second].set_pos(g->nodes[i.second].position() - offset);
+            cout << "offset: " << g->nodes[i.second].position() + offset << endl;
         }
     }
 
@@ -300,12 +297,11 @@ void Graph3D::compute_layout(double k) {
             // calculate (global) repulsive forces
 #ifdef USE_SPACE_GRID
             grid_neighbors = sg.find_neighbors(&v);
-            for (auto j = grid_neighbors.begin();
-                 j != grid_neighbors.end(); j++)
-                if (*j != &i->second) {  // |delta| <= R is not enforced! (better layout quality)
-                    delta = (*j)->position() - v.position();
+            for (auto & grid_neighbor : grid_neighbors)
+                if (grid_neighbor != &i->second) {  // |delta| <= R is not enforced! (better layout quality)
+                    delta = grid_neighbor->position() - v.position();
                     // cout << "delta: " << delta <<  endl;
-                    f_r = f_r_aux * (*j)->weight() / delta.norm();
+                    f_r = f_r_aux * grid_neighbor->weight() / delta.norm();
                     // cout << "fr: " << f_r <<  endl;
                     theta += f_r * delta.normalize();
                     // cout << "theta: " << theta <<  endl;
@@ -345,7 +341,7 @@ void Graph3D::compute_layout(double k) {
     }
 }
 
-pair<Vector3D, Vector3D> Graph3D::compute_extremal_points(void) {
+pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
     Vector3D curr_min(DBL_MAX, DBL_MAX, DBL_MAX), curr_max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
     map<int, Node3D>::iterator i;
 
@@ -372,7 +368,7 @@ pair<Vector3D, Vector3D> Graph3D::compute_extremal_points(void) {
 
 // move all points p to q = a * p + b for a vector b and a float a
 
-void Graph3D::rescale(double a, Vector3D b) {
+void Graph3D::rescale(double a, const Vector3D& b) {
     map<int, Node3D>::iterator i;
     for (i = nodes.begin(); i != nodes.end(); i++) {
         Node3D &n = i->second;
@@ -380,72 +376,7 @@ void Graph3D::rescale(double a, Vector3D b) {
     }
 }
 
-void Graph3D::draw3D(double k, bool draw_edges, bool draw_only_2clauses,
-                     bool adaptive_node_size) {
-    map<int, Node3D>::const_iterator i;
-    set<ExtNode3D>::iterator j;
-    GLUquadricObj *quad;
-    Vector3D dir_vec, rot_axis, unit_z(0.0, 0.0, 1.0);
-    double angle;
-
-    // draw edges
-    if (draw_edges) {
-        quad = gluNewQuadric();
-        for (i = nodes.begin(); i != nodes.end(); i++) {
-            const Node3D &u = i->second;
-            const set<ExtNode3D> &neighbors = u.neighbors();
-            for (j = neighbors.begin(); j != neighbors.end(); j++) {
-                const Node3D *vp = j->first;
-                if (u.id() < vp->id()) { // draw edges only in direction of incr. ids; no self-edg.
-                    const Vector3D &u_pos = u.position();
-                    const Vector3D &v_pos = vp->position();
-                    glPushMatrix();
-                    glTranslatef(u_pos.x, u_pos.y, u_pos.z);
-                    dir_vec = v_pos - u_pos;
-                    angle = 180.0 / M_PI * acosf(Vector3D::dot_product(unit_z, dir_vec) / dir_vec.norm());
-                    rot_axis = Vector3D::vec_product(unit_z, dir_vec).normalize();
-                    if (fabs(angle) < 0.001) {
-                        cout << "parallel" << endl;
-                    } else if (fabs(angle - 180.0) < 0.001) {
-                        cout << "anti-parallel" << endl;
-                    } else
-                        glRotatef(angle, rot_axis.x, rot_axis.y, rot_axis.z);
-                    // parameters for gluCylinder: (quad, baseRadius, topRadius, height, slices, stacks);
-                    EdgeAttribute a = j->second;
-                    if (a == NT_3_PLUS_CLAUSE) {
-                        if (!draw_only_2clauses) {
-                            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff_cyan);
-                            gluCylinder(quad, LINK_WIDTH_FACTOR * k, LINK_WIDTH_FACTOR * k, dir_vec.norm(), 8, 4);
-                        }
-                        // else: do nothing
-                    } else { // 2-clause
-                        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff_red);
-                        gluCylinder(quad, LINK_WIDTH_FACTOR * k, LINK_WIDTH_FACTOR * k, dir_vec.norm(), 8, 4);
-                    }
-                    glPopMatrix();
-                }
-            }
-        }
-        gluDeleteQuadric(quad);
-    }
-
-    // draw vertices
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff_white);
-    for (i = nodes.begin(); i != nodes.end(); i++) {
-        const Node3D &node = i->second;
-        glPushMatrix();
-        glTranslatef(node.position().x, node.position().y, node.position().z);
-//        if (adaptive_node_size)
-//            glutSolidSphere(0.1 * k * log2(node.neighbors().size() + 1), 20, 20);
-//        else
-//            glutSolidSphere(0.1 * k, 20, 20);
-        glPopMatrix();
-    }
-
-}
-
-vtkPolyData *Graph3D::drawVTP(double k, bool draw_edges, bool draw_only_2clauses,
-                              bool adaptive_node_size) {
+vtkPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size) {
     map<int, Node3D>::const_iterator i;
     set<ExtNode3D>::iterator j;
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
@@ -477,7 +408,7 @@ vtkPolyData *Graph3D::drawVTP(double k, bool draw_edges, bool draw_only_2clauses
         vtkSmartPointer<vtkPointSource> pointSource =
                 vtkSmartPointer<vtkPointSource>::New();
 
-        cout << i->first << "; " << node.position().x << "; " << node.position().y << "; " <<  node.position().z << endl;
+        cout << i->first << "; " << node.position().x << "; " << node.position().y << "; " << node.position().z << endl;
         if (draw_edges) {
             const Node3D &u = i->second;
             const set<ExtNode3D> &neighbors = u.neighbors();

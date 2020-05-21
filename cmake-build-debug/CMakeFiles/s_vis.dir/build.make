@@ -109,22 +109,9 @@ CMakeFiles/s_vis.dir/SpaceGrid.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s_vis.dir/SpaceGrid.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.cpp -o CMakeFiles/s_vis.dir/SpaceGrid.cpp.s
 
-CMakeFiles/s_vis.dir/SceneParameters.cpp.o: CMakeFiles/s_vis.dir/flags.make
-CMakeFiles/s_vis.dir/SceneParameters.cpp.o: ../SceneParameters.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/s_vis.dir/SceneParameters.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/s_vis.dir/SceneParameters.cpp.o -c /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.cpp
-
-CMakeFiles/s_vis.dir/SceneParameters.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s_vis.dir/SceneParameters.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.cpp > CMakeFiles/s_vis.dir/SceneParameters.cpp.i
-
-CMakeFiles/s_vis.dir/SceneParameters.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s_vis.dir/SceneParameters.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SceneParameters.cpp -o CMakeFiles/s_vis.dir/SceneParameters.cpp.s
-
 CMakeFiles/s_vis.dir/Interaction.cpp.o: CMakeFiles/s_vis.dir/flags.make
 CMakeFiles/s_vis.dir/Interaction.cpp.o: ../Interaction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/s_vis.dir/Interaction.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/s_vis.dir/Interaction.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/s_vis.dir/Interaction.cpp.o -c /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.cpp
 
 CMakeFiles/s_vis.dir/Interaction.cpp.i: cmake_force
@@ -137,7 +124,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.s: cmake_force
 
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: CMakeFiles/s_vis.dir/flags.make
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: ../cnf3d2.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/s_vis.dir/cnf3d2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/s_vis.dir/cnf3d2.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/s_vis.dir/cnf3d2.cpp.o -c /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cnf3d2.cpp
 
 CMakeFiles/s_vis.dir/cnf3d2.cpp.i: cmake_force
@@ -150,7 +137,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.s: cmake_force
 
 CMakeFiles/s_vis.dir/InteractionCallback.cpp.o: CMakeFiles/s_vis.dir/flags.make
 CMakeFiles/s_vis.dir/InteractionCallback.cpp.o: ../InteractionCallback.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/s_vis.dir/InteractionCallback.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/s_vis.dir/InteractionCallback.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/s_vis.dir/InteractionCallback.cpp.o -c /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.cpp
 
 CMakeFiles/s_vis.dir/InteractionCallback.cpp.i: cmake_force
@@ -163,7 +150,7 @@ CMakeFiles/s_vis.dir/InteractionCallback.cpp.s: cmake_force
 
 CMakeFiles/s_vis.dir/Display.cpp.o: CMakeFiles/s_vis.dir/flags.make
 CMakeFiles/s_vis.dir/Display.cpp.o: ../Display.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/s_vis.dir/Display.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/s_vis.dir/Display.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/s_vis.dir/Display.cpp.o -c /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp
 
 CMakeFiles/s_vis.dir/Display.cpp.i: cmake_force
@@ -180,7 +167,6 @@ s_vis_OBJECTS = \
 "CMakeFiles/s_vis.dir/Node.cpp.o" \
 "CMakeFiles/s_vis.dir/Graph.cpp.o" \
 "CMakeFiles/s_vis.dir/SpaceGrid.cpp.o" \
-"CMakeFiles/s_vis.dir/SceneParameters.cpp.o" \
 "CMakeFiles/s_vis.dir/Interaction.cpp.o" \
 "CMakeFiles/s_vis.dir/cnf3d2.cpp.o" \
 "CMakeFiles/s_vis.dir/InteractionCallback.cpp.o" \
@@ -193,7 +179,6 @@ s_vis: CMakeFiles/s_vis.dir/Vector.cpp.o
 s_vis: CMakeFiles/s_vis.dir/Node.cpp.o
 s_vis: CMakeFiles/s_vis.dir/Graph.cpp.o
 s_vis: CMakeFiles/s_vis.dir/SpaceGrid.cpp.o
-s_vis: CMakeFiles/s_vis.dir/SceneParameters.cpp.o
 s_vis: CMakeFiles/s_vis.dir/Interaction.cpp.o
 s_vis: CMakeFiles/s_vis.dir/cnf3d2.cpp.o
 s_vis: CMakeFiles/s_vis.dir/InteractionCallback.cpp.o
@@ -228,7 +213,7 @@ s_vis: /usr/lib/x86_64-linux-gnu/libSM.so
 s_vis: /home/cormac/VTK-build/lib/libvtkCommonCore-9.0.so.9.0.0
 s_vis: /home/cormac/VTK-build/lib/libvtksys-9.0.so.9.0.0
 s_vis: CMakeFiles/s_vis.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable s_vis"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable s_vis"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/s_vis.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

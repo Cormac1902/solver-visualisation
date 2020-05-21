@@ -12,14 +12,12 @@
 #include "Display.h"
 #include "Interaction.h"
 
-// Graph3D *current_graph; // currently displayed graph
 vector<Graph3D *> graph_stack;
 
 double k = 1.0; // old: 5.0
 double f_k = sqrt(4.0 / 7.0);
-// int curr_L;
 
-bool next_graph = false, draw_edges = true, run_anim = false, adaptive_size = true;
+bool draw_edges = true, adaptive_size = true; // run_anim = false
 bool draw_only_2clauses = false;
 
 Vector3D min_p, max_p;
@@ -75,7 +73,6 @@ void Display::display() {
     renderWindow->ShowCursor();
 
     renderer->AddActor(actor);
-//        renderWindow->Render();
 
     renderWindow->Render();
 
@@ -85,7 +82,7 @@ void Display::display() {
 
 void Display::switchDisplay(Graph3D *g, double l) {
     mapper->SetInputData(vtkSmartPointer<vtkPolyData>
-                         ::Take(g->drawVTP(l, draw_edges, draw_only_2clauses, adaptive_size)));
+                         ::Take(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)));
 }
 
 void Display::setupNodes(Graph3D *g) {
@@ -132,15 +129,6 @@ void Display::changeGraph(unsigned graphLevel) {
 
     std::cout << "Displaying " << graphMessage << std::endl;
 
-//    pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
-//    min_p = ep.first;
-//    max_p = ep.second;
-//    float max_extent = max(max_p.x - min_p.x, max(max_p.y - min_p.y, max_p.z - min_p.z));
-//    //  cout << max_extent << " " << flush;
-//    // rescale to -10.0 .. +10.0 on all axes
-//    Vector3D shift = Vector3D(-1.0, -1.0, -1.0) - 2.0 / max_extent * min_p;
-//    graph_stack[graphLevel]->rescale((float) 2.0 / max_extent, shift);
-
     switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
 
     renderWindow->Render();
@@ -156,7 +144,6 @@ void Display::positionGraph(unsigned int graphLevel) {
     pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
     min_p = ep.first;
     max_p = ep.second;
-    // cout << "p_min = " << min_p << ", p_max = " << max_p << "." << endl;
     double max_extent = max(max_p.x - min_p.x, max(max_p.y - min_p.y, max_p.z - min_p.z));
     //  cout << max_extent << " " << flush;  CHECK AGAIN
     // rescale to -10.0 .. +10.0 on all axes

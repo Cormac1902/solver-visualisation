@@ -16,7 +16,7 @@ typedef pair<Node3D*, EdgeAttribute> ExtNode3D;
 class Node3D
 {
 private:
-  int ident;
+  long ident;
   int mark;    // mark bit for different purposes
 
   Vector3D node_pos;
@@ -32,18 +32,18 @@ public:
   // modifiers
   void set_pos(double x, double y, double z);
   void set_pos(const Vector3D& p);
-  void set_id(int i);
+  void set_id(long i);
   void set_weight(int i);
   bool add_neighbor(Node3D* n, EdgeAttribute a = NT_3_PLUS_CLAUSE);
              // returns true iff element was not already present
 
   // observables
-  const Vector3D& position(void) const;
-  int id(void) const;
-  int weight(void) const;
+  const Vector3D& position() const;
+  long id() const;
+  int weight() const;
   // EdgeAttribute edge_attribute(Node3D* other_end) const;
 
-  const set<ExtNode3D>& neighbors(void) const;
+  const set<ExtNode3D>& neighbors() const;
 
   friend class Graph3D;
 };

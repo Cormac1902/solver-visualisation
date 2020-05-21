@@ -12,7 +12,7 @@ void Node3D::set_pos(const Vector3D& p)
   node_pos = p;
 }
 
-void Node3D::set_id(int i)
+void Node3D::set_id(long i)
 {
   ident = i;
 }
@@ -34,22 +34,22 @@ bool Node3D::add_neighbor(Node3D* n, EdgeAttribute a)
   return res.second;
 }
 
-const Vector3D& Node3D::position(void) const
+const Vector3D& Node3D::position() const
 {
   return node_pos;
 }
 
-int Node3D::id(void) const
+long Node3D::id() const
 {
   return ident;
 }
 
-int Node3D::weight(void) const
+int Node3D::weight() const
 {
   return c_weight;
 }
 
-const set<ExtNode3D>& Node3D::neighbors(void) const
+const set<ExtNode3D>& Node3D::neighbors() const
 {
   return neighbor_nodes;
 }

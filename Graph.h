@@ -34,16 +34,16 @@ public:
     // modifiers
     void add_node(const Node3D& n);          // node 'n' is copied into graph
 
-    void insert_edge(int x, int y, EdgeAttribute a = NT_3_PLUS_CLAUSE);
+    void insert_edge(long x, long y, EdgeAttribute a = NT_3_PLUS_CLAUSE);
     // add edge between nodes with ids x and y (if not
     // already present)
 
     void build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
-    int nr_nodes(void) { return nodes.size(); }
+    int nr_nodes() { return nodes.size(); }
 
-    int nr_edges(void) { return number_edges; }
+    int nr_edges() { return number_edges; }
 
     bool get_positioned() { return positioned; }
 
@@ -52,10 +52,10 @@ public:
     // computes the number of independent components of the graph.
     // From each component the id of one node is returned.
 
-    Graph3D *coarsen(void);
+    Graph3D *coarsen();
     // Coarsen graph by matching adjacent nodes (reduces the number of vertices to the half).
 
-    void init_positions_at_random(void);
+    void init_positions_at_random();
     // Initialize node positions randomly (all coordinates in the range [-1,1]).
 
     void init_coarsest_graph_positions(double k);
@@ -69,16 +69,14 @@ public:
     // Compute layout according to Walshaw's paper "A Multilevel Algorithm for
     // Force-Directed Graph Drawing" (JGAA 2003)
 
-    pair<Vector3D, Vector3D> compute_extremal_points(void);
+    pair<Vector3D, Vector3D> compute_extremal_points();
     // Compute bounding box (p,q) where p is the min. and q the max point.
 
-    void rescale(double a, Vector3D b);
     // Move all vertices from position p to position q = a * p + b for scalar a and vector b
+    void rescale(double a, const Vector3D& b);
 
-    void draw3D(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
-    // Draw graph according to current layout (OpenGL, GLUT).
-
-    vtkPolyData* drawVTP(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
+    // Draw graph according to current layout (VTK).
+    vtkPolyData* drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
 
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);

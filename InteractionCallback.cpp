@@ -1,5 +1,5 @@
 //
-// Created by corma on 25-Apr-20.
+// Created by Cormac on 25-Apr-20.
 //
 
 #include "InteractionCallback.h"
@@ -13,4 +13,4 @@ void InteractionCallback::Execute(vtkObject *caller, unsigned long evId, void *c
     std::cout << interactorCaller->GetClassName() << "  Event Id: " << evId << std::endl;
 
     // Now print the camera orientation.
-};
+}

@@ -258,33 +258,6 @@ Node.cpp.s:
 	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Node.cpp.s
 .PHONY : Node.cpp.s
 
-SceneParameters.o: SceneParameters.cpp.o
-
-.PHONY : SceneParameters.o
-
-# target to build an object file
-SceneParameters.cpp.o:
-	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SceneParameters.cpp.o
-.PHONY : SceneParameters.cpp.o
-
-SceneParameters.i: SceneParameters.cpp.i
-
-.PHONY : SceneParameters.i
-
-# target to preprocess a source file
-SceneParameters.cpp.i:
-	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SceneParameters.cpp.i
-.PHONY : SceneParameters.cpp.i
-
-SceneParameters.s: SceneParameters.cpp.s
-
-.PHONY : SceneParameters.s
-
-# target to generate assembly for a file
-SceneParameters.cpp.s:
-	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/SceneParameters.cpp.s
-.PHONY : SceneParameters.cpp.s
-
 SpaceGrid.o: SpaceGrid.cpp.o
 
 .PHONY : SpaceGrid.o
@@ -390,9 +363,6 @@ help:
 	@echo "... Node.o"
 	@echo "... Node.i"
 	@echo "... Node.s"
-	@echo "... SceneParameters.o"
-	@echo "... SceneParameters.i"
-	@echo "... SceneParameters.s"
 	@echo "... SpaceGrid.o"
 	@echo "... SpaceGrid.i"
 	@echo "... SpaceGrid.s"

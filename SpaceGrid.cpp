@@ -3,8 +3,8 @@
 SpaceGrid3D::~SpaceGrid3D()
 {
   // free cubes
-  for(map<GridIndex, GridCube*>::iterator i = cubes.begin(); i != cubes.end(); i++)
-    delete i->second;
+  for(auto & cube : cubes)
+    delete cube.second;
 }
 
 
@@ -12,7 +12,7 @@ SpaceGrid3D::~SpaceGrid3D()
 
 void SpaceGrid3D::insert_node(Node3D* n)
 {
-  Vector3D pos = n->position();
+  const Vector3D& pos = n->position();
   GridIndex gi = grid_index(pos);
   if(cubes.find(gi) == cubes.end())
     cubes[gi] = new GridCube();
@@ -29,7 +29,7 @@ vector<Node3D*> SpaceGrid3D::find_neighbors(Node3D* n)
   int i, j, k;
   GridIndex gi, gj;
 
-  Vector3D pos = n->position();
+  const Vector3D& pos = n->position();
   gi = grid_index(pos);
 
   // add nodes from own and neighboring cube
@@ -62,13 +62,13 @@ ostream& operator<<(ostream& os, const SpaceGrid3D& sg)
 
 // -------------------- methods for internal use  --------------------
 
-GridIndex SpaceGrid3D::grid_index(const Vector3D& p)
+GridIndex SpaceGrid3D::grid_index(const Vector3D& p) const
 {
   GridIndex gi;
   
-  gi.a = (int)floorf(p.x / side_length);
-  gi.b = (int)floorf(p.y / side_length);
-  gi.c = (int)floorf(p.z / side_length);
+  gi.a = (int)floor(p.x / side_length);
+  gi.b = (int)floor(p.y / side_length);
+  gi.c = (int)floor(p.z / side_length);
 
   return gi;
 }

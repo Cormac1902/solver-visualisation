@@ -22,4 +22,4 @@ void Interaction::OnKeyPress() {
     vtkInteractorStyleTrackballCamera::OnKeyPress();
 }
 
-vtkStandardNewMacro(Interaction);
+vtkStandardNewMacro(Interaction)

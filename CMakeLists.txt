@@ -6,7 +6,6 @@ set(SOURCE_FILES Vector.cpp
         Node.cpp
         Graph.cpp
         SpaceGrid.cpp
-        SceneParameters.cpp
         Interaction.cpp
         cnf3d2.cpp
         InteractionCallback.cpp
@@ -15,7 +14,6 @@ set(HEADERS Vector.h
         Node.h
         Graph.h
         SpaceGrid.h
-        SceneParameters.h
         Interaction.h
         InteractionCallback.h
         Display.h)
