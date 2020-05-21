@@ -31,7 +31,7 @@ public:
     ~Graph3D() = default;
 
     // modifiers
-    void add_node(const Node3D& n);          // node 'n' is copied into graph
+    void add_node(const Node3D &n);          // node 'n' is copied into graph
 
     void insert_edge(long x, long y, EdgeAttribute a = NT_3_PLUS_CLAUSE);
     // add edge between nodes with ids x and y (if not
@@ -72,10 +72,10 @@ public:
     // Compute bounding box (p,q) where p is the min. and q the max point.
 
     // Move all vertices from position p to position q = a * p + b for scalar a and vector b
-    void rescale(double a, const Vector3D& b);
+    void rescale(double a, const Vector3D &b);
 
     // Draw graph according to current layout (VTK).
-    vtkPolyData* drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
+    vtkPolyData *drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
 
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);

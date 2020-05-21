@@ -15,7 +15,7 @@ void Interaction::OnKeyPress() {
 
     try {
         Display::changeGraph(std::stoi(key));
-    } catch(std::invalid_argument& e) {
+    } catch (std::invalid_argument &e) {
     }
 
     // Forward events

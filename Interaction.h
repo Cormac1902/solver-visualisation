@@ -12,9 +12,9 @@
 
 class Interaction : public vtkInteractorStyleTrackballCamera {
 public:
-    static Interaction* New();
+    static Interaction *New();
 
-    vtkTypeMacro(Interaction, vtkInteractorStyleTrackballCamera);
+vtkTypeMacro(Interaction, vtkInteractorStyleTrackballCamera);
 
     void OnKeyPress() override;
 };

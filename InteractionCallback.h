@@ -10,22 +10,23 @@
 #include <vtkRenderWindowInteractor.h>
 #include "Interaction.h"
 
-class InteractionCallback : public vtkCallbackCommand
-{
+class InteractionCallback : public vtkCallbackCommand {
 public:
-    static InteractionCallback* New() { return new InteractionCallback; }
+    static InteractionCallback *New() { return new InteractionCallback; }
+
     // Here we Create a vtkCallbackCommand and re-implement it.
-    void Execute(vtkObject* caller, unsigned long evId, void*) override;
+    void Execute(vtkObject *caller, unsigned long evId, void *) override;
 
     InteractionCallback()
-            : interactor(nullptr)
-    {
+            : interactor(nullptr) {
     }
-    // Set pointers to any clientData or callData here.
-    Interaction* interactor;
 
-    InteractionCallback(const InteractionCallback&) = delete;
-    void operator=(const InteractionCallback&) = delete;
+    // Set pointers to any clientData or callData here.
+    Interaction *interactor;
+
+    InteractionCallback(const InteractionCallback &) = delete;
+
+    void operator=(const InteractionCallback &) = delete;
 };
 
 

@@ -297,7 +297,7 @@ void Graph3D::compute_layout(double k) {
             // calculate (global) repulsive forces
 #ifdef USE_SPACE_GRID
             grid_neighbors = sg.find_neighbors(&v);
-            for (auto & grid_neighbor : grid_neighbors)
+            for (auto &grid_neighbor : grid_neighbors)
                 if (grid_neighbor != &i->second) {  // |delta| <= R is not enforced! (better layout quality)
                     delta = grid_neighbor->position() - v.position();
                     // cout << "delta: " << delta <<  endl;
@@ -368,7 +368,7 @@ pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
 
 // move all points p to q = a * p + b for a vector b and a float a
 
-void Graph3D::rescale(double a, const Vector3D& b) {
+void Graph3D::rescale(double a, const Vector3D &b) {
     map<int, Node3D>::iterator i;
     for (i = nodes.begin(); i != nodes.end(); i++) {
         Node3D &n = i->second;
