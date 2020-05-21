@@ -53,8 +53,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.15/Modules/Compiler/GNU-CXX.cmake"
   "/usr/local/share/cmake-3.15/Modules/Compiler/GNU.cmake"
   "/usr/local/share/cmake-3.15/Modules/ExternalData.cmake"
-  "/usr/local/share/cmake-3.15/Modules/FindGLUT.cmake"
-  "/usr/local/share/cmake-3.15/Modules/FindOpenGL.cmake"
   "/usr/local/share/cmake-3.15/Modules/FindPackageHandleStandardArgs.cmake"
   "/usr/local/share/cmake-3.15/Modules/FindPackageMessage.cmake"
   "/usr/local/share/cmake-3.15/Modules/FindThreads.cmake"
@@ -66,7 +64,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.15/Modules/Platform/Linux.cmake"
   "/usr/local/share/cmake-3.15/Modules/Platform/UnixPaths.cmake"
   "/usr/local/share/cmake-3.15/Modules/ProcessorCount.cmake"
-  "/usr/local/share/cmake-3.15/Modules/SelectLibraryConfigurations.cmake"
   )
 
 # The corresponding makefile is:

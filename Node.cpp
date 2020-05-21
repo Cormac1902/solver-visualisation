@@ -1,7 +1,6 @@
 #include "Node.h"
-#include <iostream>
 
-void Node3D::set_pos(float x, float y, float z)
+void Node3D::set_pos(double x, double y, double z)
 {
   node_pos.x = x;
   node_pos.y = y;

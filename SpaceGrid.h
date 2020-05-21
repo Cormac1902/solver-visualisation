@@ -1,6 +1,6 @@
 // -*- C++ -*-
 
-// The space grid devides the 3D space into cubes of (side) lenght L.
+// The space grid divides the 3D space into cubes of (side) length L.
 // Each cube may contain a set of objects of class Node3D.
 
 #ifndef _VIS_3D_SPACE_GRID
@@ -36,10 +36,10 @@ class SpaceGrid3D
 {
 private:
   map<GridIndex, GridCube*> cubes;
-  float side_length;
+  double side_length;
   
 public:
-  SpaceGrid3D(float L) : side_length(L) { }
+  SpaceGrid3D(double L) : side_length(L) { }
           // Create (empty) grid with cube (side) length L. Each cube has end points
           // (i*L, j*L, k*L) for integers i, j, k.
 

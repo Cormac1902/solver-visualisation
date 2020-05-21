@@ -1,35 +1,30 @@
 #include <iostream>
 #include <stack>
-#include <utility>
-#include <limits.h>
-#include <float.h>
-#include <ctype.h>
-//#include <GL/glut.h>
-#include "assert.h"
+#include <climits>
+#include <cctype>
+#include <cassert>
 #include "Graph.h"
 #include "SpaceGrid.h"
 #include "SceneParameters.h"
 #include <vtkCellArray.h>
 #include <vtkPoints.h>
-// #include <vtkXMLPolyDataWriter.h>
 #include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
-#include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkProperty.h>
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkNamedColors.h>
 #include <vtkCellData.h>
+#include <vtkPointSource.h>
 
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
-void Graph3D::add_node(Node3D n) {
+void Graph3D::add_node(const Node3D& n) {
     assert(nodes.find(n.id()) == nodes.end()); // node not already present
 
     nodes[n.id()] = n;
@@ -233,45 +228,55 @@ void Graph3D::init_positions_at_random(void) {
         i->second.set_pos(Vector3D::init_random());
 }
 
-void Graph3D::init_coarsest_graph_positions(float k) {
+void Graph3D::init_coarsest_graph_positions(double k) {
     assert(nodes.size() == 2);
 
     map<int, Node3D>::iterator i = nodes.begin();
     i->second.set_pos(-k / 2.0, 0.0, 0.0);
     i++;
     i->second.set_pos(k / 2.0, 0.0, 0.0);
+
+    positioned = true;
 }
 
 // g is coarser than 'this'
-void Graph3D::init_positions_from_graph(Graph3D *g, float k) {
+void Graph3D::init_positions_from_graph(Graph3D *g, double k) {
     Vector3D offset;
-    float f_k = 0.001 * k;
+    auto f_k = 0.001 * k;
 
-    for (map<int, int>::iterator i = matching.begin(); i != matching.end(); i++) {
+    for (auto i = matching.begin(); i != matching.end(); i++) {
         // copy already computed positions
-        if (i->first == i->second)
+        if (i->first == i->second) {
             nodes[i->first].set_pos(g->nodes[i->second].position());
+            cout << "same: " << g->nodes[i->second].position() << endl;
+        }
         else {
             offset = f_k * Vector3D::init_random().normalize();
             nodes[i->first].set_pos(g->nodes[i->second].position() + offset);
             nodes[i->second].set_pos(g->nodes[i->second].position() - offset);
+            cout << "offset: " << g->nodes[i->second].position() + offset << endl;
         }
     }
+
+    positioned = true;
 }
 
-void Graph3D::compute_layout(float k) {
+void Graph3D::compute_layout(double k) {
     map<int, Node3D>::iterator i;
     set<ExtNode3D>::iterator n;
     bool converged = false;
-    float f_r, f_r_aux, f_a, t;
+    double f_r, f_r_aux, f_a, t;
     Vector3D delta, theta;
 
-    const float tol = 0.01;
-    const float C = 0.2;
-    const float lambda = 0.9;
+    const auto tol = 0.01;
+    const auto C = 0.2;
+    const auto lambda = 0.9;
 
     t = k;
     f_r_aux = -C * k * k;
+
+    /*cout << "t: " << t <<  endl; // OKAY
+    cout << "f_r_aux: " << f_r_aux <<  endl; // OKAY*/
 
 #ifdef USE_SPACE_GRID
     // put nodes into space grid (with cube length 2k)
@@ -295,12 +300,15 @@ void Graph3D::compute_layout(float k) {
             // calculate (global) repulsive forces
 #ifdef USE_SPACE_GRID
             grid_neighbors = sg.find_neighbors(&v);
-            for (vector<Node3D *>::iterator j = grid_neighbors.begin();
+            for (auto j = grid_neighbors.begin();
                  j != grid_neighbors.end(); j++)
                 if (*j != &i->second) {  // |delta| <= R is not enforced! (better layout quality)
                     delta = (*j)->position() - v.position();
+                    // cout << "delta: " << delta <<  endl;
                     f_r = f_r_aux * (*j)->weight() / delta.norm();
+                    // cout << "fr: " << f_r <<  endl;
                     theta += f_r * delta.normalize();
+                    // cout << "theta: " << theta <<  endl;
                 }
 #else
             for(map<int,Node3D>::iterator j = nodes.begin(); j != nodes.end(); j++)
@@ -316,13 +324,15 @@ void Graph3D::compute_layout(float k) {
             const set<ExtNode3D> &neighbors = v.neighbors();
             for (n = neighbors.begin(); n != neighbors.end(); n++) {
                 delta = n->first->position() - v.position();
-                float dn = delta.norm();
+                double dn = delta.norm();
                 f_a = dn * dn / k;
                 theta += f_a * delta.normalize();
             }
 
             // reposition node v
             delta = min(t, theta.norm()) * theta.normalize();
+            /*cout << "delta: " << delta << endl; //  OKAY
+            cout << "v: " << v.position() << endl; //  OKAY*/
             v.set_pos(v.position() + delta);
 
             if (delta.norm() > k * tol)
@@ -330,11 +340,13 @@ void Graph3D::compute_layout(float k) {
         }
 
         t = lambda * t;
+
+        // cout << "t: " << t << endl; //  OKAY
     }
 }
 
 pair<Vector3D, Vector3D> Graph3D::compute_extremal_points(void) {
-    Vector3D curr_min(FLT_MAX, FLT_MAX, FLT_MAX), curr_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    Vector3D curr_min(DBL_MAX, DBL_MAX, DBL_MAX), curr_max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
     map<int, Node3D>::iterator i;
 
     for (i = nodes.begin(); i != nodes.end(); i++) {
@@ -353,14 +365,14 @@ pair<Vector3D, Vector3D> Graph3D::compute_extremal_points(void) {
             curr_max.z = n.position().z;
     }
 
-    //  cout << "p_min = " << curr_min << ", p_max = " << curr_max << "." << endl;
+    // cout << "p_min = " << curr_min << ", p_max = " << curr_max << "." << endl;
 
     return pair<Vector3D, Vector3D>(curr_min, curr_max);
 }
 
 // move all points p to q = a * p + b for a vector b and a float a
 
-void Graph3D::rescale(float a, Vector3D b) {
+void Graph3D::rescale(double a, Vector3D b) {
     map<int, Node3D>::iterator i;
     for (i = nodes.begin(); i != nodes.end(); i++) {
         Node3D &n = i->second;
@@ -368,13 +380,13 @@ void Graph3D::rescale(float a, Vector3D b) {
     }
 }
 
-void Graph3D::draw3D(float k, bool draw_edges, bool draw_only_2clauses,
+void Graph3D::draw3D(double k, bool draw_edges, bool draw_only_2clauses,
                      bool adaptive_node_size) {
     map<int, Node3D>::const_iterator i;
     set<ExtNode3D>::iterator j;
     GLUquadricObj *quad;
     Vector3D dir_vec, rot_axis, unit_z(0.0, 0.0, 1.0);
-    float angle;
+    double angle;
 
     // draw edges
     if (draw_edges) {
@@ -423,16 +435,16 @@ void Graph3D::draw3D(float k, bool draw_edges, bool draw_only_2clauses,
         const Node3D &node = i->second;
         glPushMatrix();
         glTranslatef(node.position().x, node.position().y, node.position().z);
-        if (adaptive_node_size)
-            glutSolidSphere(0.1 * k * log2(node.neighbors().size() + 1), 20, 20);
-        else
-            glutSolidSphere(0.1 * k, 20, 20);
+//        if (adaptive_node_size)
+//            glutSolidSphere(0.1 * k * log2(node.neighbors().size() + 1), 20, 20);
+//        else
+//            glutSolidSphere(0.1 * k, 20, 20);
         glPopMatrix();
     }
 
 }
 
-vtkPolyData *Graph3D::drawVTP(float k, bool draw_edges, bool draw_only_2clauses,
+vtkPolyData *Graph3D::drawVTP(double k, bool draw_edges, bool draw_only_2clauses,
                               bool adaptive_node_size) {
     map<int, Node3D>::const_iterator i;
     set<ExtNode3D>::iterator j;
@@ -462,6 +474,10 @@ vtkPolyData *Graph3D::drawVTP(float k, bool draw_edges, bool draw_only_2clauses,
     for (i = nodes.begin(); i != nodes.end(); i++) {
         const Node3D &node = i->second;
         points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
+        vtkSmartPointer<vtkPointSource> pointSource =
+                vtkSmartPointer<vtkPointSource>::New();
+
+        cout << i->first << "; " << node.position().x << "; " << node.position().y << "; " <<  node.position().z << endl;
         if (draw_edges) {
             const Node3D &u = i->second;
             const set<ExtNode3D> &neighbors = u.neighbors();

@@ -10,25 +10,25 @@ using namespace std;
 
 struct Vector3D {
 public:
-  float x, y, z;
+  double x, y, z;
   
   Vector3D() : x(0.0), y(0.0), z(0.0) { }
-  Vector3D(float _x, float _y, float _z) : x(_x), y(_y), z(_z) { }
+  Vector3D(double _x, double _y, double _z) : x(_x), y(_y), z(_z) { }
   ~Vector3D() { }
 
   static Vector3D init_random(void);
            // generate a random vector with all coordinates in the range [-1,1]
 
-  float norm(void) const {
+  double norm(void) const {
     return sqrt(x*x + y*y + z*z);
   }
 
   Vector3D normalize(void) const {
-    float f = 1.0 / norm();
+    double f = 1.0 / norm();
     return Vector3D(f*x, f*y, f*z);
   }
 
-  static float dot_product(const Vector3D&a, const Vector3D& b) {
+  static double dot_product(const Vector3D&a, const Vector3D& b) {
     return a.x*b.x + a.y*b.y + a.z*b.z;
   }
 
@@ -49,7 +49,7 @@ public:
     return Vector3D(a.x - b.x, a.y - b.y, a.z - b.z);
   }
   
-  friend Vector3D operator*(float k, const Vector3D& a) {
+  friend Vector3D operator*(double k, const Vector3D& a) {
     return Vector3D(k*a.x, k*a.y, k*a.z);
   }
 

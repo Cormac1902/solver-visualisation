@@ -57,6 +57,10 @@
 					<Add directory="/home/cormac/VTK/Common/Misc"/>
 					<Add directory="/home/cormac/VTK-build/Filters/Core"/>
 					<Add directory="/home/cormac/VTK/Filters/Core"/>
+					<Add directory="/home/cormac/VTK-build/Filters/Sources"/>
+					<Add directory="/home/cormac/VTK/Filters/Sources"/>
+					<Add directory="/home/cormac/VTK-build/Interaction/Style"/>
+					<Add directory="/home/cormac/VTK/Interaction/Style"/>
 					<Add directory="/home/cormac/VTK-build/Rendering/Core"/>
 					<Add directory="/home/cormac/VTK/Rendering/Core"/>
 					<Add directory="/home/cormac/VTK-build/Rendering/FreeType"/>
@@ -77,8 +81,6 @@
 					<Add directory="/home/cormac/VTK/ThirdParty/glew/vtkglew"/>
 					<Add directory="/home/cormac/VTK-build/ThirdParty/glew"/>
 					<Add directory="/home/cormac/VTK/ThirdParty/glew"/>
-					<Add directory="/home/cormac/VTK-build/Interaction/Style"/>
-					<Add directory="/home/cormac/VTK/Interaction/Style"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>
@@ -125,6 +127,10 @@
 					<Add directory="/home/cormac/VTK/Common/Misc"/>
 					<Add directory="/home/cormac/VTK-build/Filters/Core"/>
 					<Add directory="/home/cormac/VTK/Filters/Core"/>
+					<Add directory="/home/cormac/VTK-build/Filters/Sources"/>
+					<Add directory="/home/cormac/VTK/Filters/Sources"/>
+					<Add directory="/home/cormac/VTK-build/Interaction/Style"/>
+					<Add directory="/home/cormac/VTK/Interaction/Style"/>
 					<Add directory="/home/cormac/VTK-build/Rendering/Core"/>
 					<Add directory="/home/cormac/VTK/Rendering/Core"/>
 					<Add directory="/home/cormac/VTK-build/Rendering/FreeType"/>
@@ -145,8 +151,6 @@
 					<Add directory="/home/cormac/VTK/ThirdParty/glew/vtkglew"/>
 					<Add directory="/home/cormac/VTK-build/ThirdParty/glew"/>
 					<Add directory="/home/cormac/VTK/ThirdParty/glew"/>
-					<Add directory="/home/cormac/VTK-build/Interaction/Style"/>
-					<Add directory="/home/cormac/VTK/Interaction/Style"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>

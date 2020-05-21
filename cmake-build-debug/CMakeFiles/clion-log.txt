@@ -1,7 +1,5 @@
 /usr/local/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
--- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so   
 -- Found X11: /usr/include  found components:  Xt 
--- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so  found components:  OpenGL GLX 
 -- Found X11: /usr/include   
 -- VTK_VERSION: 9.0.0
 -- Configuring done

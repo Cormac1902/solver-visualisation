@@ -45,6 +45,10 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/home/cormac/VTK/Common/Misc"
   "/home/cormac/VTK-build/Filters/Core"
   "/home/cormac/VTK/Filters/Core"
+  "/home/cormac/VTK-build/Filters/Sources"
+  "/home/cormac/VTK/Filters/Sources"
+  "/home/cormac/VTK-build/Interaction/Style"
+  "/home/cormac/VTK/Interaction/Style"
   "/home/cormac/VTK-build/Rendering/Core"
   "/home/cormac/VTK/Rendering/Core"
   "/home/cormac/VTK-build/Rendering/FreeType"
@@ -65,8 +69,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/home/cormac/VTK/ThirdParty/glew/vtkglew"
   "/home/cormac/VTK-build/ThirdParty/glew"
   "/home/cormac/VTK/ThirdParty/glew"
-  "/home/cormac/VTK-build/Interaction/Style"
-  "/home/cormac/VTK/Interaction/Style"
   )
 
 # Targets to which this target links.

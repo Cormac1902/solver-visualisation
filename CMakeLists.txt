@@ -20,11 +20,6 @@ set(HEADERS Vector.h
         InteractionCallback.h
         Display.h)
 set(CC_FLAGS "-O3 -Wall -DNDEBUG -DUSE_SPACE_GRID")
-# set(LN_FLAGS "-lXi -lX11 -lXext -lGL -lGLU -lglut -lX11")
-
-set(OpenGL_GL_PREFERENCE "LEGACY")
-find_package(OpenGL)
-find_package(GLUT)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CC_FLAGS}")
 
@@ -35,10 +30,11 @@ find_package(VTK COMPONENTS
         CommonCore
         CommonDataModel
         FiltersGeneral
+        FiltersSources
+        InteractionStyle
         RenderingCore
         RenderingFreeType
-        RenderingOpenGL2
-        InteractionStyle)
+        RenderingOpenGL2)
 
 add_executable(s_vis MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
 

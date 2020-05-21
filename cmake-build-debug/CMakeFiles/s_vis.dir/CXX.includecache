@@ -54,6 +54,8 @@ vtkTypeList.h
 vtkAutoInit.h
 /home/cormac/VTK-build/Filters/Core/vtkAutoInit.h
 
+/home/cormac/VTK-build/Filters/Sources/vtkFiltersSourcesModule.h
+
 /home/cormac/VTK-build/Rendering/Core/vtkRenderingCoreModule.h
 vtkFiltersCoreModule.h
 /home/cormac/VTK-build/Rendering/Core/vtkFiltersCoreModule.h
@@ -576,12 +578,6 @@ vtkConfigure.h
 windows.h
 -
 
-/home/cormac/VTK/Common/Core/vtkWindow.h
-vtkCommonCoreModule.h
-/home/cormac/VTK/Common/Core/vtkCommonCoreModule.h
-vtkObject.h
-/home/cormac/VTK/Common/Core/vtkObject.h
-
 /home/cormac/VTK/Common/Core/vtkWrappingHints.h
 
 /home/cormac/VTK/Common/DataModel/vtkAbstractCellLinks.h
@@ -734,6 +730,14 @@ vtkCommonExecutionModelModule.h
 vtkObject.h
 /home/cormac/VTK/Common/ExecutionModel/vtkObject.h
 
+/home/cormac/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
+vtkAlgorithm.h
+/home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
+vtkCommonExecutionModelModule.h
+/home/cormac/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
+vtkPolyData.h
+/home/cormac/VTK/Common/ExecutionModel/vtkPolyData.h
+
 /home/cormac/VTK/Common/Math/vtkTuple.h
 vtkIOStream.h
 /home/cormac/VTK/Common/Math/vtkIOStream.h
@@ -745,6 +749,12 @@ cmath
 -
 cstdlib
 -
+
+/home/cormac/VTK/Filters/Sources/vtkPointSource.h
+vtkFiltersSourcesModule.h
+/home/cormac/VTK/Filters/Sources/vtkFiltersSourcesModule.h
+vtkPolyDataAlgorithm.h
+/home/cormac/VTK/Filters/Sources/vtkPolyDataAlgorithm.h
 
 /home/cormac/VTK/Rendering/Core/vtkAbstractMapper.h
 vtkAlgorithm.h
@@ -811,26 +821,6 @@ vtkRenderingCoreModule.h
 /home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
 vtkProp.h
 /home/cormac/VTK/Rendering/Core/vtkProp.h
-
-/home/cormac/VTK/Rendering/Core/vtkProperty.h
-vtkObject.h
-/home/cormac/VTK/Rendering/Core/vtkObject.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-map
--
-string
--
-
-/home/cormac/VTK/Rendering/Core/vtkRenderWindow.h
-vtkNew.h
-/home/cormac/VTK/Rendering/Core/vtkNew.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-vtkSmartPointer.h
-/home/cormac/VTK/Rendering/Core/vtkSmartPointer.h
-vtkWindow.h
-/home/cormac/VTK/Rendering/Core/vtkWindow.h
 
 /home/cormac/VTK/Rendering/Core/vtkRenderWindowInteractor.h
 vtkCommand.h
@@ -899,16 +889,12 @@ iostream
 -
 stack
 -
-utility
+climits
 -
-limits.h
+cctype
 -
-float.h
+cassert
 -
-ctype.h
--
-assert.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/assert.h
 Graph.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 SpaceGrid.h
@@ -927,13 +913,9 @@ vtkPolyDataMapper.h
 -
 vtkActor.h
 -
-vtkRenderWindow.h
--
 vtkRenderer.h
 -
 vtkRenderWindowInteractor.h
--
-vtkProperty.h
 -
 vtkLine.h
 -
@@ -942,6 +924,8 @@ vtkUnsignedCharArray.h
 vtkNamedColors.h
 -
 vtkCellData.h
+-
+vtkPointSource.h
 -
 
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h

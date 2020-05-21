@@ -134,6 +134,7 @@ CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK-build/Common/Core/vtkVersionM
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK-build/Common/DataModel/vtkCommonDataModelModule.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK-build/Common/ExecutionModel/vtkCommonExecutionModelModule.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK-build/Filters/Core/vtkFiltersCoreModule.h
+CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK-build/Filters/Sources/vtkFiltersSourcesModule.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK-build/Rendering/Core/vtkRenderingCoreModule.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Color/vtkNamedColors.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkABI.h
@@ -190,7 +191,6 @@ CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkVariantCast.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkVariantInlineOperators.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkWeakPointerBase.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkWin32Header.h
-CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkWindow.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Core/vtkWrappingHints.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/DataModel/vtkAbstractCellLinks.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCell.h
@@ -209,7 +209,9 @@ CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPointSet.
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyData.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyDataInternals.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
+CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Common/Math/vtkTuple.h
+CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Filters/Sources/vtkPointSource.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkAbstractMapper.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkAbstractMapper3D.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkActor.h
@@ -219,8 +221,6 @@ CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkPolyDataMap
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkProp.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkProp3D.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkPropCollection.h
-CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkProperty.h
-CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkRenderWindow.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkRenderWindowInteractor.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkRenderer.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: /home/cormac/VTK/Rendering/Core/vtkViewport.h

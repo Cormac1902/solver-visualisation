@@ -10,100 +10,82 @@
 #include <vtkLine.h>
 
 #include "Display.h"
-#include "Graph.h"
 #include "Interaction.h"
 
-float sphi = 0.0, stheta = 0.0;
-float zoom = 1.0;
-float zNear = 0.1, zFar = 20.0;
-int downX, downY;
-bool leftButton = false, middleButton = false, rightButton = false;
-
-float xOffset = 0.0, yOffset = 0.0;
-
-Graph3D *current_graph; // currently displayed graph
+// Graph3D *current_graph; // currently displayed graph
 vector<Graph3D *> graph_stack;
 
-float k = 1.0; // old: 5.0
-float f_k = sqrt(4.0 / 7.0);
-int curr_L;
+double k = 1.0; // old: 5.0
+double f_k = sqrt(4.0 / 7.0);
+// int curr_L;
 
 bool next_graph = false, draw_edges = true, run_anim = false, adaptive_size = true;
 bool draw_only_2clauses = false;
 
 Vector3D min_p, max_p;
 
-//vtkSmartPointer<vtkVertexGlyphFilter> Display::vertexFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
-//vtkSmartPointer<vtkPolyData> Display::polydata = vtkSmartPointer<vtkPolyData>::New();
 vtkSmartPointer<vtkPolyDataMapper> Display::mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
 
 // ----------------------------------------------------------------------
 
 void Display::display() {
-    if (current_graph != nullptr) {
 
-        switchDisplay();
+    switchDisplay(graph_stack.back(), k);
 
-        vtkSmartPointer<vtkActor> actor =
-                vtkSmartPointer<vtkActor>::New();
-        actor->SetMapper(mapper);
+    vtkSmartPointer<vtkActor> actor =
+            vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
 
-        vtkSmartPointer<vtkNamedColors> colors =
-                vtkSmartPointer<vtkNamedColors>::New();
+    // actor->GetProperty()->SetColor(colors->GetColor3d("cyan_white").GetData());
 
-        // actor->GetProperty()->SetColor(colors->GetColor3d("cyan_white").GetData());
+    actor->GetProperty()->EdgeVisibilityOn();
+    actor->GetProperty()->SetLineWidth(12);
+    actor->GetProperty()->SetPointSize(36);
+    actor->GetProperty()->RenderLinesAsTubesOn();
+    actor->GetProperty()->RenderPointsAsSpheresOn();
+    actor->GetProperty()->VertexVisibilityOn();
+    // actor->GetProperty()->SetVertexColor(0.5,1.0,0.8);
 
-        actor->GetProperty()->EdgeVisibilityOn();
-        actor->GetProperty()->SetLineWidth(12);
-        actor->GetProperty()->SetPointSize(36);
-        actor->GetProperty()->RenderLinesAsTubesOn();
-        actor->GetProperty()->RenderPointsAsSpheresOn();
-        actor->GetProperty()->VertexVisibilityOn();
-        // actor->GetProperty()->SetVertexColor(0.5,1.0,0.8);
+    // actor->GetProperty()->BackfaceCullingOn();
 
-        // actor->GetProperty()->BackfaceCullingOn();
+    vtkSmartPointer<vtkCamera> camera =
+            vtkSmartPointer<vtkCamera>::New();
+    camera->SetPosition(0, 0, 20);
+    camera->SetFocalPoint(0, 0, 0);
 
-        vtkSmartPointer<vtkCamera> camera =
-                vtkSmartPointer<vtkCamera>::New();
-        camera->SetPosition(0, 0, 20);
-        camera->SetFocalPoint(0, 0, 0);
+    vtkSmartPointer<vtkRenderer> renderer =
+            vtkSmartPointer<vtkRenderer>::New();
 
-        vtkSmartPointer<vtkRenderer> renderer =
-                vtkSmartPointer<vtkRenderer>::New();
+    renderer->SetActiveCamera(camera);
 
-        renderer->SetActiveCamera(camera);
+    renderWindow->AddRenderer(renderer);
+    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
+            vtkSmartPointer<vtkRenderWindowInteractor>::New();
+    renderWindowInteractor->SetRenderWindow(renderWindow);
 
-        renderWindow->AddRenderer(renderer);
-        vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
-                vtkSmartPointer<vtkRenderWindowInteractor>::New();
-        renderWindowInteractor->SetRenderWindow(renderWindow);
+    Interaction *interactor = Interaction::New();
 
-        Interaction* interactor = Interaction::New();
+    vtkSmartPointer<Interaction> interactorPointer = vtkSmartPointer<Interaction>::Take(interactor);
+    renderWindowInteractor->SetInteractorStyle(interactor);
+    interactor->SetCurrentRenderer(renderer);
 
-        vtkSmartPointer<Interaction> interactorPointer = vtkSmartPointer<Interaction>::Take(interactor);
-        renderWindowInteractor->SetInteractorStyle(interactor);
-        interactor->SetCurrentRenderer(renderer);
+    renderWindow->SetSize(1920, 1080);
+    renderWindow->SetWindowName("ReadPolyData");
+    renderWindow->ShowCursor();
 
-        renderWindow->SetSize(1920, 1080);
-        renderWindow->SetWindowName("ReadPolyData");
-        renderWindow->ShowCursor();
-
-        renderer->AddActor(actor);
+    renderer->AddActor(actor);
 //        renderWindow->Render();
 
-        renderWindow->Render();
+    renderWindow->Render();
 
-        renderWindowInteractor->Start();
+    renderWindowInteractor->Start();
 
-    }
 }
 
-void Display::switchDisplay() {
-    if (current_graph != nullptr) {
-        mapper->SetInputData(vtkSmartPointer<vtkPolyData>
-                             ::Take(current_graph->drawVTP(k, draw_edges, draw_only_2clauses, adaptive_size)));
-    }
+void Display::switchDisplay(Graph3D *g, double l) {
+    mapper->SetInputData(vtkSmartPointer<vtkPolyData>
+                         ::Take(g->drawVTP(l, draw_edges, draw_only_2clauses, adaptive_size)));
 }
 
 void Display::setupNodes(Graph3D *g) {
@@ -114,6 +96,76 @@ void Display::setupNodes(Graph3D *g) {
     g->add_node(o);
     g->insert_edge(1, 2);
     g->insert_edge(1, 3);
+}
+
+void Display::changeGraph(unsigned graphLevel) {
+
+    std::string graphMessage;
+
+    if (graphLevel == 0) {
+        graphMessage = "non-coarsened graph";
+    } else {
+        graphMessage = "coarsened graph ";
+        graphMessage.append(std::to_string(graphLevel));
+        if (graph_stack.size() <= graphLevel) {
+            std::cout << "No " << graphMessage << std::endl;
+            return;
+        }
+    }
+
+    if (!graph_stack[graphLevel]->get_positioned()) {
+        auto capitalisedGraphMessage = graphMessage;
+        capitalisedGraphMessage[0] = toupper(capitalisedGraphMessage[0]);
+        std::cout << capitalisedGraphMessage << " is not positioned" << std::endl;
+        if (!graph_stack[graphLevel + 1]->get_positioned()) {
+            for (auto j = graph_stack.size() - 2; j > graphLevel; j--) {
+                if (!graph_stack[j]->get_positioned()) {
+                    std::cout << "Positioning coarsened graph " << j << std::endl;
+                    positionGraph(j);
+                }
+            }
+        }
+
+        std::cout << "Positioning " << graphMessage << std::endl;
+        positionGraph(graphLevel);
+    }
+
+    std::cout << "Displaying " << graphMessage << std::endl;
+
+//    pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
+//    min_p = ep.first;
+//    max_p = ep.second;
+//    float max_extent = max(max_p.x - min_p.x, max(max_p.y - min_p.y, max_p.z - min_p.z));
+//    //  cout << max_extent << " " << flush;
+//    // rescale to -10.0 .. +10.0 on all axes
+//    Vector3D shift = Vector3D(-1.0, -1.0, -1.0) - 2.0 / max_extent * min_p;
+//    graph_stack[graphLevel]->rescale((float) 2.0 / max_extent, shift);
+
+    switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
+
+    renderWindow->Render();
+
+}
+
+void Display::positionGraph(unsigned int graphLevel) {
+    double l = kFromGraphLevel(graphLevel);
+    // std::cout << "k: " << l << std::endl;  OKAY
+    graph_stack[graphLevel]->init_positions_from_graph(graph_stack[graphLevel + 1], l);
+    graph_stack[graphLevel]->compute_layout(l);
+
+    pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
+    min_p = ep.first;
+    max_p = ep.second;
+    // cout << "p_min = " << min_p << ", p_max = " << max_p << "." << endl;
+    double max_extent = max(max_p.x - min_p.x, max(max_p.y - min_p.y, max_p.z - min_p.z));
+    //  cout << max_extent << " " << flush;  CHECK AGAIN
+    // rescale to -10.0 .. +10.0 on all axes
+    Vector3D shift = Vector3D(-1.0, -1.0, -1.0) - 2.0 / max_extent * min_p;
+    graph_stack[graphLevel]->rescale(2.0 / max_extent, shift);
+}
+
+double Display::kFromGraphLevel(unsigned int graphLevel) {
+    return k * pow(f_k, graph_stack.size() - graphLevel - 2);
 }
 
 // builds (global) stack of coarsened graphs
@@ -159,60 +211,10 @@ void Display::init(char *filename) {
     }
 
     // compute (random) layout of coarsest graph (with 2 nodes)
-    curr_L = (int) graph_stack.size() - 1;
-    graph_stack[curr_L]->init_coarsest_graph_positions(k);
-    pair<Vector3D, Vector3D> ep = graph_stack[curr_L]->compute_extremal_points();
+    graph_stack.back()->init_coarsest_graph_positions(k);
+    pair<Vector3D, Vector3D> ep = graph_stack.back()->compute_extremal_points();
     min_p = ep.first;
     max_p = ep.second;
-    current_graph = graph_stack[curr_L];
-    curr_L--;
-
-    for (int i = curr_L; i >= 0; i--) {
-        graph_stack[i]->init_positions_from_graph(graph_stack[i + 1], k);
-        graph_stack[i]->compute_layout(k);
-        k *= f_k;
-    }
-
-    k = 1.0;
 
     display();
-}
-
-void Display::changeGraph(unsigned i) {
-
-    std::string graphMessage;
-
-    if (i == 0) {
-        graphMessage = "non-coarsened graph";
-    } else {
-        graphMessage = "coarsened graph ";
-        graphMessage.append(std::to_string(i));
-        if (graph_stack.size() <= i) {
-            std::cout << "No " << graphMessage << std::endl;
-            return;
-        }
-    }
-    std::cout << "Displaying " << graphMessage << std::endl;
-
-            // layout & display next finer graph
-    // graph_stack[i]->init_positions_from_graph(graph_stack[i + 1], k);
-    //      graph_stack[curr_L]->init_positions_at_random();
-//    graph_stack[i]->compute_layout(k);
-    pair<Vector3D, Vector3D> ep = graph_stack[i]->compute_extremal_points();
-    min_p = ep.first;
-    max_p = ep.second;
-    float max_extent = max(max_p.x - min_p.x, max(max_p.y - min_p.y, max_p.z - min_p.z));
-    //  cout << max_extent << " " << flush;
-    // rescale to -10.0 .. +10.0 on all axes
-    Vector3D shift = Vector3D(-1.0, -1.0, -1.0) - 2.0 / max_extent * min_p;
-    graph_stack[i]->rescale((float) 2.0 / max_extent, shift);
-
-    k = pow(f_k, graph_stack.size() - i - 1);
-
-    //graph_stack[i]->drawVTP(k, draw_edges, draw_only_2clauses, adaptive_size);
-    current_graph = graph_stack[i];
-    switchDisplay();
-
-    renderWindow->Render();
-
 }

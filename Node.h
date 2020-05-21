@@ -30,7 +30,7 @@ public:
   ~Node3D() { }
   
   // modifiers
-  void set_pos(float x, float y, float z);
+  void set_pos(double x, double y, double z);
   void set_pos(const Vector3D& p);
   void set_id(int i);
   void set_weight(int i);
@@ -41,7 +41,7 @@ public:
   const Vector3D& position(void) const;
   int id(void) const;
   int weight(void) const;
-  EdgeAttribute edge_attribute(Node3D* other_end) const;
+  // EdgeAttribute edge_attribute(Node3D* other_end) const;
 
   const set<ExtNode3D>& neighbors(void) const;
 

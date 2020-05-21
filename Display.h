@@ -15,9 +15,11 @@ class Display {
     static vtkSmartPointer<vtkRenderWindow> renderWindow;
 
     static void display();
-    static void switchDisplay();
     static void setupNodes(Graph3D *g);
-    static void changeGraph(unsigned i);
+    static void switchDisplay(Graph3D *g, double l);
+    static void changeGraph(unsigned graphLevel);
+    static void positionGraph(unsigned graphLevel);
+    static double kFromGraphLevel(unsigned graphLevel);
 
     friend class Interaction;
 
