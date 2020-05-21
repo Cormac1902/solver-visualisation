@@ -16,8 +16,8 @@ class GridIndex {
 public:
   int a, b, c;  // coordinates of minimal corner in multiples of L
 
-  GridIndex(int _a = 0, int _b = 0, int _c = 0) : a(_a), b(_b), c(_c) { }
-  ~GridIndex() { }
+  explicit GridIndex(int _a = 0, int _b = 0, int _c = 0) : a(_a), b(_b), c(_c) { }
+  ~GridIndex() = default;
 
   friend ostream& operator<<(ostream& os, const GridIndex& i) {
     os << "<" << i.a << ", " << i.b << ", " << i.c << ">";
@@ -39,12 +39,12 @@ private:
   double side_length;
   
 public:
-  SpaceGrid3D(double L) : side_length(L) { }
+  explicit SpaceGrid3D(double L) : side_length(L) { }
           // Create (empty) grid with cube (side) length L. Each cube has end points
           // (i*L, j*L, k*L) for integers i, j, k.
 
-  ~SpaceGrid3D(void);
-  
+  ~SpaceGrid3D();
+
   void insert_node(Node3D* n);
           // Add node n to grid. (The position vector of node n must be set up properly.)
   

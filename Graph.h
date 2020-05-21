@@ -28,8 +28,7 @@ private:
 public:
     Graph3D() : number_edges(0), positioned(false) {
     } // constructs empty graph
-    ~Graph3D() {
-    }
+    ~Graph3D() = default;
 
     // modifiers
     void add_node(const Node3D& n);          // node 'n' is copied into graph
@@ -43,9 +42,9 @@ public:
     // observables
     int nr_nodes() { return nodes.size(); }
 
-    int nr_edges() { return number_edges; }
+    int nr_edges() const { return number_edges; }
 
-    bool get_positioned() { return positioned; }
+    bool get_positioned() const { return positioned; }
 
     // misc
     int independent_components(vector<int> *one_of_each_comp);
