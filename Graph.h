@@ -7,6 +7,8 @@
 #include <vector>
 #include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
+#include <vtkGraph.h>
+#include <vtkGraphToPolyData.h>
 #include "Node.h"
 
 using namespace std;
@@ -75,7 +77,7 @@ public:
     void rescale(double a, const Vector3D &b);
 
     // Draw graph according to current layout (VTK).
-    vtkPolyData *drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
+    vtkGraphToPolyData *drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
 
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);

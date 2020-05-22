@@ -8,9 +8,15 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkNamedColors.h>
 #include <vtkLine.h>
+#include <vtkUnsignedCharArray.h>
+#include <vtkPointData.h>
 
 #include "Display.h"
 #include "Interaction.h"
+
+#ifdef vtkGenericDataArray_h
+#define InsertNextTupleValue InsertNextTypedTuple
+#endif
 
 vector<Graph3D *> graph_stack;
 
@@ -29,13 +35,13 @@ vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRend
 
 void Display::display() {
 
+//    changeGraph(0);
+
     switchDisplay(graph_stack.back(), k);
 
     vtkSmartPointer<vtkActor> actor =
             vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-
-    // actor->GetProperty()->SetColor(colors->GetColor3d("cyan_white").GetData());
 
     actor->GetProperty()->EdgeVisibilityOn();
     actor->GetProperty()->SetLineWidth(12);
@@ -43,7 +49,6 @@ void Display::display() {
     actor->GetProperty()->RenderLinesAsTubesOn();
     actor->GetProperty()->RenderPointsAsSpheresOn();
     actor->GetProperty()->VertexVisibilityOn();
-    // actor->GetProperty()->SetVertexColor(0.5,1.0,0.8);
 
     // actor->GetProperty()->BackfaceCullingOn();
 
@@ -81,8 +86,23 @@ void Display::display() {
 }
 
 void Display::switchDisplay(Graph3D *g, double l) {
-    mapper->SetInputData(vtkSmartPointer<vtkPolyData>
-                         ::Take(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)));
+
+    // g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
+    mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
+
+    /*vtkSmartPointer<vtkNamedColors> namedColors =
+            vtkSmartPointer<vtkNamedColors>::New();
+
+    vtkSmartPointer<vtkUnsignedCharArray> colors =
+            vtkSmartPointer<vtkUnsignedCharArray>::New();
+    colors->SetNumberOfComponents(3);
+    colors->SetName ("Colors");
+    colors->InsertNextTupleValue(namedColors->GetColor3ub("Tomato").GetData());
+    colors->InsertNextTupleValue(namedColors->GetColor3ub("Mint").GetData());
+    colors->InsertNextTupleValue(namedColors->GetColor3ub("Peacock").GetData());
+
+    mapper->GetInput()->GetPointData()->AddArray(colors);*/
+
 }
 
 void Display::setupNodes(Graph3D *g) {

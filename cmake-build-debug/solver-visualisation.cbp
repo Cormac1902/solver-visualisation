@@ -59,6 +59,8 @@
 					<Add directory="/home/cormac/VTK/Filters/Core"/>
 					<Add directory="/home/cormac/VTK-build/Filters/Sources"/>
 					<Add directory="/home/cormac/VTK/Filters/Sources"/>
+					<Add directory="/home/cormac/VTK-build/Infovis/Layout"/>
+					<Add directory="/home/cormac/VTK/Infovis/Layout"/>
 					<Add directory="/home/cormac/VTK-build/Interaction/Style"/>
 					<Add directory="/home/cormac/VTK/Interaction/Style"/>
 					<Add directory="/home/cormac/VTK-build/Rendering/Core"/>
@@ -81,6 +83,14 @@
 					<Add directory="/home/cormac/VTK/ThirdParty/glew/vtkglew"/>
 					<Add directory="/home/cormac/VTK-build/ThirdParty/glew"/>
 					<Add directory="/home/cormac/VTK/ThirdParty/glew"/>
+					<Add directory="/home/cormac/VTK-build/Views/Core"/>
+					<Add directory="/home/cormac/VTK/Views/Core"/>
+					<Add directory="/home/cormac/VTK-build/Interaction/Widgets"/>
+					<Add directory="/home/cormac/VTK/Interaction/Widgets"/>
+					<Add directory="/home/cormac/VTK-build/Views/Infovis"/>
+					<Add directory="/home/cormac/VTK/Views/Infovis"/>
+					<Add directory="/home/cormac/VTK-build/Rendering/Context2D"/>
+					<Add directory="/home/cormac/VTK/Rendering/Context2D"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>
@@ -129,6 +139,8 @@
 					<Add directory="/home/cormac/VTK/Filters/Core"/>
 					<Add directory="/home/cormac/VTK-build/Filters/Sources"/>
 					<Add directory="/home/cormac/VTK/Filters/Sources"/>
+					<Add directory="/home/cormac/VTK-build/Infovis/Layout"/>
+					<Add directory="/home/cormac/VTK/Infovis/Layout"/>
 					<Add directory="/home/cormac/VTK-build/Interaction/Style"/>
 					<Add directory="/home/cormac/VTK/Interaction/Style"/>
 					<Add directory="/home/cormac/VTK-build/Rendering/Core"/>
@@ -151,6 +163,14 @@
 					<Add directory="/home/cormac/VTK/ThirdParty/glew/vtkglew"/>
 					<Add directory="/home/cormac/VTK-build/ThirdParty/glew"/>
 					<Add directory="/home/cormac/VTK/ThirdParty/glew"/>
+					<Add directory="/home/cormac/VTK-build/Views/Core"/>
+					<Add directory="/home/cormac/VTK/Views/Core"/>
+					<Add directory="/home/cormac/VTK-build/Interaction/Widgets"/>
+					<Add directory="/home/cormac/VTK/Interaction/Widgets"/>
+					<Add directory="/home/cormac/VTK-build/Views/Infovis"/>
+					<Add directory="/home/cormac/VTK/Views/Infovis"/>
+					<Add directory="/home/cormac/VTK-build/Rendering/Context2D"/>
+					<Add directory="/home/cormac/VTK/Rendering/Context2D"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>

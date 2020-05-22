@@ -29,10 +29,13 @@ find_package(VTK COMPONENTS
         CommonDataModel
         FiltersGeneral
         FiltersSources
+        InfovisLayout
         InteractionStyle
         RenderingCore
         RenderingFreeType
-        RenderingOpenGL2)
+        RenderingOpenGL2
+        ViewsCore
+        ViewsInfovis)
 
 add_executable(s_vis MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
 
