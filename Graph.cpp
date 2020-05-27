@@ -369,7 +369,7 @@ pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
 
     // cout << "p_min = " << curr_min << ", p_max = " << curr_max << "." << endl;
 
-    return pair<Vector3D, Vector3D>(curr_min, curr_max);
+    return {curr_min, curr_max};
 }
 
 // move all points p to q = a * p + b for a vector b and a float a
@@ -392,10 +392,11 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
     // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
     vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
 //    vtkSmartPointer<vtkIntArray> edgeColours;
-    vtkColor3ub twoClauseColour;
-    vtkColor3ub threePlusClauseColour;
-    map<pair<int, int>, vtkColor3ub> edgeColourMap;
+    vtkColor4ub twoClauseColour;
+    vtkColor4ub threePlusClauseColour;
+    map<pair<unsigned, unsigned>, pair<unsigned, vtkColor4ub>> edgeColourMap;
     bool colourPoints = false;
+    unsigned highestEdgeDuplication = 0;
 
     // draw_edges = false;
 
@@ -405,8 +406,8 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
 
     namedColours = vtkSmartPointer<vtkNamedColors>::New();
 
-    twoClauseColour = namedColours->GetColor3ub("Tomato");
-    threePlusClauseColour = namedColours->GetColor3ub("Mint");
+    twoClauseColour = namedColours->GetColor4ub("Tomato");
+    threePlusClauseColour = namedColours->GetColor4ub("Mint");
 
     // Create a vtkCellArray container and store the lines in it
     if (draw_edges) {
@@ -416,7 +417,7 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
         edgeColours
         = vtkSmartPointer<vtkUnsignedCharArray>::New();
 //        = vtkSmartPointer<vtkIntArray>::New();
-        edgeColours->SetNumberOfComponents(3);
+        edgeColours->SetNumberOfComponents(4);
         edgeColours->SetName("Colour");
 
 /*        coloursLookupTable = vtkSmartPointer<vtkLookupTable>::New();
@@ -450,8 +451,12 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
                     EdgeAttribute a = neighbor.second;
                     if (!draw_only_2clauses || a != NT_3_PLUS_CLAUSE) {
                         auto neighbourIndex = std::distance(std::begin(nodes), nodes.find(vp->id()));
-                        if (edgeColourMap.find({nodeIndex, neighbourIndex})->second != threePlusClauseColour) {
-                            edgeColourMap[{nodeIndex, neighbourIndex}] =
+                        edgeColourMap[{nodeIndex, neighbourIndex}].first++;
+                        if (edgeColourMap[{nodeIndex, neighbourIndex}].first > highestEdgeDuplication) {
+                            highestEdgeDuplication = edgeColourMap[{nodeIndex, neighbourIndex}].first;
+                        }
+                        if (edgeColourMap.find({nodeIndex, neighbourIndex})->second.second != threePlusClauseColour) {
+                            edgeColourMap[{nodeIndex, neighbourIndex}].second =
                                     a != NT_3_PLUS_CLAUSE ? twoClauseColour : threePlusClauseColour;
                         }
                         // cout << (a != NT_3_PLUS_CLAUSE) << endl;
@@ -461,10 +466,18 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
         }
     }
 
-    for (const auto & edge : edgeColourMap) {
+    for (auto & edge : edgeColourMap) {
         graph->AddEdge(edge.first.first, edge.first.second);
-        edgeColours->InsertNextTupleValue(edge.second.GetData());
+        vtkColor4ub edgeColour = edge.second.second;
+        edgeColour[3] = 255 * ((float) edge.second.first / (float) highestEdgeDuplication);
+        edge.second.second = edgeColour;
+        edgeColours->InsertNextTupleValue(edge.second.second.GetData());
+        cout << edge.first.first << " " << edge.first.second << ": " << edge.second.first << " " << edge.second.second << endl;
+//        cout << edge.second.second << endl;
     }
+
+    cout << number_edges << endl;
+    cout << highestEdgeDuplication << endl;
 
     graph->SetPoints(points);
 
