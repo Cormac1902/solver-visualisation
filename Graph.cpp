@@ -395,17 +395,22 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
     vtkColor3ub twoClauseColour;
     vtkColor3ub threePlusClauseColour;
     map<pair<int, int>, vtkColor3ub> edgeColourMap;
+    bool colourPoints = false;
+
+    // draw_edges = false;
 
     vertexColours->SetNumberOfComponents(3);
 
 //    draw_only_2clauses = true;
 
+    namedColours = vtkSmartPointer<vtkNamedColors>::New();
+
+    twoClauseColour = namedColours->GetColor3ub("Tomato");
+    threePlusClauseColour = namedColours->GetColor3ub("Mint");
+
     // Create a vtkCellArray container and store the lines in it
     if (draw_edges) {
-        namedColours = vtkSmartPointer<vtkNamedColors>::New();
 
-        twoClauseColour = namedColours->GetColor3ub("Tomato");
-        threePlusClauseColour = namedColours->GetColor3ub("Mint");
 
         // Create a vtkUnsignedCharArray container and store the colors in it
         edgeColours
@@ -422,9 +427,7 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
         coloursLookupTable->Build();*/
     }
 
-    for (unsigned l = 0; l < nodes.size(); l++) {
-        graph->AddVertex();
-    }
+    graph->SetNumberOfVertices(nodes.size());
 
     for (auto i = nodes.begin(); i != nodes.end(); i++) {
         const Node3D &node = i->second;
@@ -432,8 +435,10 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
         vtkSmartPointer<vtkPointSource> pointSource =
                 vtkSmartPointer<vtkPointSource>::New();
 
-        // vertexColours->InsertNextTupleValue((i->first % 2 == 0 ? twoClauseColour : threePlusClauseColour).GetData());
-
+        if (colourPoints) {
+            vertexColours->InsertNextTupleValue(
+                    (i->first % 2 == 0 ? twoClauseColour : threePlusClauseColour).GetData());
+        }
         // cout << i->first << "; " << node.position().x << "; " << node.position().y << "; " << node.position().z << endl;
         if (draw_edges) {
             const Node3D &u = i->second;
@@ -462,7 +467,10 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
     }
 
     graph->SetPoints(points);
-    // graph->GetVertexData()->SetScalars(vertexColours);
+
+    if (colourPoints) {
+        graph->GetVertexData()->SetScalars(vertexColours);
+    }
 
     if (draw_edges) {
         //cout << "edges" << endl;
