@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="solver-visualisation" targetName="s_vis" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3b41a777-1209-4e2c-bb9f-a83692706b6a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Display.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Display.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Display.h" beforeDir="false" afterPath="$PROJECT_DIR$/Display.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Graph.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Graph.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/Display.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/Display.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/Graph.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/Graph.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/Interaction.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/Interaction.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/cnf3d2.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/cnf3d2.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/s_vis.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/s_vis" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/s_vis" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1UXEjxYOEr9EfpwZKlPLm6mM2Eu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="cf.advertisement.text.has.clang-format" value="true" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+  </component>
+  <component name="RunManager">
+    <configuration name="s_vis" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="solver-visualisation" TARGET_NAME="s_vis" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="solver-visualisation" RUN_TARGET_NAME="s_vis">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b41a777-1209-4e2c-bb9f-a83692706b6a" name="Default Changelist" comment="" />
+      <created>1575494678742</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1575494678742</updated>
+      <workItem from="1575494680197" duration="6083000" />
+      <workItem from="1575639829141" duration="1098000" />
+      <workItem from="1579225106113" duration="17000" />
+      <workItem from="1587059160151" duration="612000" />
+      <workItem from="1587060407082" duration="688000" />
+      <workItem from="1587063353054" duration="1255000" />
+      <workItem from="1587232764855" duration="260000" />
+      <workItem from="1587233042042" duration="3657000" />
+      <workItem from="1587314143608" duration="7344000" />
+      <workItem from="1587748194309" duration="7750000" />
+      <workItem from="1587828572120" duration="10801000" />
+      <workItem from="1587933821950" duration="2520000" />
+      <workItem from="1588256263568" duration="607000" />
+      <workItem from="1588258404911" duration="6976000" />
+      <workItem from="1588343552177" duration="5491000" />
+      <workItem from="1588430320116" duration="14483000" />
+      <workItem from="1588517585876" duration="9239000" />
+      <workItem from="1588603186979" duration="595000" />
+      <workItem from="1588607087551" duration="3673000" />
+      <workItem from="1588615867120" duration="1623000" />
+      <workItem from="1588622509437" duration="2368000" />
+      <workItem from="1588875940827" duration="6813000" />
+      <workItem from="1589233320354" duration="4000" />
+      <workItem from="1589466780967" duration="4393000" />
+      <workItem from="1589475689641" duration="5078000" />
+      <workItem from="1589489107386" duration="4677000" />
+      <workItem from="1589552110154" duration="31162000" />
+      <workItem from="1589727471921" duration="623000" />
+      <workItem from="1589912699891" duration="14852000" />
+      <workItem from="1590006253097" duration="15675000" />
+      <workItem from="1590075071428" duration="21478000" />
+      <workItem from="1590180370420" duration="4698000" />
+      <workItem from="1590524242093" duration="5000" />
+      <workItem from="1590524261914" duration="1845000" />
+      <workItem from="1590610473785" duration="7924000" />
+      <workItem from="1590679209456" duration="9447000" />
+      <workItem from="1590764358181" duration="9523000" />
+      <workItem from="1591284977821" duration="57000" />
+      <workItem from="1591285091990" duration="488000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="873" y="342" key="#Plugins" timestamp="1589489657569">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="873" y="342" key="#Plugins/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1589489657569" />
+    <state x="857" y="346" key="#SSH_Configurations" timestamp="1591285580153">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="857" y="346" key="#SSH_Configurations/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1591285580153" />
+    <state x="4483" y="257" key="#SSH_Configurations/0.0.2560.1400/3840.0.1920.1040@3840.0.1920.1040" timestamp="1589912952145" />
+    <state x="857" y="346" key="#SSH_Configurations/3840.1099.1536.816/0.0.2560.1400/3840.18.1920.1040@0.0.2560.1400" timestamp="1587233092887" />
+    <state x="736" y="356" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590011998984">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="736" y="356" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1590011998984" />
+    <state x="1035" y="503" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1590025657612">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1035" y="503" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1590025657612" />
+    <state x="961" y="437" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1591284984020">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="961" y="437" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1591284984020" />
+    <state x="1011" y="448" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1590025563496">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1011" y="448" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1590025563496" />
+    <state x="915" y="284" key="FileChooserDialogImpl" timestamp="1590109169795">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="915" y="284" key="FileChooserDialogImpl/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1590109169795" />
+    <state width="1258" height="401" key="GridCell.Tab.0.bottom" timestamp="1587766050971">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1258" height="401" key="GridCell.Tab.0.bottom/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1587766050971" />
+    <state width="1258" height="401" key="GridCell.Tab.0.center" timestamp="1587766050971">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1258" height="401" key="GridCell.Tab.0.center/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1587766050971" />
+    <state width="1258" height="401" key="GridCell.Tab.0.left" timestamp="1587766050971">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1258" height="401" key="GridCell.Tab.0.left/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1587766050971" />
+    <state width="1258" height="401" key="GridCell.Tab.0.right" timestamp="1587766050971">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1258" height="401" key="GridCell.Tab.0.right/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1587766050971" />
+    <state x="782" y="346" key="SettingsEditor" timestamp="1591285580750">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="782" y="346" key="SettingsEditor/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1591285580750" />
+    <state x="4427" y="257" key="SettingsEditor/0.0.2560.1400/3840.0.1920.1040@3840.0.1920.1040" timestamp="1589912956547" />
+    <state x="782" y="346" key="SettingsEditor/3840.1099.1536.816/0.0.2560.1400/3840.18.1920.1040@0.0.2560.1400" timestamp="1587233094811" />
+    <state x="506" y="278" width="693" height="534" key="find.popup" timestamp="1590766150266">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="506" y="278" width="693" height="534" key="find.popup/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1590766150266" />
+    <state x="1057" y="486" key="refactoring.ChangeSignatureDialog" timestamp="1588462997552">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1057" y="486" key="refactoring.ChangeSignatureDialog/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1588462997552" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1590108592139">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/3840.0.1920.1040@0.0.2560.1400" timestamp="1590108592139" />
+  </component>
+</project>

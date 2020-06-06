@@ -37,6 +37,8 @@ find_package(VTK COMPONENTS
         ViewsCore
         ViewsInfovis)
 
+find_package(tsl-ordered-map REQUIRED)
+
 add_executable(s_vis MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
 
 if (VTK_FOUND)

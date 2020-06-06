@@ -470,6 +470,9 @@ solver-visualisation_BINARY_DIR:STATIC=/mnt/d/Users/Cormac/OneDrive/Family/Corma
 //Value Computed by CMake
 solver-visualisation_SOURCE_DIR:STATIC=/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
 
+//The directory containing a CMake configuration file for tsl-ordered-map.
+tsl-ordered-map_DIR:PATH=/usr/local/share/cmake/tsl-ordered-map
+
 
 ########################
 # INTERNAL cache entries

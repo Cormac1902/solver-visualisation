@@ -11,8 +11,9 @@
 #include "Graph.h"
 
 class Display {
-    static vtkSmartPointer<vtkPolyDataMapper> mapper;
-    static vtkSmartPointer<vtkRenderWindow> renderWindow;
+    static vtkPolyDataMapper* mapper;
+    static vtkActor* actor;
+    static vtkRenderWindow* renderWindow;
 
     static void display();
 

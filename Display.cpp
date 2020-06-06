@@ -10,6 +10,7 @@
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkPointData.h>
+#include <vtkPointSource.h>
 
 #include "Display.h"
 #include "Interaction.h"
@@ -26,10 +27,14 @@ double f_k = sqrt(4.0 / 7.0);
 bool draw_edges = true, adaptive_size = true; // run_anim = false
 bool draw_only_2clauses = false;
 
+float min_line_width = 3, max_line_width = 12;
+int max_line_width_threshold = 250, min_line_width_threshold = 2500;
+
 Vector3D min_p, max_p;
 
-vtkSmartPointer<vtkPolyDataMapper> Display::mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+vtkPolyDataMapper *Display::mapper = vtkPolyDataMapper::New();
+vtkActor *Display::actor = vtkActor::New();
+vtkRenderWindow *Display::renderWindow = vtkRenderWindow::New();
 
 // ----------------------------------------------------------------------
 
@@ -39,26 +44,23 @@ void Display::display() {
 
     switchDisplay(graph_stack.back(), k);
 
-    vtkSmartPointer<vtkActor> actor =
-            vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
 
     actor->GetProperty()->EdgeVisibilityOn();
-    actor->GetProperty()->SetLineWidth(12);
-    actor->GetProperty()->SetPointSize(36);
     actor->GetProperty()->RenderLinesAsTubesOn();
     actor->GetProperty()->RenderPointsAsSpheresOn();
     actor->GetProperty()->VertexVisibilityOn();
 
+    mapper->InterpolateScalarsBeforeMappingOn();
+    mapper->ScalarVisibilityOn();
+
     // actor->GetProperty()->BackfaceCullingOn();
 
-    vtkSmartPointer<vtkCamera> camera =
-            vtkSmartPointer<vtkCamera>::New();
+    vtkSmartPointer<vtkCamera> camera = vtkSmartPointer<vtkCamera>::New();
     camera->SetPosition(0, 0, 20);
     camera->SetFocalPoint(0, 0, 0);
 
-    vtkSmartPointer<vtkRenderer> renderer =
-            vtkSmartPointer<vtkRenderer>::New();
+    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
 
     renderer->SetActiveCamera(camera);
 
@@ -89,6 +91,22 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
     // g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
     mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
+
+    float numberOfLines = mapper->GetInput()->GetNumberOfLines();
+
+    auto lineWidth = min(max_line_width,
+                         ((float) (min_line_width_threshold - max_line_width_threshold) / numberOfLines) + min_line_width);
+
+    actor->GetProperty()->SetLineWidth(lineWidth);
+    actor->GetProperty()->SetPointSize(lineWidth * 3);
+
+/*    vtkSmartPointer<vtkPointSource> pointSource =
+            vtkSmartPointer<vtkPointSource>::New();
+    pointSource->SetNumberOfPoints(mapper->GetInput()->GetNumberOfPoints());
+    pointSource->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
+    pointSource->Update();
+
+    mapper->SetInputConnection(pointSource->GetOutputPort());*/
 
     /*vtkSmartPointer<vtkNamedColors> namedColors =
             vtkSmartPointer<vtkNamedColors>::New();
@@ -178,7 +196,6 @@ double Display::kFromGraphLevel(unsigned int graphLevel) {
 // builds (global) stack of coarsened graphs
 void Display::init(char *filename) {
     auto *g = new Graph3D();
-    g->set_all_matching({});
     graph_stack.push_back(g);
 
     // build initial graph
@@ -209,7 +226,7 @@ void Display::init(char *filename) {
     Graph3D *a = g, *b;
     int level = 1;
     while (a->nr_nodes() > 2) {
-        b = a->coarsen();
+        b = a->coarsen(level);
         graph_stack.push_back(b);
         cout << "Coarsened graph " << level << " consists of " << b->nr_nodes()
              << " vertices and " << b->nr_edges() << " edge(s)." << endl;

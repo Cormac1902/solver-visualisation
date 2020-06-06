@@ -25,10 +25,12 @@ private:
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
 
-    map<int, vector<int>> allMatching;
+    map<long, vector<long>> allMatching;
+
+    map<long, long> matchMap;
 
 public:
-    Graph3D() : number_edges(0), positioned(false) {
+    Graph3D() : number_edges(0), positioned(false), allMatching({}) {
     } // constructs empty graph
     ~Graph3D() = default;
 
@@ -53,7 +55,7 @@ public:
     // computes the number of independent components of the graph.
     // From each component the id of one node is returned.
 
-    Graph3D *coarsen();
+    Graph3D *coarsen(int level);
     // Coarsen graph by matching adjacent nodes (reduces the number of vertices to the half).
 
     void init_positions_at_random();
@@ -82,9 +84,11 @@ public:
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);
 
-    void set_all_matching(map<int, vector<int>> prev);
+    void set_all_matching(map<long, vector<long>> prev);
 
-    void add_match(int node, int matched);
+    void set_match_map(map<long, long> prev);
+
+    void add_match(long node, long matched);
 };
 
 #endif

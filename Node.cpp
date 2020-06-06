@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Node.h"
 
 void Node3D::set_pos(double x, double y, double z) {

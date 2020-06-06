@@ -28,7 +28,7 @@ private:
     int c_weight; // used for graph coarsening (weight: number of merged nodes)
 
 public:
-    explicit Node3D(int id = 0) : ident(id), mark(0), c_weight(1) {}
+    explicit Node3D(long id = 0) : ident(id), mark(0), c_weight(1) {}
 
     ~Node3D() = default;
 

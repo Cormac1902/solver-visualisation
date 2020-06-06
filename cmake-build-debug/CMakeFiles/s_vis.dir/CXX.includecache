@@ -56,12 +56,6 @@ vtkAutoInit.h
 
 /home/cormac/VTK-build/Filters/Sources/vtkFiltersSourcesModule.h
 
-/home/cormac/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK-build/Interaction/Style/vtkRenderingCoreModule.h
-vtkAutoInit.h
-/home/cormac/VTK-build/Interaction/Style/vtkAutoInit.h
-
 /home/cormac/VTK-build/Rendering/Core/vtkRenderingCoreModule.h
 vtkFiltersCoreModule.h
 /home/cormac/VTK-build/Rendering/Core/vtkFiltersCoreModule.h
@@ -812,24 +806,6 @@ vtkFiltersSourcesModule.h
 vtkPolyDataAlgorithm.h
 /home/cormac/VTK/Filters/Sources/vtkPolyDataAlgorithm.h
 
-/home/cormac/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
-vtkInteractionStyleModule.h
-/home/cormac/VTK/Interaction/Style/vtkInteractionStyleModule.h
-vtkInteractorStyle.h
-/home/cormac/VTK/Interaction/Style/vtkInteractorStyle.h
-
-/home/cormac/VTK/Rendering/Core/vtkAbstractMapper.h
-vtkAlgorithm.h
-/home/cormac/VTK/Rendering/Core/vtkAlgorithm.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-
-/home/cormac/VTK/Rendering/Core/vtkAbstractMapper3D.h
-vtkAbstractMapper.h
-/home/cormac/VTK/Rendering/Core/vtkAbstractMapper.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-
 /home/cormac/VTK/Rendering/Core/vtkActor.h
 vtkProp3D.h
 /home/cormac/VTK/Rendering/Core/vtkProp3D.h
@@ -841,36 +817,6 @@ vtkActor.h
 /home/cormac/VTK/Rendering/Core/vtkActor.h
 vtkPropCollection.h
 /home/cormac/VTK/Rendering/Core/vtkPropCollection.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-
-/home/cormac/VTK/Rendering/Core/vtkInteractorObserver.h
-vtkObject.h
-/home/cormac/VTK/Rendering/Core/vtkObject.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-
-/home/cormac/VTK/Rendering/Core/vtkInteractorStyle.h
-vtkInteractorObserver.h
-/home/cormac/VTK/Rendering/Core/vtkInteractorObserver.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-
-/home/cormac/VTK/Rendering/Core/vtkMapper.h
-vtkAbstractMapper3D.h
-/home/cormac/VTK/Rendering/Core/vtkAbstractMapper3D.h
-vtkRenderingCoreModule.h
-/home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
-vtkSmartPointer.h
-/home/cormac/VTK/Rendering/Core/vtkSmartPointer.h
-vtkSystemIncludes.h
-/home/cormac/VTK/Rendering/Core/vtkSystemIncludes.h
-vector
--
-
-/home/cormac/VTK/Rendering/Core/vtkPolyDataMapper.h
-vtkMapper.h
-/home/cormac/VTK/Rendering/Core/vtkMapper.h
 vtkRenderingCoreModule.h
 /home/cormac/VTK/Rendering/Core/vtkRenderingCoreModule.h
 
@@ -972,12 +918,6 @@ vtkObject.h
 vtkViewsCoreModule.h
 /home/cormac/VTK/Views/Core/vtkViewsCoreModule.h
 
-/home/cormac/VTK/Views/Core/vtkViewTheme.h
-vtkObject.h
-/home/cormac/VTK/Views/Core/vtkObject.h
-vtkViewsCoreModule.h
-/home/cormac/VTK/Views/Core/vtkViewsCoreModule.h
-
 /home/cormac/VTK/Views/Infovis/vtkGraphLayoutView.h
 vtkRenderView.h
 /home/cormac/VTK/Views/Infovis/vtkRenderView.h
@@ -1007,13 +947,7 @@ Graph.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 SpaceGrid.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h
-Interaction.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
-vtkCellArray.h
--
 vtkPoints.h
--
-vtkPolyDataMapper.h
 -
 vtkActor.h
 -
@@ -1043,8 +977,6 @@ vtkGraphToPolyData.h
 -
 vtkLookupTable.h
 -
-vtkViewTheme.h
--
 
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 map
@@ -1061,14 +993,6 @@ vtkGraphToPolyData.h
 -
 Node.h
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
-
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
-vtkInteractorStyleTrackballCamera.h
--
-vtkObjectFactory.h
--
-vtkRenderWindowInteractor.h
-/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/vtkRenderWindowInteractor.h
 
 /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 set
