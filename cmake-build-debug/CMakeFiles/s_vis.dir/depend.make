@@ -255,6 +255,7 @@ CMakeFiles/s_vis.dir/Graph.cpp.o: ../Node.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../SpaceGrid.h
 CMakeFiles/s_vis.dir/Graph.cpp.o: ../Vector.h
 
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Common/Color/vtkCommonColorModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Common/Core/vtkCommonCoreModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Common/Core/vtkConfigure.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Common/Core/vtkMathConfigure.h
@@ -270,6 +271,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Filters/General/v
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Filters/Sources/vtkFiltersSourcesModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK-build/Rendering/Core/vtkRenderingCoreModule.h
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Color/vtkNamedColors.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkABI.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkAOSDataArrayTemplate.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkAbstractArray.h
@@ -309,6 +311,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkSetGet.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkSmartPointer.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkSmartPointerBase.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkStdString.h
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkStringArray.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkSystemIncludes.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkTimeStamp.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Core/vtkType.h
@@ -328,6 +331,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCel
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCellArray.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCellLinks.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCellType.h
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkColor.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkDataObject.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkDataSet.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkGraph.h
@@ -336,6 +340,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPol
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyDataInternals.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Common/Math/vtkTuple.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Filters/General/vtkVertexGlyphFilter.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Filters/Sources/vtkGraphToPolyData.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
@@ -410,6 +415,7 @@ CMakeFiles/s_vis.dir/SpaceGrid.cpp.o: ../Vector.h
 CMakeFiles/s_vis.dir/Vector.cpp.o: ../Vector.cpp
 CMakeFiles/s_vis.dir/Vector.cpp.o: ../Vector.h
 
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Common/Color/vtkCommonColorModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Common/Core/vtkCommonCoreModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Common/Core/vtkConfigure.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Common/Core/vtkMathConfigure.h
@@ -424,6 +430,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Filters/Core/vtkFilter
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Filters/General/vtkFiltersGeneralModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Filters/Sources/vtkFiltersSourcesModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK-build/Rendering/Core/vtkRenderingCoreModule.h
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Color/vtkNamedColors.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkABI.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkAOSDataArrayTemplate.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkAbstractArray.h
@@ -462,6 +469,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkSetGet.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkSmartPointer.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkSmartPointerBase.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkStdString.h
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkStringArray.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkSystemIncludes.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkTimeStamp.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Core/vtkType.h
@@ -481,6 +489,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCell.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCellArray.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCellLinks.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkCellType.h
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkColor.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkDataObject.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkDataSet.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkGraph.h
@@ -489,6 +498,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyData
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/DataModel/vtkPolyDataInternals.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkAlgorithm.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Common/Math/vtkTuple.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Filters/General/vtkVertexGlyphFilter.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Filters/Sources/vtkGraphToPolyData.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/VTK/Rendering/Core/vtkAbstractMapper.h

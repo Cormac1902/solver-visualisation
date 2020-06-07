@@ -226,7 +226,7 @@ void Display::init(char *filename) {
     Graph3D *a = g, *b;
     int level = 1;
     while (a->nr_nodes() > 2) {
-        b = a->coarsen(level);
+        b = a->coarsen();
         graph_stack.push_back(b);
         cout << "Coarsened graph " << level << " consists of " << b->nr_nodes()
              << " vertices and " << b->nr_edges() << " edge(s)." << endl;

@@ -9,37 +9,58 @@
 #include <vtkPolyData.h>
 #include <vtkGraph.h>
 #include <vtkGraphToPolyData.h>
+#include <vtkColor.h>
+#include <vtkNamedColors.h>
 #include "Node.h"
 
 using namespace std;
 
 class Graph3D {
 private:
-    map<int, Node3D> nodes; // maps ids to nodes (ids are DIMACS variables)
+    map<unsigned long, Node3D> nodes; // maps ids to nodes (ids are DIMACS variables)
     // NOTE: edges are stored inside the nodes
 
     int number_edges; // number of edges contained in graph
 
     bool positioned; // whether graph has been positioned
 
+    float highestEdgeDuplication; // tracks highest number of recurring edges
+
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
 
-    map<long, vector<long>> allMatching;
+    map<unsigned long, vector<unsigned long>> allMatching;
 
-    map<long, long> matchMap;
+    map<unsigned long, unsigned long> matchMap;
+
+    vtkColor4ub twoClauseColour;
+    vtkColor4ub threePlusClauseColour;
+
+    // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
+    map<pair<unsigned long, unsigned long>, pair<unsigned long, pair<unsigned, vtkColor4ub>>> edgeColourMap;
+
+    void add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a);
+
+    void add_graph_edge(unsigned long x, ExtNode3D y);
 
 public:
-    Graph3D() : number_edges(0), positioned(false), allMatching({}) {
+    Graph3D() : number_edges(0), positioned(false), highestEdgeDuplication(0), allMatching({}) {
+        vtkSmartPointer<vtkNamedColors> namedColours = vtkSmartPointer<vtkNamedColors>::New();
+        twoClauseColour = namedColours->GetColor4ub("Tomato");
+        threePlusClauseColour = namedColours->GetColor4ub("Mint");
     } // constructs empty graph
     ~Graph3D() = default;
 
     // modifiers
     void add_node(const Node3D &n);          // node 'n' is copied into graph
 
-    void insert_edge(long x, long y, EdgeAttribute a = NT_3_PLUS_CLAUSE);
+    void insert_edge(unsigned long x, unsigned long y, EdgeAttribute a = NT_3_PLUS_CLAUSE);
     // add edge between nodes with ids x and y (if not
     // already present)
+
+    void add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a);
+
+    void add_graph_edges_from_clause(vector<long> clause);
 
     void build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
@@ -55,7 +76,7 @@ public:
     // computes the number of independent components of the graph.
     // From each component the id of one node is returned.
 
-    Graph3D *coarsen(int level);
+    Graph3D *coarsen();
     // Coarsen graph by matching adjacent nodes (reduces the number of vertices to the half).
 
     void init_positions_at_random();
@@ -84,11 +105,11 @@ public:
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);
 
-    void set_all_matching(map<long, vector<long>> prev);
+    void set_all_matching(map<unsigned long, vector<unsigned long>> prev);
 
-    void set_match_map(map<long, long> prev);
+    void set_match_map(map<unsigned long, unsigned long> prev);
 
-    void add_match(long node, long matched);
+    void add_match(unsigned long node, unsigned long matched);
 };
 
 #endif

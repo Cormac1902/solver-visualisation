@@ -31,15 +31,15 @@ void Graph3D::add_node(const Node3D &n) {
     nodes[n.id()] = n;
 }
 
-void Graph3D::set_all_matching(map<long, vector<long>> prev) {
+void Graph3D::set_all_matching(map<unsigned long, vector<unsigned long>> prev) {
     allMatching = std::move(prev);
 }
 
-void Graph3D::set_match_map(map<long, long> prev) {
+void Graph3D::set_match_map(map<unsigned long, unsigned long> prev) {
     matchMap = std::move(prev);
 }
 
-void Graph3D::add_match(long node, long matched) {
+void Graph3D::add_match(unsigned long node, unsigned long matched) {
     if (node != matched) {
         allMatching[matched].push_back(node);
         allMatching[matched].insert(allMatching[matched].end(), allMatching[node].begin(), allMatching[node].end());
@@ -51,7 +51,7 @@ void Graph3D::add_match(long node, long matched) {
     }
 }
 
-void Graph3D::insert_edge(long x, long y, EdgeAttribute a) {
+void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     // assertion: nodes x and y exist
     assert(nodes.find(x) != nodes.end() && nodes.find(y) != nodes.end());
 
@@ -66,6 +66,47 @@ void Graph3D::insert_edge(long x, long y, EdgeAttribute a) {
 
     if (ins_x)
         number_edges++;
+}
+
+void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
+    pair<unsigned long, pair<unsigned, vtkColor4ub>>* edgeColour = &edgeColourMap[{x, y}];
+    if (edgeColour->second.first == 0) {
+        edgeColour->first = edgeColourMap.size();
+    }
+    edgeColour->second.first++;
+    if (edgeColour->second.first > highestEdgeDuplication) {
+        highestEdgeDuplication = edgeColour->second.first;
+    }
+    if (edgeColour->second.second != threePlusClauseColour) {
+        edgeColour->second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
+    }
+}
+
+void Graph3D::add_graph_edge(unsigned long x, ExtNode3D y) {
+    add_graph_edge(x,
+            std::distance(std::begin(nodes), nodes.find(matchMap[y.first->id()])),
+            y.second);
+}
+
+void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a) {
+    add_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
+            std::distance(std::begin(nodes), nodes.find(matchMap[y])),
+            a);
+}
+
+void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
+    auto a = (clause.size() == 2 ? NT_2_CLAUSE : NT_3_PLUS_CLAUSE);
+    for (auto &var : clause) {
+        if (var < 0) {
+            var = abs(var);
+        }
+    }
+    std::sort(clause.begin(), clause.end());
+    for (auto i = clause.begin(); i < clause.end(); i++) {
+        for (auto j = clause.begin() + 1; j != clause.end(); j++) {
+            add_graph_edge_from_ids(*i, *j, a);
+        }
+    }
 }
 
 void Graph3D::build_from_cnf(istream &is) {
@@ -119,7 +160,7 @@ void Graph3D::build_from_cnf(istream &is) {
 
 // one_of_each_component is reset
 int Graph3D::independent_components(vector<int> *one_of_each_component) {
-    map<int, Node3D>::iterator first_unmarked = nodes.begin(), nmi;
+    map<unsigned long, Node3D>::iterator first_unmarked = nodes.begin(), nmi;
     int nr_components = 0;
     stack<Node3D *> node_stack;
 
@@ -161,15 +202,14 @@ int Graph3D::independent_components(vector<int> *one_of_each_component) {
     return nr_components;
 }
 
-Graph3D *Graph3D::coarsen(int level) {
-    map<int, Node3D>::iterator i;
+Graph3D *Graph3D::coarsen() {
     set<ExtNode3D>::iterator j;
     int curr_min_weight;
     Node3D *curr_min_weight_node;
 
     // build matching
-    for (i = nodes.begin(); i != nodes.end(); i++) {
-        Node3D &node_1 = i->second;
+    for (auto & node : nodes) {
+        Node3D &node_1 = node.second;
         if (node_1.mark != 0)
             continue;   // already paired
         curr_min_weight = INT_MAX;
@@ -194,8 +234,8 @@ Graph3D *Graph3D::coarsen(int level) {
     }
 
     // remove markings
-    for (i = nodes.begin(); i != nodes.end(); i++)
-        i->second.mark = 0;
+    for (auto & node : nodes)
+        node.second.mark = 0;
 
     // build coarsened graph
     map<int, int>::iterator k;
@@ -218,8 +258,8 @@ Graph3D *Graph3D::coarsen(int level) {
     }
     // b) set up edges
     long new_node_1_id, new_node_2_id;
-    for (i = nodes.begin(); i != nodes.end(); i++) {
-        Node3D &node = i->second;
+    for (auto & i : nodes) {
+        Node3D &node = i.second;
         k = matching.find(node.id());
         new_node_1_id = (k == matching.end() ? node.id() : matching[node.id()]);
         for (j = node.neighbors().begin(); j != node.neighbors().end(); j++) {
@@ -269,7 +309,6 @@ void Graph3D::init_positions_from_graph(Graph3D *g, double k) {
 }
 
 void Graph3D::compute_layout(double k) {
-    map<int, Node3D>::iterator i;
     set<ExtNode3D>::iterator n;
     bool converged = false;
     double f_r, f_r_aux, f_a, t;
@@ -286,8 +325,8 @@ void Graph3D::compute_layout(double k) {
     // put nodes into space grid (with cube length 2k)
     vector<Node3D *> grid_neighbors;
     SpaceGrid3D sg(2.0 * k);  // R = 2.0 * k
-    for (i = nodes.begin(); i != nodes.end(); i++)
-        sg.insert_node(&i->second);
+    for (auto & node : nodes)
+        sg.insert_node(&node.second);
 #endif
 
     // iteratively compute layout
@@ -296,8 +335,8 @@ void Graph3D::compute_layout(double k) {
 
         converged = true;
 
-        for (i = nodes.begin(); i != nodes.end(); i++) {
-            Node3D &v = i->second;
+        for (auto & node : nodes) {
+            Node3D &v = node.second;
 
             theta = Vector3D(0.0, 0.0, 0.0);
 
@@ -305,7 +344,7 @@ void Graph3D::compute_layout(double k) {
 #ifdef USE_SPACE_GRID
             grid_neighbors = sg.find_neighbors(&v);
             for (auto &grid_neighbor : grid_neighbors)
-                if (grid_neighbor != &i->second) {  // |delta| <= R is not enforced! (better layout quality)
+                if (grid_neighbor != &node.second) {  // |delta| <= R is not enforced! (better layout quality)
                     delta = grid_neighbor->position() - v.position();
                     f_r = f_r_aux * grid_neighbor->weight() / delta.norm();
                     theta += f_r * delta.normalize();
@@ -343,10 +382,9 @@ void Graph3D::compute_layout(double k) {
 
 pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
     Vector3D curr_min(DBL_MAX, DBL_MAX, DBL_MAX), curr_max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
-    map<int, Node3D>::iterator i;
 
-    for (i = nodes.begin(); i != nodes.end(); i++) {
-        Node3D &n = i->second;
+    for (auto & node : nodes) {
+        Node3D &n = node.second;
         if (n.position().x < curr_min.x)
             curr_min.x = n.position().x;
         if (n.position().x > curr_max.x)
@@ -367,9 +405,8 @@ pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
 // move all points p to q = a * p + b for a vector b and a float a
 
 void Graph3D::rescale(double a, const Vector3D &b) {
-    map<int, Node3D>::iterator i;
-    for (i = nodes.begin(); i != nodes.end(); i++) {
-        Node3D &n = i->second;
+    for (auto & node : nodes) {
+        Node3D &n = node.second;
         n.set_pos(a * n.position() + b);
     }
 }
@@ -385,22 +422,11 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
     // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
     vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
 //    vtkSmartPointer<vtkIntArray> edgeColours;
-    vtkColor4ub twoClauseColour;
-    vtkColor4ub threePlusClauseColour;
-    map<pair<unsigned, unsigned>, pair<unsigned, pair<unsigned, vtkColor4ub>>> edgeColourMap;  // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
     bool colourPoints = true;
-    float highestEdgeDuplication = 0;
-
-    // draw_edges = false;
 
     vertexColours->SetNumberOfComponents(3);
 
 //    draw_only_2clauses = true;
-
-    namedColours = vtkSmartPointer<vtkNamedColors>::New();
-
-    twoClauseColour = namedColours->GetColor4ub("Tomato");
-    threePlusClauseColour = namedColours->GetColor4ub("Mint");
 
     // Create a vtkCellArray container and store the lines in it
     if (draw_edges) {
@@ -433,25 +459,11 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
         }
         if (draw_edges) {
             const Node3D &u = i->second;
-            const set<ExtNode3D> &neighbors = u.neighbors();
             auto nodeIndex = std::distance(std::begin(nodes), nodes.find(u.id()));
-            for (const auto & neighbor : neighbors) {
-                const Node3D *vp = neighbor.first;
-                if (u.id() < vp->id()) { // draw edges only in direction of incr. ids; no self-edg.
-                    EdgeAttribute a = neighbor.second;
-                    if (!draw_only_2clauses || a != NT_3_PLUS_CLAUSE) {
-                        auto neighbourIndex = std::distance(std::begin(nodes), nodes.find(vp->id()));
-                        if (edgeColourMap[{nodeIndex, neighbourIndex}].second.first == 0) {
-                            edgeColourMap[{nodeIndex, neighbourIndex}].first = edgeColourMap.size();
-                        }
-                        edgeColourMap[{nodeIndex, neighbourIndex}].second.first++;
-                        if (edgeColourMap[{nodeIndex, neighbourIndex}].second.first > highestEdgeDuplication) {
-                            highestEdgeDuplication = edgeColourMap[{nodeIndex, neighbourIndex}].second.first;
-                        }
-                        if (edgeColourMap.find({nodeIndex, neighbourIndex})->second.second.second != threePlusClauseColour) {
-                            edgeColourMap[{nodeIndex, neighbourIndex}].second.second =
-                                    a != NT_3_PLUS_CLAUSE ? twoClauseColour : threePlusClauseColour;
-                        }
+            for (const auto & neighbor : u.neighbors()) {
+                if (u.id() < neighbor.first->id()) { // draw edges only in direction of incr. ids; no self-edg.
+                    if (!draw_only_2clauses || neighbor.second != NT_3_PLUS_CLAUSE) {
+                        add_graph_edge(nodeIndex, neighbor);
                     }
                 }
             }
@@ -523,25 +535,28 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
     //cout << "render" << endl;
     //cout << "second" << endl;
 
+    /*vector<long> newClause = {-1, 3, 2};
+
+    add_graph_edges_from_clause(newClause);*/
+
     return graphToPolyData;
     //return graph;
 }
 
 ostream &operator<<(ostream &os, const Graph3D &g) {
-    map<int, Node3D>::const_iterator i;
     set<ExtNode3D>::iterator j;
 
     os << "Nodes:" << endl;
     os << "\t";
-    for (i = g.nodes.begin(); i != g.nodes.end(); i++) {
+    for (auto i = g.nodes.begin(); i != g.nodes.end(); i++) {
         if (i != g.nodes.begin())
             os << ", ";
         os << i->first;
     }
     os << endl;
     os << "Edges:" << endl;
-    for (i = g.nodes.begin(); i != g.nodes.end(); i++) {
-        const Node3D *n = &i->second;
+    for (const auto & node : g.nodes) {
+        const Node3D *n = &node.second;
         const set<ExtNode3D> &nbs = n->neighbors();
         os << "\t";
         for (j = nbs.begin(); j != nbs.end(); j++) {
