@@ -12,6 +12,8 @@
 #include <vtkPointData.h>
 #include <vtkPointSource.h>
 
+#include <utility>
+
 #include "Display.h"
 #include "Interaction.h"
 
@@ -123,6 +125,16 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
 }
 
+void Display::addEdgesFromClause(Graph3D *g, vector<long>& clause, double l) {
+    auto highestEdgeDuplication = g->getHighestEdgeDuplication();
+
+    g->add_graph_edges_from_clause(clause);
+
+    if (g->getHighestEdgeDuplication() != highestEdgeDuplication) {
+        g->reColour();
+    }
+}
+
 void Display::setupNodes(Graph3D *g) {
     Node3D n(1), m(2), o(3);
 
@@ -168,6 +180,12 @@ void Display::changeGraph(unsigned graphLevel) {
     std::cout << "Displaying " << graphMessage << std::endl;
 
     switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
+
+    if (graphLevel < 5 ) {
+        vector<long> newClause = {-1, 3, 2};
+
+        graph_stack[graphLevel]->add_graph_edges_from_clause(newClause);
+    }
 
     renderWindow->Render();
 

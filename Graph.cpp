@@ -70,8 +70,10 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     pair<unsigned long, pair<unsigned, vtkColor4ub>>* edgeColour = &edgeColourMap[{x, y}];
+    auto newEdge = false;
     if (edgeColour->second.first == 0) {
         edgeColour->first = edgeColourMap.size();
+        newEdge = true;
     }
     edgeColour->second.first++;
     if (edgeColour->second.first > highestEdgeDuplication) {
@@ -79,6 +81,11 @@ void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) 
     }
     if (edgeColour->second.second != threePlusClauseColour) {
         edgeColour->second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
+    }
+    if (newEdge) {
+        add_edge_to_graph({x, y}, edgeColourMap[{x, y}]);
+    } else {
+        edgeColours->SetTypedTuple(edgeColour->first, edgeColour->second.second.GetData());
     }
 }
 
@@ -412,100 +419,103 @@ void Graph3D::rescale(double a, const Vector3D &b) {
 }
 
 vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size) {
-    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-    vtkSmartPointer<vtkMutableUndirectedGraph> graph = vtkSmartPointer<vtkMutableUndirectedGraph>::New();
-    vtkSmartPointer<vtkUnsignedCharArray> vertexColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
-    vertexColours->SetName("Vertex Colours");
     vtkGraphToPolyData *graphToPolyData = vtkGraphToPolyData::New();
+//    vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
 //    vtkSmartPointer<vtkCellArray> lines;
-    vtkSmartPointer<vtkNamedColors> namedColours;
-    // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
-    vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
-//    vtkSmartPointer<vtkIntArray> edgeColours;
-    bool colourPoints = true;
 
-    vertexColours->SetNumberOfComponents(3);
+    if (!drawn) {
+        drawn = true;
+
+        graph = vtkMutableUndirectedGraph::New();
+
+        vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+
+        vtkSmartPointer<vtkUnsignedCharArray> vertexColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
+        vertexColours->SetName("Vertex Colours");
+        // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
+
+//    vtkSmartPointer<vtkIntArray> edgeColours;
+        bool colourPoints = true;
+
+        vertexColours->SetNumberOfComponents(3);
 
 //    draw_only_2clauses = true;
 
-    // Create a vtkCellArray container and store the lines in it
-    if (draw_edges) {
+        // Create a vtkCellArray container and store the lines in it
+        if (draw_edges) {
 
 
-        // Create a vtkUnsignedCharArray container and store the colors in it
-        edgeColours
-        = vtkSmartPointer<vtkUnsignedCharArray>::New();
+            // Create a vtkUnsignedCharArray container and store the colors in it
+            edgeColours
+                    = vtkUnsignedCharArray::New();
 //        = vtkSmartPointer<vtkIntArray>::New();
-        edgeColours->SetNumberOfComponents(4);
-        edgeColours->SetName("Edge Colours");
+            edgeColours->SetNumberOfComponents(4);
+            edgeColours->SetName("Edge Colours");
 
 /*        coloursLookupTable = vtkSmartPointer<vtkLookupTable>::New();
         coloursLookupTable->SetNumberOfTableValues(2);
         coloursLookupTable->SetTableValue(0, twoClauseColour.GetRed(), twoClauseColour.GetGreen(), twoClauseColour.GetBlue()); // red
         coloursLookupTable->SetTableValue(1, threePlusClauseColour.GetRed(), threePlusClauseColour.GetGreen(), threePlusClauseColour.GetBlue()); // green
         coloursLookupTable->Build();*/
-    }
-
-    graph->SetNumberOfVertices(nodes.size());
-
-    for (auto i = nodes.begin(); i != nodes.end(); i++) {
-        const Node3D &node = i->second;
-        points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
-        vtkSmartPointer<vtkPointSource> pointSource = vtkSmartPointer<vtkPointSource>::New();
-
-        if (colourPoints) {
-            vertexColours->InsertNextTupleValue(
-                    (i->first % 2 == 0 ? twoClauseColour : threePlusClauseColour).GetData());
         }
-        if (draw_edges) {
-            const Node3D &u = i->second;
-            auto nodeIndex = std::distance(std::begin(nodes), nodes.find(u.id()));
-            for (const auto & neighbor : u.neighbors()) {
-                if (u.id() < neighbor.first->id()) { // draw edges only in direction of incr. ids; no self-edg.
-                    if (!draw_only_2clauses || neighbor.second != NT_3_PLUS_CLAUSE) {
-                        add_graph_edge(nodeIndex, neighbor);
+
+        graph->SetNumberOfVertices(nodes.size());
+
+        for (auto i = nodes.begin(); i != nodes.end(); i++) {
+            const Node3D &node = i->second;
+            points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
+
+            if (colourPoints) {
+                vertexColours->InsertNextTupleValue(
+                        (i->first % 2 == 0 ? twoClauseColour : threePlusClauseColour).GetData());
+            }
+            if (draw_edges) {
+                const Node3D &u = i->second;
+                auto nodeIndex = std::distance(std::begin(nodes), nodes.find(u.id()));
+                for (const auto &neighbor : u.neighbors()) {
+                    if (u.id() < neighbor.first->id()) { // draw edges only in direction of incr. ids; no self-edg.
+                        if (!draw_only_2clauses || neighbor.second != NT_3_PLUS_CLAUSE) {
+                            add_graph_edge(nodeIndex, neighbor);
+                        }
                     }
                 }
             }
         }
-    }
 
-    for (auto & edge : edgeColourMap) {
-        graph->AddEdge(edge.first.first, edge.first.second);
-        edge.second.second.second[3] = 255 * ((float) edge.second.second.first / highestEdgeDuplication);
-        edgeColours->InsertNextTupleValue(edge.second.second.second.GetData());
+/*    for (auto & edge : edgeColourMap) {
+//        graph->AddEdge(edge.first.first, edge.first.second);
+//        edge.second.second.second[3] = 255 * ((float) edge.second.second.first / highestEdgeDuplication);
+//        edgeColours->InsertNextTupleValue(edge.second.second.second.GetData());
+        add_edge_to_graph(edge);
 //        std::cout << edge.first.first << " " << edge.first.second << ": " << edge.second.first << " " << edge.second.second.first << " " << edge.second.second.second << std::endl;
+    }*/
+
+        /*auto colour = threePlusClauseColour;
+        colour[3] = 0;
+
+        edgeColours->SetTypedTuple(0, colour.GetData());*/
+
+        graph->SetPoints(points);
+
+        if (colourPoints) {
+            graph->GetVertexData()->AddArray(vertexColours);
+        }
+
+        if (draw_edges) {
+            graph->GetEdgeData()->SetScalars(edgeColours);
+        }
+
+        // Visualize
+        /*vtkSmartPointer<vtkGraphLayoutView> graphLayoutView =
+                vtkSmartPointer<vtkGraphLayoutView>::New();
+        graphLayoutView->AddRepresentationFromInput(graph);
+        graphLayoutView->SetLayoutStrategyToPassThrough();
+        graphLayoutView->SetVertexColorArrayName("Vertex Colours");
+        graphLayoutView->ColorVerticesOn();*/
     }
-
-    /*auto colour = threePlusClauseColour;
-    colour[3] = 0;
-
-    edgeColours->SetTypedTuple(0, colour.GetData());*/
-
-    graph->SetPoints(points);
-
-    if (colourPoints) {
-        graph->GetVertexData()->AddArray(vertexColours);
-    }
-
-    if (draw_edges) {
-        graph->GetEdgeData()->SetScalars(edgeColours);
-    }
-
-    // Visualize
-    /*vtkSmartPointer<vtkGraphLayoutView> graphLayoutView =
-            vtkSmartPointer<vtkGraphLayoutView>::New();
-    graphLayoutView->AddRepresentationFromInput(graph);
-    graphLayoutView->SetLayoutStrategyToPassThrough();
-    graphLayoutView->SetVertexColorArrayName("Vertex Colours");
-    graphLayoutView->ColorVerticesOn();*/
 
     graphToPolyData->SetInputData(graph);
     graphToPolyData->Update();
-
-    if (colourPoints) {
-//        graphToPolyData->GetOutput()->GetPointData()->AddArray(vertexColours);
-    }
 
     /*vtkSmartPointer<vtkViewTheme> theme =
             vtkSmartPointer<vtkViewTheme>::New();
@@ -535,12 +545,35 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
     //cout << "render" << endl;
     //cout << "second" << endl;
 
-    /*vector<long> newClause = {-1, 3, 2};
-
-    add_graph_edges_from_clause(newClause);*/
+//    vector<long> newClause = {-1, 3, 2};
+//
+//    add_graph_edges_from_clause(newClause);
 
     return graphToPolyData;
     //return graph;
+}
+
+void Graph3D::reColour() {
+    for (auto &edge : edgeColourMap) {
+        set_colour(edge.second.second);
+    }
+}
+
+void Graph3D::add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<unsigned long, pair<unsigned int, vtkColor4ub>>>& edge) {
+//    graph->AddEdge(edge->first.first, edge->first.second);
+//    edge->second.second.second[3] = 255 * ((float) edge->second.second.first / highestEdgeDuplication);
+    add_edge_to_graph(edge.first, edge.second);
+}
+
+void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<unsigned long, pair<unsigned int, vtkColor4ub>>& colour) {
+    graph->AddEdge(vertices.first, vertices.second);
+//    colour.second.second[3] = 255 * ((float) colour.second.first / highestEdgeDuplication);
+    set_colour(colour.second);
+    edgeColours->InsertNextTupleValue(colour.second.second.GetData());
+}
+
+void Graph3D::set_colour(pair<unsigned int, vtkColor4ub>& colour) {
+    colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication);
 }
 
 ostream &operator<<(ostream &os, const Graph3D &g) {
@@ -571,3 +604,4 @@ ostream &operator<<(ostream &os, const Graph3D &g) {
 
     return os;
 }
+

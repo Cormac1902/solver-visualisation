@@ -21,6 +21,8 @@ class Display {
 
     static void switchDisplay(Graph3D *g, double l);
 
+    static void addEdgesFromClause(Graph3D *g, vector<long>& clause, double l);
+
     static void changeGraph(unsigned graphLevel);
 
     static void positionGraph(unsigned graphLevel);

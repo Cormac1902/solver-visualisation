@@ -11,6 +11,8 @@
 #include <vtkGraphToPolyData.h>
 #include <vtkColor.h>
 #include <vtkNamedColors.h>
+#include <vtkUndirectedGraph.h>
+#include <vtkMutableUndirectedGraph.h>
 #include "Node.h"
 
 using namespace std;
@@ -23,8 +25,12 @@ private:
     int number_edges; // number of edges contained in graph
 
     bool positioned; // whether graph has been positioned
+    bool drawn; // whether graph has been drawn
 
     float highestEdgeDuplication; // tracks highest number of recurring edges
+
+    vtkMutableUndirectedGraph* graph{};
+    vtkUnsignedCharArray* edgeColours{};
 
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
@@ -43,8 +49,18 @@ private:
 
     void add_graph_edge(unsigned long x, ExtNode3D y);
 
+    void add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<unsigned long, pair<unsigned, vtkColor4ub>>>& edge);
+
+    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<unsigned long, pair<unsigned, vtkColor4ub>>& colour);
+
+    void set_colour(pair<unsigned int, vtkColor4ub>& colour);
+
 public:
-    Graph3D() : number_edges(0), positioned(false), highestEdgeDuplication(0), allMatching({}) {
+    Graph3D() : number_edges(0),
+                positioned(false),
+                drawn(false),
+                highestEdgeDuplication(0),
+                allMatching({}) {
         vtkSmartPointer<vtkNamedColors> namedColours = vtkSmartPointer<vtkNamedColors>::New();
         twoClauseColour = namedColours->GetColor4ub("Tomato");
         threePlusClauseColour = namedColours->GetColor4ub("Mint");
@@ -70,6 +86,8 @@ public:
     int nr_edges() const { return number_edges; }
 
     bool get_positioned() const { return positioned; }
+
+    float getHighestEdgeDuplication() const { return highestEdgeDuplication; }
 
     // misc
     int independent_components(vector<int> *one_of_each_comp);
@@ -101,6 +119,8 @@ public:
 
     // Draw graph according to current layout (VTK).
     vtkGraphToPolyData *drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
+
+    void reColour();
 
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);
