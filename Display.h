@@ -9,11 +9,15 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
 #include "Graph.h"
+#include <cryptominisat5/cryptominisat.h>
+
+using namespace CMSat;
 
 class Display {
     static vtkPolyDataMapper* mapper;
     static vtkActor* actor;
     static vtkRenderWindow* renderWindow;
+    static vector<vector<long>> clauses;
 
     static void display();
 
@@ -21,13 +25,17 @@ class Display {
 
     static void switchDisplay(Graph3D *g, double l);
 
-    static void addEdgesFromClause(Graph3D *g, vector<long>& clause, double l);
+    static void addEdgesFromClause(Graph3D *g, vector<long> clause);
 
     static void changeGraph(unsigned graphLevel);
 
     static void positionGraph(unsigned graphLevel);
 
     static double kFromGraphLevel(unsigned graphLevel);
+
+    static void solve();
+
+    static vector<long> clauseFromCMSATClause(const vector<Lit>& cmsatClause);
 
     friend class Interaction;
 

@@ -11,6 +11,8 @@ void Interaction::OnKeyPress() {
     std::string key = rwi->GetKeySym();
     if (key.substr(0, 3) == "KP_") {
         key = key.substr(3, key.length() - 3);
+    } else if (key == "s" || key == "S") {
+        Display::solve();
     }
 
     try {

@@ -21,7 +21,7 @@ set(CC_FLAGS "-O3 -Wall -DNDEBUG -DUSE_SPACE_GRID")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CC_FLAGS}")
 
-set(VTK_DIR "/home/cormac/VTK-build")
+set(VTK_DIR "/home/cormac/projects/VTK-build")
 
 find_package(VTK COMPONENTS
         CommonColor
@@ -37,7 +37,11 @@ find_package(VTK COMPONENTS
         ViewsCore
         ViewsInfovis)
 
-find_package(tsl-ordered-map REQUIRED)
+#find_package(tsl-ordered-map REQUIRED)
+
+find_package(cryptominisat5 REQUIRED)
+
+message(STATUS "Cryptominisat version: ${CRYPTOMINISAT5_VERSION_MAJOR}.${CRYPTOMINISAT5_VERSION_MINOR}")
 
 add_executable(s_vis MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
 
@@ -60,4 +64,5 @@ endif ()
 
 target_link_libraries(s_vis PRIVATE
         ${OPENGL_LIBRARIES}
-        ${GLUT_LIBRARIES})
+        ${GLUT_LIBRARIES}
+        ${CRYPTOMINISAT5_LIBRARIES})

@@ -1,7 +1,6 @@
-/usr/local/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
--- Found X11: /usr/include  found components:  Xt 
--- Found X11: /usr/include   
+/snap/clion/114/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
+-- Cryptominisat version: 5.6
 -- VTK_VERSION: 9.0.0
 -- Configuring done
 -- Generating done
--- Build files have been written to: /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug
+-- Build files have been written to: /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug

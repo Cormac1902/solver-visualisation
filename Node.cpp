@@ -11,7 +11,7 @@ void Node3D::set_pos(const Vector3D &p) {
     node_pos = p;
 }
 
-void Node3D::set_id(long i) {
+void Node3D::set_id(unsigned long i) {
     ident = i;
 }
 
@@ -34,7 +34,7 @@ const Vector3D &Node3D::position() const {
     return node_pos;
 }
 
-long Node3D::id() const {
+unsigned long Node3D::id() const {
     return ident;
 }
 

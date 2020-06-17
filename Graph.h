@@ -29,8 +29,12 @@ private:
 
     float highestEdgeDuplication; // tracks highest number of recurring edges
 
-    vtkMutableUndirectedGraph* graph{};
-    vtkUnsignedCharArray* edgeColours{};
+    vtkMutableUndirectedGraph* graph;
+    vtkUnsignedCharArray* edgeColours;
+    vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
+
+
+private:
 
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
@@ -43,24 +47,26 @@ private:
     vtkColor4ub threePlusClauseColour;
 
     // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
-    map<pair<unsigned long, unsigned long>, pair<unsigned long, pair<unsigned, vtkColor4ub>>> edgeColourMap;
+    map<pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> edgeColourMap;
 
     void add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a);
 
     void add_graph_edge(unsigned long x, ExtNode3D y);
 
-    void add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<unsigned long, pair<unsigned, vtkColor4ub>>>& edge);
+    void add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>>& edge);
 
-    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<unsigned long, pair<unsigned, vtkColor4ub>>& colour);
+    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<vtkIdType, pair<unsigned, vtkColor4ub>>& colour);
 
-    void set_colour(pair<unsigned int, vtkColor4ub>& colour);
+    void set_colour(pair<unsigned int, vtkColor4ub>& colour) const;
 
 public:
     Graph3D() : number_edges(0),
                 positioned(false),
                 drawn(false),
                 highestEdgeDuplication(0),
-                allMatching({}) {
+                graphToPolyData(vtkSmartPointer<vtkGraphToPolyData>::New()),
+                allMatching({})
+                {
         vtkSmartPointer<vtkNamedColors> namedColours = vtkSmartPointer<vtkNamedColors>::New();
         twoClauseColour = namedColours->GetColor4ub("Tomato");
         threePlusClauseColour = namedColours->GetColor4ub("Mint");
@@ -78,7 +84,7 @@ public:
 
     void add_graph_edges_from_clause(vector<long> clause);
 
-    void build_from_cnf(istream &is); // read file in DIMACS format, build graph
+    vector<vector<long>> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
     int nr_nodes() { return nodes.size(); }
@@ -88,6 +94,10 @@ public:
     bool get_positioned() const { return positioned; }
 
     float getHighestEdgeDuplication() const { return highestEdgeDuplication; }
+
+    const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
+
+    vtkMutableUndirectedGraph* getGraph() { return graph; }
 
     // misc
     int independent_components(vector<int> *one_of_each_comp);
@@ -118,7 +128,7 @@ public:
     void rescale(double a, const Vector3D &b);
 
     // Draw graph according to current layout (VTK).
-    vtkGraphToPolyData *drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
+    void drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
 
     void reColour();
 

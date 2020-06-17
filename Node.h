@@ -18,7 +18,7 @@ typedef pair<Node3D *, EdgeAttribute> ExtNode3D;
 
 class Node3D {
 private:
-    long ident;
+    unsigned long ident;
     int mark;    // mark bit for different purposes
 
     Vector3D node_pos;
@@ -37,7 +37,7 @@ public:
 
     void set_pos(const Vector3D &p);
 
-    void set_id(long i);
+    void set_id(unsigned long i);
 
     void set_weight(int i);
 
@@ -47,7 +47,7 @@ public:
     // observables
     const Vector3D &position() const;
 
-    long id() const;
+    unsigned long id() const;
 
     int weight() const;
     // EdgeAttribute edge_attribute(Node3D* other_end) const;

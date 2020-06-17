@@ -6,7 +6,6 @@
 #include <vtkProperty.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkNamedColors.h>
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkPointData.h>
@@ -34,9 +33,12 @@ int max_line_width_threshold = 250, min_line_width_threshold = 2500;
 
 Vector3D min_p, max_p;
 
+Graph3D* current_graph;
+
 vtkPolyDataMapper *Display::mapper = vtkPolyDataMapper::New();
 vtkActor *Display::actor = vtkActor::New();
 vtkRenderWindow *Display::renderWindow = vtkRenderWindow::New();
+vector<vector<long>> Display::clauses = {};
 
 // ----------------------------------------------------------------------
 
@@ -78,7 +80,7 @@ void Display::display() {
     interactor->SetCurrentRenderer(renderer);
 
     renderWindow->SetSize(1920, 1080);
-    renderWindow->SetWindowName("ReadPolyData");
+    renderWindow->SetWindowName("Solver Visualisation");
     renderWindow->ShowCursor();
 
     renderer->AddActor(actor);
@@ -91,16 +93,27 @@ void Display::display() {
 
 void Display::switchDisplay(Graph3D *g, double l) {
 
+    auto highestEdgeDuplication = g->getHighestEdgeDuplication();
+
     // g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
-    mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
+    g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
+    mapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
+//    mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
+
+    if (g->getHighestEdgeDuplication() != highestEdgeDuplication) {
+        g->reColour();
+    }
 
     float numberOfLines = mapper->GetInput()->GetNumberOfLines();
 
     auto lineWidth = min(max_line_width,
-                         ((float) (min_line_width_threshold - max_line_width_threshold) / numberOfLines) + min_line_width);
+                         ((float) (min_line_width_threshold - max_line_width_threshold) / numberOfLines) +
+                         min_line_width);
 
     actor->GetProperty()->SetLineWidth(lineWidth);
     actor->GetProperty()->SetPointSize(lineWidth * 3);
+
+    current_graph = g;
 
 /*    vtkSmartPointer<vtkPointSource> pointSource =
             vtkSmartPointer<vtkPointSource>::New();
@@ -125,14 +138,18 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
 }
 
-void Display::addEdgesFromClause(Graph3D *g, vector<long>& clause, double l) {
+void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
     auto highestEdgeDuplication = g->getHighestEdgeDuplication();
 
-    g->add_graph_edges_from_clause(clause);
+    g->add_graph_edges_from_clause(std::move(clause));
 
     if (g->getHighestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
     }
+
+//    g->getGraphToPolyData()->SetInputData(g->getGraph());
+//    g->getGraphToPolyData()->Update();
+//    renderWindow->Render();
 }
 
 void Display::setupNodes(Graph3D *g) {
@@ -181,15 +198,10 @@ void Display::changeGraph(unsigned graphLevel) {
 
     switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
 
-    if (graphLevel < 5 ) {
-        vector<long> newClause = {-1, 3, 2};
-
-        graph_stack[graphLevel]->add_graph_edges_from_clause(newClause);
-    }
-
     renderWindow->Render();
 
 }
+
 
 void Display::positionGraph(unsigned int graphLevel) {
     double l = kFromGraphLevel(graphLevel);
@@ -211,6 +223,58 @@ double Display::kFromGraphLevel(unsigned int graphLevel) {
     return k * pow(f_k, graph_stack.size() - graphLevel - 2);
 }
 
+
+void Display::solve() {
+
+    SATSolver s;
+    vector<Lit> cmsatClause;
+
+    //fill the solver, run solve, etc.
+
+    s.new_vars(graph_stack[0]->nr_nodes());
+
+    for (auto &clause : clauses) {
+        for (auto &var : clause) {
+            cmsatClause.emplace_back(abs(var) - 1, var < 0);
+        }
+        s.add_clause(cmsatClause);
+        cmsatClause.clear();
+    }
+
+    //Get all clauses of size 4 or less
+
+    s.solve();
+
+    s.start_getting_small_clauses(UINT32_MAX, UINT32_MAX);
+
+    vector<Lit> lits;
+    bool ret = true;
+    while (ret) {
+        ret = s.get_next_small_clause(lits);
+        if (ret) {
+            //deal with clause in "lits"
+            // add_to_my_db(lits);
+            addEdgesFromClause(current_graph, clauseFromCMSATClause(lits));
+        }
+    }
+
+    renderWindow->Render();
+
+    cout << "Finished solving" << endl;
+
+    s.end_getting_small_clauses();
+
+}
+
+vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
+    vector<long> clause;
+    clause.reserve(cmsatClause.size());
+    for (auto &lit : cmsatClause) {
+        clause.push_back(lit.var());
+    }
+    return clause;
+}
+
 // builds (global) stack of coarsened graphs
 void Display::init(char *filename) {
     auto *g = new Graph3D();
@@ -221,10 +285,10 @@ void Display::init(char *filename) {
         setupNodes(g);
     else {
         if (strncmp("-", filename, 1) == 0)
-            g->build_from_cnf(cin);
+            clauses = g->build_from_cnf(cin);
         else {
             ifstream is(filename);
-            g->build_from_cnf(is);
+            clauses = g->build_from_cnf(is);
             is.close();
         }
     }

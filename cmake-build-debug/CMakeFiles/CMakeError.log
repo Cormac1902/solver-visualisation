@@ -1,24 +1,24 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_67d13/fast && /usr/bin/make -f CMakeFiles/cmTC_67d13.dir/build.make CMakeFiles/cmTC_67d13.dir/build
-make[1]: Entering directory '/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_67d13.dir/src.c.o
-/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_67d13.dir/src.c.o   -c /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_67d13
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_67d13.dir/link.txt --verbose=1
-/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_67d13.dir/src.c.o  -o cmTC_67d13 
-CMakeFiles/cmTC_67d13.dir/src.c.o: In function `main':
+Run Build Command(s):/usr/bin/make cmTC_2a0ce/fast && /usr/bin/make -f CMakeFiles/cmTC_2a0ce.dir/build.make CMakeFiles/cmTC_2a0ce.dir/build
+make[1]: Entering directory '/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2a0ce.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_2a0ce.dir/src.c.o   -c /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_2a0ce
+/snap/clion/114/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2a0ce.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_2a0ce.dir/src.c.o  -o cmTC_2a0ce 
+CMakeFiles/cmTC_2a0ce.dir/src.c.o: In function `main':
 src.c:(.text+0x3e): undefined reference to `pthread_create'
 src.c:(.text+0x4a): undefined reference to `pthread_detach'
 src.c:(.text+0x5b): undefined reference to `pthread_join'
 src.c:(.text+0x6f): undefined reference to `pthread_atfork'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_67d13.dir/build.make:86: recipe for target 'cmTC_67d13' failed
-make[1]: *** [cmTC_67d13] Error 1
-make[1]: Leaving directory '/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
-Makefile:121: recipe for target 'cmTC_67d13/fast' failed
-make: *** [cmTC_67d13/fast] Error 2
+CMakeFiles/cmTC_2a0ce.dir/build.make:86: recipe for target 'cmTC_2a0ce' failed
+make[1]: *** [cmTC_2a0ce] Error 1
+make[1]: Leaving directory '/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
+Makefile:121: recipe for target 'cmTC_2a0ce/fast' failed
+make: *** [cmTC_2a0ce/fast] Error 2
 
 
 Source file was:
@@ -42,22 +42,22 @@ int main(void)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_eab52/fast && /usr/bin/make -f CMakeFiles/cmTC_eab52.dir/build.make CMakeFiles/cmTC_eab52.dir/build
-make[1]: Entering directory '/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_eab52.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_eab52.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
-Linking C executable cmTC_eab52
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eab52.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_eab52.dir/CheckFunctionExists.c.o  -o cmTC_eab52 -lpthreads 
+Run Build Command(s):/usr/bin/make cmTC_d81b6/fast && /usr/bin/make -f CMakeFiles/cmTC_d81b6.dir/build.make CMakeFiles/cmTC_d81b6.dir/build
+make[1]: Entering directory '/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d81b6.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_d81b6.dir/CheckFunctionExists.c.o   -c /snap/clion/114/bin/cmake/linux/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d81b6
+/snap/clion/114/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d81b6.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_d81b6.dir/CheckFunctionExists.c.o  -o cmTC_d81b6  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_eab52.dir/build.make:86: recipe for target 'cmTC_eab52' failed
-make[1]: *** [cmTC_eab52] Error 1
-make[1]: Leaving directory '/mnt/d/Users/Cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
-Makefile:121: recipe for target 'cmTC_eab52/fast' failed
-make: *** [cmTC_eab52/fast] Error 2
+CMakeFiles/cmTC_d81b6.dir/build.make:86: recipe for target 'cmTC_d81b6' failed
+make[1]: *** [cmTC_d81b6] Error 1
+make[1]: Leaving directory '/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/CMakeTmp'
+Makefile:121: recipe for target 'cmTC_d81b6/fast' failed
+make: *** [cmTC_d81b6/fast] Error 2
 
 
 

@@ -6,7 +6,6 @@
 #include "Graph.h"
 #include "SpaceGrid.h"
 #include <vtkPoints.h>
-#include <vtkActor.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkLine.h>
@@ -69,23 +68,22 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
-    pair<unsigned long, pair<unsigned, vtkColor4ub>>* edgeColour = &edgeColourMap[{x, y}];
-    auto newEdge = false;
-    if (edgeColour->second.first == 0) {
-        edgeColour->first = edgeColourMap.size();
-        newEdge = true;
+    pair<vtkIdType, pair<unsigned, vtkColor4ub>>& edgeColour = edgeColourMap[{x, y}];
+    auto newEdge = edgeColour.second.first == 0;
+    edgeColour.second.first++;
+    if (edgeColour.second.first > highestEdgeDuplication) {
+        highestEdgeDuplication = edgeColour.second.first;
     }
-    edgeColour->second.first++;
-    if (edgeColour->second.first > highestEdgeDuplication) {
-        highestEdgeDuplication = edgeColour->second.first;
-    }
-    if (edgeColour->second.second != threePlusClauseColour) {
-        edgeColour->second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
+    if (edgeColour.second.second[0] != threePlusClauseColour[0]
+        || edgeColour.second.second[1] != threePlusClauseColour[1]
+        || edgeColour.second.second[2] != threePlusClauseColour[2]) {
+        edgeColour.second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
     }
     if (newEdge) {
         add_edge_to_graph({x, y}, edgeColourMap[{x, y}]);
     } else {
-        edgeColours->SetTypedTuple(edgeColour->first, edgeColour->second.second.GetData());
+        set_colour(edgeColour.second);
+        edgeColours->SetTypedTuple(edgeColour.first, edgeColour.second.second.GetData());
     }
 }
 
@@ -101,25 +99,36 @@ void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttr
             a);
 }
 
+void Graph3D::add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned int, vtkColor4ub>>>& edge) {
+    add_edge_to_graph(edge.first, edge.second);
+}
+
+void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<vtkIdType, pair<unsigned int, vtkColor4ub>>& colour) {
+    graph->AddEdge(vertices.first, vertices.second);
+    set_colour(colour.second);
+    colour.first = edgeColours->InsertNextTupleValue(colour.second.second.GetData());
+}
+
 void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
     auto a = (clause.size() == 2 ? NT_2_CLAUSE : NT_3_PLUS_CLAUSE);
     for (auto &var : clause) {
-        if (var < 0) {
-            var = abs(var);
-        }
+        var = abs(var);
     }
     std::sort(clause.begin(), clause.end());
     for (auto i = clause.begin(); i < clause.end(); i++) {
-        for (auto j = clause.begin() + 1; j != clause.end(); j++) {
+        for (auto j = i + 1; j != clause.end(); j++) {
+            cout << *i << " " << *j << endl;
             add_graph_edge_from_ids(*i, *j, a);
         }
     }
 }
 
-void Graph3D::build_from_cnf(istream &is) {
+vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
     long p;
     char c;
+    bool positive = true;
     vector<long> clause;
+    vector<vector<long>> clauses;
     Node3D n;
 
     while (!is.eof()) {
@@ -131,29 +140,44 @@ void Graph3D::build_from_cnf(istream &is) {
 
         clause.clear();
         do {
-            while (isspace(c = is.get()) || c == '-') // ignore spaces and '-'
+            while (isspace(c = is.get())) // ignore spaces and '-'
                 ;
             if (is.eof())
                 break;
             else {
-                is.unget();
-                p = 0;
-                while (isdigit(c = is.get()))
-                    p = 10 * p + c - '0';
-                if (p != 0)
-                    clause.push_back(p);
+                if (c == '-') {
+                    positive = false;
+                } else {
+                    is.unget();
+                    p = 0;
+
+                    while (isdigit(c = is.get()))
+                        p = 10 * p + c - '0';
+
+                    if (!positive)
+                        p = -p;
+
+                    if (p != 0)
+                        clause.push_back(p);
+
+                    positive = true;
+                }
             }
         } while (p != 0);
 
         if (!clause.empty()) {
+
+            clauses.push_back(clause);
             // insert nodes
-            for (long &i : clause)
+            for (long &i : clause) {
+                i = abs(i);
                 if (nodes.find(i) == nodes.end()) { // node not yet present
                     n.set_id(i);
                     add_node(n);
                     allMatching[n.id()] = {};
                     matchMap[n.id()] = n.id();
                 }
+            }
 
             // insert edges
             EdgeAttribute a = (clause.size() == 2 ? NT_2_CLAUSE : NT_3_PLUS_CLAUSE);
@@ -163,6 +187,8 @@ void Graph3D::build_from_cnf(istream &is) {
                         insert_edge(*i, *j, a);
         }
     }
+
+    return clauses;
 }
 
 // one_of_each_component is reset
@@ -264,7 +290,7 @@ Graph3D *Graph3D::coarsen() {
 
     }
     // b) set up edges
-    long new_node_1_id, new_node_2_id;
+    unsigned long new_node_1_id, new_node_2_id;
     for (auto & i : nodes) {
         Node3D &node = i.second;
         k = matching.find(node.id());
@@ -418,8 +444,7 @@ void Graph3D::rescale(double a, const Vector3D &b) {
     }
 }
 
-vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size) {
-    vtkGraphToPolyData *graphToPolyData = vtkGraphToPolyData::New();
+void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size) {
 //    vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
 //    vtkSmartPointer<vtkCellArray> lines;
 
@@ -435,7 +460,7 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
         // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
 
 //    vtkSmartPointer<vtkIntArray> edgeColours;
-        bool colourPoints = true;
+        bool colourPoints = false;
 
         vertexColours->SetNumberOfComponents(3);
 
@@ -446,8 +471,7 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
 
 
             // Create a vtkUnsignedCharArray container and store the colors in it
-            edgeColours
-                    = vtkUnsignedCharArray::New();
+            edgeColours = vtkUnsignedCharArray::New();
 //        = vtkSmartPointer<vtkIntArray>::New();
             edgeColours->SetNumberOfComponents(4);
             edgeColours->SetName("Edge Colours");
@@ -549,30 +573,18 @@ vtkGraphToPolyData *Graph3D::drawPolyData(double k, bool draw_edges, bool draw_o
 //
 //    add_graph_edges_from_clause(newClause);
 
-    return graphToPolyData;
+//    return graphToPolyData;
     //return graph;
 }
 
 void Graph3D::reColour() {
     for (auto &edge : edgeColourMap) {
         set_colour(edge.second.second);
+        edgeColours->SetTypedTuple(edge.second.first, edge.second.second.second.GetData());
     }
 }
 
-void Graph3D::add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<unsigned long, pair<unsigned int, vtkColor4ub>>>& edge) {
-//    graph->AddEdge(edge->first.first, edge->first.second);
-//    edge->second.second.second[3] = 255 * ((float) edge->second.second.first / highestEdgeDuplication);
-    add_edge_to_graph(edge.first, edge.second);
-}
-
-void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<unsigned long, pair<unsigned int, vtkColor4ub>>& colour) {
-    graph->AddEdge(vertices.first, vertices.second);
-//    colour.second.second[3] = 255 * ((float) colour.second.first / highestEdgeDuplication);
-    set_colour(colour.second);
-    edgeColours->InsertNextTupleValue(colour.second.second.GetData());
-}
-
-void Graph3D::set_colour(pair<unsigned int, vtkColor4ub>& colour) {
+void Graph3D::set_colour(pair<unsigned int, vtkColor4ub>& colour) const {
     colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication);
 }
 
