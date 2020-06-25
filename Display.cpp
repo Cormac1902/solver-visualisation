@@ -20,7 +20,7 @@
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
-vector<Graph3D *> graph_stack;
+vector<Graph3D*> graph_stack;
 
 double k = 1.0; // old: 5.0
 double f_k = sqrt(4.0 / 7.0);
@@ -96,7 +96,10 @@ void Display::switchDisplay(Graph3D *g, double l) {
     auto highestEdgeDuplication = g->getHighestEdgeDuplication();
 
     // g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
-    g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
+    if (!g->get_drawn()) {
+        g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
+    }
+
     mapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
 //    mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
 
@@ -147,9 +150,6 @@ void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
         g->reColour();
     }
 
-//    g->getGraphToPolyData()->SetInputData(g->getGraph());
-//    g->getGraphToPolyData()->Update();
-//    renderWindow->Render();
 }
 
 void Display::setupNodes(Graph3D *g) {
@@ -241,11 +241,9 @@ void Display::solve() {
         cmsatClause.clear();
     }
 
-    //Get all clauses of size 4 or less
+    s.start_getting_small_clauses(UINT32_MAX, UINT32_MAX);
 
     s.solve();
-
-    s.start_getting_small_clauses(UINT32_MAX, UINT32_MAX);
 
     vector<Lit> lits;
     bool ret = true;
@@ -257,8 +255,6 @@ void Display::solve() {
             addEdgesFromClause(current_graph, clauseFromCMSATClause(lits));
         }
     }
-
-    renderWindow->Render();
 
     cout << "Finished solving" << endl;
 

@@ -93,6 +93,8 @@ public:
 
     bool get_positioned() const { return positioned; }
 
+    bool get_drawn() const { return drawn; }
+
     float getHighestEdgeDuplication() const { return highestEdgeDuplication; }
 
     const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }

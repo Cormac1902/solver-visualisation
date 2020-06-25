@@ -117,10 +117,11 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
     std::sort(clause.begin(), clause.end());
     for (auto i = clause.begin(); i < clause.end(); i++) {
         for (auto j = i + 1; j != clause.end(); j++) {
-            cout << *i << " " << *j << endl;
             add_graph_edge_from_ids(*i, *j, a);
         }
     }
+
+    graphToPolyData->Modified();
 }
 
 vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
@@ -445,8 +446,6 @@ void Graph3D::rescale(double a, const Vector3D &b) {
 }
 
 void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size) {
-//    vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
-//    vtkSmartPointer<vtkCellArray> lines;
 
     if (!drawn) {
         drawn = true;
@@ -506,19 +505,6 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
             }
         }
 
-/*    for (auto & edge : edgeColourMap) {
-//        graph->AddEdge(edge.first.first, edge.first.second);
-//        edge.second.second.second[3] = 255 * ((float) edge.second.second.first / highestEdgeDuplication);
-//        edgeColours->InsertNextTupleValue(edge.second.second.second.GetData());
-        add_edge_to_graph(edge);
-//        std::cout << edge.first.first << " " << edge.first.second << ": " << edge.second.first << " " << edge.second.second.first << " " << edge.second.second.second << std::endl;
-    }*/
-
-        /*auto colour = threePlusClauseColour;
-        colour[3] = 0;
-
-        edgeColours->SetTypedTuple(0, colour.GetData());*/
-
         graph->SetPoints(points);
 
         if (colourPoints) {
@@ -529,52 +515,10 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
             graph->GetEdgeData()->SetScalars(edgeColours);
         }
 
-        // Visualize
-        /*vtkSmartPointer<vtkGraphLayoutView> graphLayoutView =
-                vtkSmartPointer<vtkGraphLayoutView>::New();
-        graphLayoutView->AddRepresentationFromInput(graph);
-        graphLayoutView->SetLayoutStrategyToPassThrough();
-        graphLayoutView->SetVertexColorArrayName("Vertex Colours");
-        graphLayoutView->ColorVerticesOn();*/
+        graphToPolyData->SetInputData(graph);
+        graphToPolyData->Update();
     }
 
-    graphToPolyData->SetInputData(graph);
-    graphToPolyData->Update();
-
-    /*vtkSmartPointer<vtkViewTheme> theme =
-            vtkSmartPointer<vtkViewTheme>::New();
-
-    vtkSmartPointer<vtkGraphLayoutView> graphLayoutView =
-            vtkSmartPointer<vtkGraphLayoutView>::New();
-    graphLayoutView->AddRepresentationFromInput(graph);
-    graphLayoutView->SetLayoutStrategyToPassThrough();
-
-    graphLayoutView->SetVertexColorArrayName("Colour");
-    graphLayoutView->ColorVerticesOn();
-    theme->SetCellLookupTable(coloursLookupTable);
-
-    graphLayoutView->SetEdgeColorArrayName("Colour");
-    graphLayoutView->ColorEdgesOn();
-    theme->SetPointLookupTable(coloursLookupTable);
-
-    graphLayoutView->ApplyViewTheme(theme);
-
-    Interaction *interactor = Interaction::New();
-    interactor->SetCurrentRenderer(graphLayoutView->GetRenderer());
-    graphLayoutView->SetDisplaySize(1920, 1080);
-    graphLayoutView->Render();
-    graphLayoutView->GetInteractor()->Start();*/
-
-
-    //cout << "render" << endl;
-    //cout << "second" << endl;
-
-//    vector<long> newClause = {-1, 3, 2};
-//
-//    add_graph_edges_from_clause(newClause);
-
-//    return graphToPolyData;
-    //return graph;
 }
 
 void Graph3D::reColour() {
@@ -582,6 +526,8 @@ void Graph3D::reColour() {
         set_colour(edge.second.second);
         edgeColours->SetTypedTuple(edge.second.first, edge.second.second.second.GetData());
     }
+
+//    graphToPolyData->Modified();
 }
 
 void Graph3D::set_colour(pair<unsigned int, vtkColor4ub>& colour) const {
