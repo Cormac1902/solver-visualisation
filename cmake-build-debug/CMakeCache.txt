@@ -266,16 +266,16 @@ ProcessorCount_cmd_sysctl:FILEPATH=/sbin/sysctl
 VTK_DIR:PATH=VTK_DIR-NOTFOUND
 
 //Path to a file.
-X11_ICE_INCLUDE_PATH:PATH=X11_ICE_INCLUDE_PATH-NOTFOUND
+X11_ICE_INCLUDE_PATH:PATH=/usr/include
 
 //Path to a library.
-X11_ICE_LIB:FILEPATH=X11_ICE_LIB-NOTFOUND
+X11_ICE_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libICE.so
 
 //Path to a file.
-X11_SM_INCLUDE_PATH:PATH=X11_SM_INCLUDE_PATH-NOTFOUND
+X11_SM_INCLUDE_PATH:PATH=/usr/include
 
 //Path to a library.
-X11_SM_LIB:FILEPATH=X11_SM_LIB-NOTFOUND
+X11_SM_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libSM.so
 
 //Path to a file.
 X11_X11_INCLUDE_PATH:PATH=/usr/include
@@ -404,10 +404,10 @@ X11_Xss_INCLUDE_PATH:PATH=X11_Xss_INCLUDE_PATH-NOTFOUND
 X11_Xss_LIB:FILEPATH=X11_Xss_LIB-NOTFOUND
 
 //Path to a file.
-X11_Xt_INCLUDE_PATH:PATH=X11_Xt_INCLUDE_PATH-NOTFOUND
+X11_Xt_INCLUDE_PATH:PATH=/usr/include
 
 //Path to a library.
-X11_Xt_LIB:FILEPATH=X11_Xt_LIB-NOTFOUND
+X11_Xt_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libXt.so
 
 //Path to a file.
 X11_Xtst_INCLUDE_PATH:PATH=X11_Xtst_INCLUDE_PATH-NOTFOUND
@@ -445,6 +445,12 @@ X11_xkbfile_INCLUDE_PATH:PATH=X11_xkbfile_INCLUDE_PATH-NOTFOUND
 //Path to a library.
 X11_xkbfile_LIB:FILEPATH=X11_xkbfile_LIB-NOTFOUND
 
+//The directory containing a CMake configuration file for ZeroMQ.
+ZeroMQ_DIR:PATH=ZeroMQ_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for cppzmq.
+cppzmq_DIR:PATH=cppzmq_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for cryptomini.
 cryptomini_DIR:PATH=cryptomini_DIR-NOTFOUND
 
@@ -454,6 +460,9 @@ cryptominisat5_DIR:PATH=/usr/local/lib/cmake/cryptominisat5
 //The directory containing a CMake configuration file for cryptominisat.
 cryptominisat_DIR:PATH=cryptominisat_DIR-NOTFOUND
 
+//The directory containing a CMake configuration file for lzmq.
+lzmq_DIR:PATH=lzmq_DIR-NOTFOUND
+
 //Value Computed by CMake
 solver-visualisation_BINARY_DIR:STATIC=/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug
 
@@ -462,6 +471,12 @@ solver-visualisation_SOURCE_DIR:STATIC=/home/cormac/OneDrive/Family/Cormac/Colle
 
 //The directory containing a CMake configuration file for tsl-ordered-map.
 tsl-ordered-map_DIR:PATH=tsl-ordered-map_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for zmq.
+zmq_DIR:PATH=zmq_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for zmq_hpp.
+zmq_hpp_DIR:PATH=zmq_hpp_DIR-NOTFOUND
 
 
 ########################
@@ -575,6 +590,8 @@ CMAKE_HAVE_SHMAT:INTERNAL=1
 CMAKE_HOME_DIRECTORY:INTERNAL=/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
 //Install .so files without execute permission.
 CMAKE_INSTALL_SO_NO_EXE:INTERNAL=1
+//Have library ICE
+CMAKE_LIB_ICE_HAS_ICECONNECTIONNUMBER:INTERNAL=1
 //ADVANCED property for variable: CMAKE_LINKER
 CMAKE_LINKER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MAKE_PROGRAM

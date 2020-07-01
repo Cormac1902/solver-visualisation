@@ -70,10 +70,7 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     pair<vtkIdType, pair<unsigned, vtkColor4ub>>& edgeColour = edgeColourMap[{x, y}];
     auto newEdge = edgeColour.second.first == 0;
-    edgeColour.second.first++;
-    if (edgeColour.second.first > highestEdgeDuplication) {
-        highestEdgeDuplication = edgeColour.second.first;
-    }
+    change_edge_duplication(edgeColour.second.first);
     if (edgeColour.second.second[0] != threePlusClauseColour[0]
         || edgeColour.second.second[1] != threePlusClauseColour[1]
         || edgeColour.second.second[2] != threePlusClauseColour[2]) {
@@ -122,6 +119,53 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
     }
 
     graphToPolyData->Modified();
+}
+
+void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
+    pair<vtkIdType, pair<unsigned, vtkColor4ub>>& edgeColour = edgeColourMap[{x, y}];
+    if (edgeColour.second.first > 0) {
+        change_edge_duplication(edgeColour.second.first, false);
+        set_colour(edgeColour.second);
+        edgeColours->SetTypedTuple(edgeColour.first, edgeColour.second.second.GetData());
+    }
+}
+
+void Graph3D::remove_graph_edge_from_ids(unsigned long x, unsigned long y) {
+    remove_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
+                   std::distance(std::begin(nodes), nodes.find(matchMap[y])));
+}
+
+void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
+    for (auto &var : clause) {
+        var = abs(var);
+    }
+    std::sort(clause.begin(), clause.end());
+    for (auto i = clause.begin(); i < clause.end(); i++) {
+        for (auto j = i + 1; j != clause.end(); j++) {
+            remove_graph_edge_from_ids(*i, *j);
+        }
+    }
+
+    graphToPolyData->Modified();
+}
+
+void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
+    if (increment) {
+        if(duplication > 0) {
+            edgeDuplications[duplication]--;
+        }
+        duplication++;
+    } else {
+        if (edgeDuplications[duplication] > 1) {
+            edgeDuplications[duplication]--;
+        } else {
+            edgeDuplications.erase(duplication);
+        }
+        duplication--;
+    }
+    if(duplication > 0) {
+        edgeDuplications[duplication]++;
+    }
 }
 
 vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
@@ -531,7 +575,7 @@ void Graph3D::reColour() {
 }
 
 void Graph3D::set_colour(pair<unsigned int, vtkColor4ub>& colour) const {
-    colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication);
+    colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication());
 }
 
 ostream &operator<<(ostream &os, const Graph3D &g) {

@@ -25,7 +25,11 @@ class Display {
 
     static void switchDisplay(Graph3D *g, double l);
 
+    static void changeGraphFromClause(Graph3D *g, vector<long> clause, bool add = true);
+
     static void addEdgesFromClause(Graph3D *g, vector<long> clause);
+
+    static void removeEdgesFromClause(Graph3D *g, vector<long> clause);
 
     static void changeGraph(unsigned graphLevel);
 
@@ -41,6 +45,10 @@ class Display {
 
 public:
     static void init(char *filename);
+
+    static void addEdgesFromClause(vector<long> clause);
+
+    static void removeEdgesFromClause(vector<long> clause);
 };
 
 

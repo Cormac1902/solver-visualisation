@@ -6,6 +6,42 @@
 
 #IncludeRegexTransform: 
 
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp
+vtkCamera.h
+-
+vtkProperty.h
+-
+vtkRenderer.h
+-
+vtkRenderWindowInteractor.h
+-
+vtkLine.h
+-
+vtkUnsignedCharArray.h
+-
+vtkPointData.h
+-
+vtkPointSource.h
+-
+utility
+-
+Display.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+Interaction.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+vtkVertexGlyphFilter.h
+-
+vtkPolyDataMapper.h
+-
+vtkRenderWindow.h
+-
+Graph.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
+cryptominisat5/cryptominisat.h
+-
+
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.cpp
 iostream
 -
@@ -74,6 +110,14 @@ vtkMutableUndirectedGraph.h
 Node.h
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+vtkInteractorStyleTrackballCamera.h
+-
+vtkObjectFactory.h
+-
+vtkRenderWindowInteractor.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/vtkRenderWindowInteractor.h
+
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 set
 -
@@ -115,6 +159,12 @@ vtkLongLongArray.h
 /home/cormac/projects/VTK-build/Filters/Core/vtkFiltersCoreModule.h
 vtkAutoInit.h
 /home/cormac/projects/VTK-build/Filters/Core/vtkAutoInit.h
+
+/home/cormac/projects/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK-build/Interaction/Style/vtkRenderingCoreModule.h
+vtkAutoInit.h
+/home/cormac/projects/VTK-build/Interaction/Style/vtkAutoInit.h
 
 /home/cormac/projects/VTK-build/Views/Core/vtkViewsCoreModule.h
 
@@ -674,6 +724,12 @@ vtkConfigure.h
 windows.h
 -
 
+/home/cormac/projects/VTK/Common/Core/vtkWindow.h
+vtkCommonCoreModule.h
+/home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
+vtkObject.h
+/home/cormac/projects/VTK/Common/Core/vtkObject.h
+
 /home/cormac/projects/VTK/Common/Core/vtkWrappingHints.h
 
 /home/cormac/projects/VTK/Common/DataModel/vtkAbstractCellLinks.h
@@ -840,11 +896,25 @@ cstdlib
 vector
 -
 
+/home/cormac/projects/VTK/Common/DataModel/vtkRect.h
+vtkVector.h
+/home/cormac/projects/VTK/Common/DataModel/vtkVector.h
+vtkMath.h
+/home/cormac/projects/VTK/Common/DataModel/vtkMath.h
+
 /home/cormac/projects/VTK/Common/DataModel/vtkUndirectedGraph.h
 vtkCommonDataModelModule.h
 /home/cormac/projects/VTK/Common/DataModel/vtkCommonDataModelModule.h
 vtkGraph.h
 /home/cormac/projects/VTK/Common/DataModel/vtkGraph.h
+
+/home/cormac/projects/VTK/Common/DataModel/vtkVector.h
+vtkObject.h
+/home/cormac/projects/VTK/Common/DataModel/vtkObject.h
+vtkTuple.h
+/home/cormac/projects/VTK/Common/DataModel/vtkTuple.h
+cmath
+-
 
 /home/cormac/projects/VTK/Common/ExecutionModel/vtkAlgorithm.h
 vtkCommonExecutionModelModule.h
@@ -874,6 +944,14 @@ cmath
 cstdlib
 -
 
+/home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
+
+/home/cormac/projects/VTK/Filters/General/vtkVertexGlyphFilter.h
+vtkFiltersGeneralModule.h
+/home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
+vtkPolyDataAlgorithm.h
+/home/cormac/projects/VTK/Filters/General/vtkPolyDataAlgorithm.h
+
 /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
 
 /home/cormac/projects/VTK/Filters/Sources/vtkGraphToPolyData.h
@@ -888,6 +966,24 @@ vtkFiltersSourcesModule.h
 vtkPolyDataAlgorithm.h
 /home/cormac/projects/VTK/Filters/Sources/vtkPolyDataAlgorithm.h
 
+/home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
+vtkInteractionStyleModule.h
+/home/cormac/projects/VTK/Interaction/Style/vtkInteractionStyleModule.h
+vtkInteractorStyle.h
+/home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyle.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper.h
+vtkAlgorithm.h
+/home/cormac/projects/VTK/Rendering/Core/vtkAlgorithm.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper3D.h
+vtkAbstractMapper.h
+/home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
 /home/cormac/projects/VTK/Rendering/Core/vtkActor.h
 vtkProp3D.h
 /home/cormac/projects/VTK/Rendering/Core/vtkProp3D.h
@@ -899,6 +995,44 @@ vtkActor.h
 /home/cormac/projects/VTK/Rendering/Core/vtkActor.h
 vtkPropCollection.h
 /home/cormac/projects/VTK/Rendering/Core/vtkPropCollection.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkCamera.h
+vtkObject.h
+/home/cormac/projects/VTK/Rendering/Core/vtkObject.h
+vtkRect.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRect.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkInteractorObserver.h
+vtkObject.h
+/home/cormac/projects/VTK/Rendering/Core/vtkObject.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkInteractorStyle.h
+vtkInteractorObserver.h
+/home/cormac/projects/VTK/Rendering/Core/vtkInteractorObserver.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkMapper.h
+vtkAbstractMapper3D.h
+/home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper3D.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+vtkSmartPointer.h
+/home/cormac/projects/VTK/Rendering/Core/vtkSmartPointer.h
+vtkSystemIncludes.h
+/home/cormac/projects/VTK/Rendering/Core/vtkSystemIncludes.h
+vector
+-
+
+/home/cormac/projects/VTK/Rendering/Core/vtkPolyDataMapper.h
+vtkMapper.h
+/home/cormac/projects/VTK/Rendering/Core/vtkMapper.h
 vtkRenderingCoreModule.h
 /home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
 
@@ -923,6 +1057,26 @@ vtkRenderingCoreModule.h
 /home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
 vtkProp.h
 /home/cormac/projects/VTK/Rendering/Core/vtkProp.h
+
+/home/cormac/projects/VTK/Rendering/Core/vtkProperty.h
+vtkObject.h
+/home/cormac/projects/VTK/Rendering/Core/vtkObject.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+map
+-
+string
+-
+
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderWindow.h
+vtkNew.h
+/home/cormac/projects/VTK/Rendering/Core/vtkNew.h
+vtkRenderingCoreModule.h
+/home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
+vtkSmartPointer.h
+/home/cormac/projects/VTK/Rendering/Core/vtkSmartPointer.h
+vtkWindow.h
+/home/cormac/projects/VTK/Rendering/Core/vtkWindow.h
 
 /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindowInteractor.h
 vtkCommand.h

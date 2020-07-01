@@ -9,14 +9,15 @@ set(SOURCE_FILES Vector.cpp
         Interaction.cpp
         cnf3d2.cpp
         InteractionCallback.cpp
-        Display.cpp)
+        Display.cpp
+        API.cpp)
 set(HEADERS Vector.h
         Node.h
         Graph.h
         SpaceGrid.h
         Interaction.h
         InteractionCallback.h
-        Display.h)
+        Display.h API.h)
 set(CC_FLAGS "-O3 -Wall -DNDEBUG -DUSE_SPACE_GRID")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CC_FLAGS}")
@@ -37,9 +38,9 @@ find_package(VTK COMPONENTS
         ViewsCore
         ViewsInfovis)
 
-#find_package(tsl-ordered-map REQUIRED)
-
 find_package(cryptominisat5 REQUIRED)
+
+include_directories(${ZeroMQ_INCLUDE_DIR} ${cppzmq_INCLUDE_DIR})
 
 message(STATUS "Cryptominisat version: ${CRYPTOMINISAT5_VERSION_MAJOR}.${CRYPTOMINISAT5_VERSION_MINOR}")
 
@@ -65,4 +66,5 @@ endif ()
 target_link_libraries(s_vis PRIVATE
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES}
-        ${CRYPTOMINISAT5_LIBRARIES})
+        ${CRYPTOMINISAT5_LIBRARIES}
+        zmq)

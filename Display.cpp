@@ -93,7 +93,7 @@ void Display::display() {
 
 void Display::switchDisplay(Graph3D *g, double l) {
 
-    auto highestEdgeDuplication = g->getHighestEdgeDuplication();
+    auto highestEdgeDuplication = g->highestEdgeDuplication();
 
     // g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
     if (!g->get_drawn()) {
@@ -103,7 +103,7 @@ void Display::switchDisplay(Graph3D *g, double l) {
     mapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
 //    mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
 
-    if (g->getHighestEdgeDuplication() != highestEdgeDuplication) {
+    if (g->highestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
     }
 
@@ -141,15 +141,36 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
 }
 
-void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
-    auto highestEdgeDuplication = g->getHighestEdgeDuplication();
+void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
+    auto highestEdgeDuplication = g->highestEdgeDuplication();
 
-    g->add_graph_edges_from_clause(std::move(clause));
+    if (add) {
+        g->add_graph_edges_from_clause(std::move(clause));
+    } else {
+        g->remove_graph_edges_from_clause(std::move(clause));
+    }
 
-    if (g->getHighestEdgeDuplication() != highestEdgeDuplication) {
+    if (g->highestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
     }
 
+    renderWindow->Render();
+}
+
+void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
+    changeGraphFromClause(g, std::move(clause));
+}
+
+void Display::addEdgesFromClause(vector<long> clause) {
+    addEdgesFromClause(current_graph, std::move(clause));
+}
+
+void Display::removeEdgesFromClause(Graph3D *g, vector<long> clause) {
+    changeGraphFromClause(g, std::move(clause), false);
+}
+
+void Display::removeEdgesFromClause(vector<long> clause) {
+    removeEdgesFromClause(current_graph, std::move(clause));
 }
 
 void Display::setupNodes(Graph3D *g) {

@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/s_vis.dir/API.cpp.o"
   "CMakeFiles/s_vis.dir/Display.cpp.o"
   "CMakeFiles/s_vis.dir/Graph.cpp.o"
   "CMakeFiles/s_vis.dir/Interaction.cpp.o"

@@ -123,6 +123,33 @@ s_vis/fast:
 	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/build
 .PHONY : s_vis/fast
 
+API.o: API.cpp.o
+
+.PHONY : API.o
+
+# target to build an object file
+API.cpp.o:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/API.cpp.o
+.PHONY : API.cpp.o
+
+API.i: API.cpp.i
+
+.PHONY : API.i
+
+# target to preprocess a source file
+API.cpp.i:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/API.cpp.i
+.PHONY : API.cpp.i
+
+API.s: API.cpp.s
+
+.PHONY : API.s
+
+# target to generate assembly for a file
+API.cpp.s:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/API.cpp.s
+.PHONY : API.cpp.s
+
 Display.o: Display.cpp.o
 
 .PHONY : Display.o
@@ -348,6 +375,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... s_vis"
+	@echo "... API.o"
+	@echo "... API.i"
+	@echo "... API.s"
 	@echo "... Display.o"
 	@echo "... Display.i"
 	@echo "... Display.s"

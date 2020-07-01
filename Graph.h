@@ -27,14 +27,11 @@ private:
     bool positioned; // whether graph has been positioned
     bool drawn; // whether graph has been drawn
 
-    float highestEdgeDuplication; // tracks highest number of recurring edges
+    map<unsigned, unsigned > edgeDuplications; // tracks highest number of recurring edges
 
     vtkMutableUndirectedGraph* graph;
     vtkUnsignedCharArray* edgeColours;
     vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
-
-
-private:
 
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
@@ -57,13 +54,17 @@ private:
 
     void add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<vtkIdType, pair<unsigned, vtkColor4ub>>& colour);
 
+    void remove_graph_edge(unsigned long x, unsigned long y);
+
+    void change_edge_duplication(unsigned& duplication, bool increment = true);
+
     void set_colour(pair<unsigned int, vtkColor4ub>& colour) const;
 
 public:
     Graph3D() : number_edges(0),
                 positioned(false),
                 drawn(false),
-                highestEdgeDuplication(0),
+                edgeDuplications({}),
                 graphToPolyData(vtkSmartPointer<vtkGraphToPolyData>::New()),
                 allMatching({})
                 {
@@ -84,6 +85,10 @@ public:
 
     void add_graph_edges_from_clause(vector<long> clause);
 
+    void remove_graph_edge_from_ids(unsigned long x, unsigned long y);
+
+    void remove_graph_edges_from_clause(vector<long> clause);
+
     vector<vector<long>> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
@@ -95,7 +100,7 @@ public:
 
     bool get_drawn() const { return drawn; }
 
-    float getHighestEdgeDuplication() const { return highestEdgeDuplication; }
+    float highestEdgeDuplication() const { return (float) edgeDuplications.end()->first; }
 
     const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
 
