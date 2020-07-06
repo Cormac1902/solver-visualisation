@@ -42,50 +42,6 @@ Graph.h
 cryptominisat5/cryptominisat.h
 -
 
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.cpp
-iostream
--
-stack
--
-climits
--
-cctype
--
-cassert
--
-Graph.h
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
-SpaceGrid.h
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h
-vtkPoints.h
--
-vtkRenderer.h
--
-vtkRenderWindowInteractor.h
--
-vtkLine.h
--
-vtkUnsignedCharArray.h
--
-vtkNamedColors.h
--
-vtkCellData.h
--
-vtkPointSource.h
--
-vtkPointData.h
--
-vtkUndirectedGraph.h
--
-vtkMutableUndirectedGraph.h
--
-vtkGraphLayoutView.h
--
-vtkGraphToPolyData.h
--
-vtkLookupTable.h
--
-
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
 map
 -
@@ -124,14 +80,6 @@ set
 Vector.h
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
 
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/SpaceGrid.h
-vector
--
-map
--
-Node.h
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
-
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
 cmath
 -
@@ -165,10 +113,6 @@ vtkRenderingCoreModule.h
 /home/cormac/projects/VTK-build/Interaction/Style/vtkRenderingCoreModule.h
 vtkAutoInit.h
 /home/cormac/projects/VTK-build/Interaction/Style/vtkAutoInit.h
-
-/home/cormac/projects/VTK-build/Views/Core/vtkViewsCoreModule.h
-
-/home/cormac/projects/VTK-build/Views/Infovis/vtkViewsInfovisModule.h
 
 /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
 
@@ -460,14 +404,6 @@ vtkCommonCoreModule.h
 vtkDataArray.h
 /home/cormac/projects/VTK/Common/Core/vtkDataArray.h
 
-/home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
-vtkCommonCoreModule.h
-/home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
-vtkScalarsToColors.h
-/home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
-vtkUnsignedCharArray.h
-/home/cormac/projects/VTK/Common/Core/vtkUnsignedCharArray.h
-
 /home/cormac/projects/VTK/Common/Core/vtkMath.h
 vtkCommonCoreModule.h
 /home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
@@ -551,14 +487,6 @@ vtkObject.h
 /home/cormac/projects/VTK/Common/Core/vtkObject.h
 vtkDataArray.h
 /home/cormac/projects/VTK/Common/Core/vtkDataArray.h
-
-/home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
-vtkCommonCoreModule.h
-/home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
-vtkObject.h
-/home/cormac/projects/VTK/Common/Core/vtkObject.h
-vtkVariant.h
-/home/cormac/projects/VTK/Common/Core/vtkVariant.h
 
 /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
 vtkCommonCoreModule.h
@@ -775,12 +703,6 @@ type_traits
 -
 utility
 -
-
-/home/cormac/projects/VTK/Common/DataModel/vtkCellData.h
-vtkCommonDataModelModule.h
-/home/cormac/projects/VTK/Common/DataModel/vtkCommonDataModelModule.h
-vtkDataSetAttributes.h
-/home/cormac/projects/VTK/Common/DataModel/vtkDataSetAttributes.h
 
 /home/cormac/projects/VTK/Common/DataModel/vtkCellLinks.h
 vtkAbstractCellLinks.h
@@ -1145,32 +1067,4 @@ inttypes.h
 /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/int.h
 include/kwiml/int.h
 /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/include/kwiml/int.h
-
-/home/cormac/projects/VTK/Views/Core/vtkRenderViewBase.h
-vtkSmartPointer.h
-/home/cormac/projects/VTK/Views/Core/vtkSmartPointer.h
-vtkView.h
-/home/cormac/projects/VTK/Views/Core/vtkView.h
-vtkViewsCoreModule.h
-/home/cormac/projects/VTK/Views/Core/vtkViewsCoreModule.h
-
-/home/cormac/projects/VTK/Views/Core/vtkView.h
-vtkObject.h
-/home/cormac/projects/VTK/Views/Core/vtkObject.h
-vtkViewsCoreModule.h
-/home/cormac/projects/VTK/Views/Core/vtkViewsCoreModule.h
-
-/home/cormac/projects/VTK/Views/Infovis/vtkGraphLayoutView.h
-vtkRenderView.h
-/home/cormac/projects/VTK/Views/Infovis/vtkRenderView.h
-vtkViewsInfovisModule.h
-/home/cormac/projects/VTK/Views/Infovis/vtkViewsInfovisModule.h
-
-/home/cormac/projects/VTK/Views/Infovis/vtkRenderView.h
-vtkRenderViewBase.h
-/home/cormac/projects/VTK/Views/Infovis/vtkRenderViewBase.h
-vtkSmartPointer.h
-/home/cormac/projects/VTK/Views/Infovis/vtkSmartPointer.h
-vtkViewsInfovisModule.h
-/home/cormac/projects/VTK/Views/Infovis/vtkViewsInfovisModule.h
 

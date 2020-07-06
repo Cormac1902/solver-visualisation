@@ -250,6 +250,8 @@ void Display::solve() {
     SATSolver s;
     vector<Lit> cmsatClause;
 
+    s.set_num_threads(4);
+
     //fill the solver, run solve, etc.
 
     s.new_vars(graph_stack[0]->nr_nodes());
@@ -262,24 +264,24 @@ void Display::solve() {
         cmsatClause.clear();
     }
 
-    s.start_getting_small_clauses(UINT32_MAX, UINT32_MAX);
+    std::cout << "Solving..." << std::endl;
 
     s.solve();
 
-    vector<Lit> lits;
-    bool ret = true;
-    while (ret) {
-        ret = s.get_next_small_clause(lits);
-        if (ret) {
-            //deal with clause in "lits"
-            // add_to_my_db(lits);
-            addEdgesFromClause(current_graph, clauseFromCMSATClause(lits));
-        }
-    }
+//    vector<Lit> lits;
+//    bool ret = true;
+//    while (ret) {
+//        ret = s.get_next_small_clause(lits);
+//        if (ret) {
+//            //deal with clause in "lits"
+//            // add_to_my_db(lits);
+//            addEdgesFromClause(current_graph, clauseFromCMSATClause(lits));
+//        }
+//    }
 
-    cout << "Finished solving" << endl;
+    std::cout << "Finished solving" << std::endl;
 
-    s.end_getting_small_clauses();
+//    s.end_getting_small_clauses();
 
 }
 

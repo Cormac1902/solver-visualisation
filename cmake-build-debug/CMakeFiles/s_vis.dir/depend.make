@@ -10,7 +10,6 @@ CMakeFiles/s_vis.dir/API.cpp.o: ../Vector.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt64Array.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/Filters/Core/vtkFiltersCoreModule.h
-CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/ThirdParty/zlib/vtkzlib/zconf.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkNamedColors.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Core/vtkABI.h

@@ -16,8 +16,8 @@ private:
 
 public:
     API() : context(1),
-            add_socket(context, ZMQ_REP),
-            remove_socket(context, ZMQ_REP) {
+            add_socket(context, ZMQ_PULL),
+            remove_socket(context, ZMQ_PULL) {
         add_socket.bind("tcp://*:29786");
         remove_socket.bind("tcp://*:29787");
     }
