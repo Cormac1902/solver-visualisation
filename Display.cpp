@@ -9,7 +9,7 @@
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkPointData.h>
-#include <vtkPointSource.h>
+#include <vtkFloatArray.h>
 
 #include <utility>
 #include <mutex>
@@ -66,16 +66,21 @@ void Display::display() {
 
     vertexActor->SetMapper(vertexMapper);
 
+//    vertexActor->GetProperty()->EdgeVisibilityOn();
+//    vertexActor->GetProperty()->RenderLinesAsTubesOn();
+//    vertexActor->GetProperty()->VertexVisibilityOn();
+//    vertexActor->GetProperty()->RenderPointsAsSpheresOn();
+
     vertexMapper->InterpolateScalarsBeforeMappingOn();
     vertexMapper->ScalarVisibilityOn();
 
     // edgeActor->GetProperty()->BackfaceCullingOn();
 
-    vtkSmartPointer<vtkCamera> camera = vtkSmartPointer<vtkCamera>::New();
+    auto camera = vtkSmartPointer<vtkCamera>::New();
     camera->SetPosition(0, 0, 20);
     camera->SetFocalPoint(0, 0, 0);
 
-    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+    auto renderer = vtkSmartPointer<vtkRenderer>::New();
 
     renderer->SetActiveCamera(camera);
 
@@ -86,7 +91,7 @@ void Display::display() {
 
     Interaction *interactor = Interaction::New();
 
-    vtkSmartPointer<Interaction> interactorPointer = vtkSmartPointer<Interaction>::Take(interactor);
+    auto interactorPointer = vtkSmartPointer<Interaction>::Take(interactor);
     renderWindowInteractor->SetInteractorStyle(interactor);
     interactor->SetCurrentRenderer(renderer);
 
@@ -130,41 +135,18 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
     current_graph = g;
 
-    vtkSmartPointer<vtkSphereSource> sphereSource =
-            vtkSmartPointer<vtkSphereSource>::New();
+    auto sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 
-//    sphereSource->SetCenter(0.0, 0.0, 0.0);
     sphereSource->SetRadius(lineWidth * 3 / 1000);
-    // Make the surface smooth.
-//    sphereSource->SetPhiResolution(100);
-//    sphereSource->SetThetaResolution(100);
 
+    glyph3D->SetScaleModeToScaleByScalar();
     glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
-    glyph3D->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
+    glyph3D->SetInputData(g->getVertexPolydata());
     glyph3D->Update();
 
     vertexMapper->SetInputConnection(glyph3D->GetOutputPort());
-
-/*    vtkSmartPointer<vtkPointSource> pointSource =
-            vtkSmartPointer<vtkPointSource>::New();
-    pointSource->SetNumberOfPoints(edgeMapper->GetInput()->GetNumberOfPoints());
-    pointSource->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
-    pointSource->Update();
-
-    edgeMapper->SetInputConnection(pointSource->GetOutputPort());*/
-
-    /*vtkSmartPointer<vtkNamedColors> namedColors =
-            vtkSmartPointer<vtkNamedColors>::New();
-
-    vtkSmartPointer<vtkUnsignedCharArray> colors =
-            vtkSmartPointer<vtkUnsignedCharArray>::New();
-    colors->SetNumberOfComponents(3);
-    colors->SetName ("Colors");
-    colors->InsertNextTupleValue(namedColors->GetColor3ub("Tomato").GetData());
-    colors->InsertNextTupleValue(namedColors->GetColor3ub("Mint").GetData());
-    colors->InsertNextTupleValue(namedColors->GetColor3ub("Peacock").GetData());
-
-    edgeMapper->GetInput()->GetPointData()->AddArray(colors);*/
+    vertexMapper->SetScalarModeToUsePointFieldData();
+    vertexMapper->SelectColorArray(1);
 
 }
 

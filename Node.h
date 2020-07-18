@@ -45,14 +45,14 @@ public:
     // returns true iff element was not already present
 
     // observables
-    const Vector3D &position() const;
+    [[nodiscard]] const Vector3D &position() const;
 
-    unsigned long id() const;
+    [[nodiscard]] unsigned long id() const;
 
-    int weight() const;
+    [[nodiscard]] int weight() const;
     // EdgeAttribute edge_attribute(Node3D* other_end) const;
 
-    const set<ExtNode3D> &neighbors() const;
+    [[nodiscard]] const set<ExtNode3D> &neighbors() const;
 
     friend class Graph3D;
 };

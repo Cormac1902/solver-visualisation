@@ -13,6 +13,7 @@
 #include <vtkNamedColors.h>
 #include <vtkUndirectedGraph.h>
 #include <vtkMutableUndirectedGraph.h>
+#include <vtkFloatArray.h>
 #include "Node.h"
 
 using namespace std;
@@ -23,6 +24,7 @@ private:
     // NOTE: edges are stored inside the nodes
 
     int number_edges; // number of edges contained in graph
+    float largest_node;
 
     bool positioned; // whether graph has been positioned
     bool drawn; // whether graph has been drawn
@@ -31,7 +33,11 @@ private:
 
     vtkSmartPointer<vtkMutableUndirectedGraph> graph;
     vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
+    vtkSmartPointer<vtkUnsignedCharArray> vertexColours;
     vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
+    vtkSmartPointer<vtkPoints> points;
+    vtkSmartPointer<vtkFloatArray> scales;
+    vtkSmartPointer<vtkPolyData> vertexPolydata;
 
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
@@ -62,13 +68,14 @@ private:
 
 public:
     Graph3D() : number_edges(0),
+                largest_node(0),
                 positioned(false),
                 drawn(false),
                 edgeDuplications({}),
                 graphToPolyData(vtkSmartPointer<vtkGraphToPolyData>::New()),
                 allMatching({})
                 {
-        vtkSmartPointer<vtkNamedColors> namedColours = vtkSmartPointer<vtkNamedColors>::New();
+        auto namedColours = vtkSmartPointer<vtkNamedColors>::New();
         twoClauseColour = namedColours->GetColor4ub("Tomato");
         threePlusClauseColour = namedColours->GetColor4ub("Mint");
     } // constructs empty graph
@@ -105,6 +112,10 @@ public:
     [[nodiscard]] const vtkSmartPointer<vtkMutableUndirectedGraph> &getGraph() const { return graph; }
 
     [[nodiscard]] const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
+
+    [[nodiscard]] const vtkSmartPointer<vtkPoints> &getPoints() const { return points; }
+
+    [[nodiscard]] const vtkSmartPointer<vtkPolyData> &getVertexPolydata() const { return vertexPolydata; }
 
     vtkMutableUndirectedGraph* getGraph() { return graph; }
 

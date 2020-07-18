@@ -5,20 +5,9 @@
 #include <cassert>
 #include "Graph.h"
 #include "SpaceGrid.h"
-#include <vtkPoints.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkLine.h>
-#include <vtkUnsignedCharArray.h>
-#include <vtkNamedColors.h>
-#include <vtkCellData.h>
-#include <vtkPointSource.h>
-#include <vtkPointData.h>
-#include <vtkUndirectedGraph.h>
-#include <vtkMutableUndirectedGraph.h>
-#include <vtkGraphLayoutView.h>
-#include <vtkGraphToPolyData.h>
-#include <vtkLookupTable.h>
+#include "vtkUnsignedCharArray.h"
+#include "vtkDataSetAttributes.h"
+#include "vtkPointData.h"
 
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple
@@ -63,8 +52,12 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     assert(ins_x == ins_y); // either none or both edges must have existed before insertion
 #endif
 
-    if (ins_x)
-        number_edges++;
+    if (ins_x) number_edges++;
+
+    auto neighbours_size = max(nodes[x].neighbors().size(), nodes[y].neighbors().size());
+    if (neighbours_size > largest_node) {
+        largest_node = neighbours_size;
+    }
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
@@ -495,15 +488,15 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
         drawn = true;
 
         graph = vtkSmartPointer<vtkMutableUndirectedGraph>::New();
+        points = vtkSmartPointer<vtkPoints>::New();
+        scales = vtkSmartPointer<vtkFloatArray>::New();
 
-        vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-
-        vtkSmartPointer<vtkUnsignedCharArray> vertexColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
+        vertexColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
         vertexColours->SetName("Vertex Colours");
         // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
 
 //    vtkSmartPointer<vtkIntArray> edgeColours;
-        bool colourPoints = false;
+        bool colourPoints = true;
 
         vertexColours->SetNumberOfComponents(3);
 
@@ -531,10 +524,11 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
         for (auto i = nodes.begin(); i != nodes.end(); i++) {
             const Node3D &node = i->second;
             points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
+            scales->InsertNextValue((node.neighbors().size() / largest_node) * 1.5);
 
             if (colourPoints) {
                 vertexColours->InsertNextTupleValue(
-                        (i->first % 2 == 0 ? twoClauseColour : threePlusClauseColour).GetData());
+                        (node.neighbors().size() == largest_node ? twoClauseColour : threePlusClauseColour).GetData());
             }
             if (draw_edges) {
                 const Node3D &u = i->second;
@@ -551,16 +545,23 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 
         graph->SetPoints(points);
 
-        if (colourPoints) {
-            graph->GetVertexData()->AddArray(vertexColours);
-        }
-
         if (draw_edges) {
             graph->GetEdgeData()->SetScalars(edgeColours);
         }
 
         graphToPolyData->SetInputData(graph);
+
         graphToPolyData->Update();
+
+        vertexPolydata = vtkSmartPointer<vtkPolyData>::New();
+        vertexPolydata->SetPoints(graphToPolyData->GetOutput()->GetPoints());
+        vertexPolydata->GetPointData()->SetScalars(scales);
+        vertexPolydata->GetPointData()->AddArray(vertexColours);
+
+        if (colourPoints) {
+//            graph->GetVertexData()->SetScalars(vertexColours);
+//            graphToPolyData->GetOutput()->GetPointData()->SetScalars(vertexColours);
+        }
     }
 
 }
