@@ -1,8 +1,5 @@
 #include "Display.h"
-#include <zmq.hpp>
-#include "msgpack.hpp"
 #include <string>
-#include <iostream>
 #include "thread"
 #include "API.h"
 

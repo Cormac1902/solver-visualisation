@@ -14,6 +14,8 @@ private:
     zmq::context_t context;
     zmq::socket_t add_socket, remove_socket;
 
+    static std::vector<long> unpack_vector(zmq::message_t& message);
+
 public:
     API() : context(1),
             add_socket(context, ZMQ_PULL),

@@ -9,7 +9,6 @@ CMakeFiles/s_vis.dir/API.cpp.o: ../Node.h
 CMakeFiles/s_vis.dir/API.cpp.o: ../Vector.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt64Array.h
-CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK-build/Filters/Core/vtkFiltersCoreModule.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkNamedColors.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Core/vtkABI.h
@@ -90,6 +89,8 @@ CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Common/Math/vtkTuple.h
+CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkFiltersCoreModule.h
+CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkGlyph3D.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkVertexGlyphFilter.h
 CMakeFiles/s_vis.dir/API.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
@@ -206,11 +207,13 @@ CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Common/ExecutionMo
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Common/Math/vtkTuple.h
+CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkGlyph3D.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkVertexGlyphFilter.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkGraphToPolyData.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkPointSource.h
+CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkSphereSource.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper.h
 CMakeFiles/s_vis.dir/Display.cpp.o: /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper3D.h
@@ -370,7 +373,6 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o: ../Node.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: ../Vector.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt64Array.h
-CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK-build/Filters/Core/vtkFiltersCoreModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkNamedColors.h
@@ -453,6 +455,8 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Common/Executi
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Common/Math/vtkTuple.h
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkFiltersCoreModule.h
+CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkGlyph3D.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkVertexGlyphFilter.h
 CMakeFiles/s_vis.dir/Interaction.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
@@ -532,7 +536,6 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o: ../Vector.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: ../cnf3d2.cpp
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt64Array.h
-CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK-build/Filters/Core/vtkFiltersCoreModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/Color/vtkNamedColors.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/Core/vtkABI.h
@@ -613,6 +616,8 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/ExecutionMod
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkCommonExecutionModelModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/ExecutionModel/vtkPolyDataAlgorithm.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Common/Math/vtkTuple.h
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkFiltersCoreModule.h
+CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Filters/Core/vtkGlyph3D.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Filters/General/vtkVertexGlyphFilter.h
 CMakeFiles/s_vis.dir/cnf3d2.cpp.o: /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h

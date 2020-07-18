@@ -8,15 +8,22 @@
 #include <vtkVertexGlyphFilter.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
+#include <vtkGlyph3D.h>
 #include "Graph.h"
 #include <cryptominisat5/cryptominisat.h>
 
 using namespace CMSat;
 
 class Display {
-    static vtkPolyDataMapper* mapper;
-    static vtkActor* actor;
-    static vtkRenderWindow* renderWindow;
+    static vtkSmartPointer<vtkPolyDataMapper> edgeMapper;
+    static vtkSmartPointer<vtkActor> edgeActor;
+
+    static vtkSmartPointer<vtkPolyDataMapper> vertexMapper;
+    static vtkSmartPointer<vtkActor> vertexActor;
+    static vtkSmartPointer<vtkGlyph3D> glyph3D;
+
+    static vtkSmartPointer<vtkRenderWindow> renderWindow;
+
     static vector<vector<long>> clauses;
 
     static void display();

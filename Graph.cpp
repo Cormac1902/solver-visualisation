@@ -156,7 +156,7 @@ void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
         }
         duplication++;
     } else {
-        if (edgeDuplications[duplication] > 1) {
+        if (edgeDuplications[duplication] > 0) {
             edgeDuplications[duplication]--;
         } else {
             edgeDuplications.erase(duplication);
@@ -494,7 +494,7 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
     if (!drawn) {
         drawn = true;
 
-        graph = vtkMutableUndirectedGraph::New();
+        graph = vtkSmartPointer<vtkMutableUndirectedGraph>::New();
 
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
 
@@ -514,7 +514,7 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 
 
             // Create a vtkUnsignedCharArray container and store the colors in it
-            edgeColours = vtkUnsignedCharArray::New();
+            edgeColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
 //        = vtkSmartPointer<vtkIntArray>::New();
             edgeColours->SetNumberOfComponents(4);
             edgeColours->SetName("Edge Colours");

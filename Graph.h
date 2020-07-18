@@ -29,8 +29,8 @@ private:
 
     map<unsigned, unsigned > edgeDuplications; // tracks highest number of recurring edges
 
-    vtkMutableUndirectedGraph* graph;
-    vtkUnsignedCharArray* edgeColours;
+    vtkSmartPointer<vtkMutableUndirectedGraph> graph;
+    vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
     vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
 
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
@@ -94,15 +94,17 @@ public:
     // observables
     int nr_nodes() { return nodes.size(); }
 
-    int nr_edges() const { return number_edges; }
+    [[nodiscard]] int nr_edges() const { return number_edges; }
 
-    bool get_positioned() const { return positioned; }
+    [[nodiscard]] bool get_positioned() const { return positioned; }
 
-    bool get_drawn() const { return drawn; }
+    [[nodiscard]] bool get_drawn() const { return drawn; }
 
-    float highestEdgeDuplication() const { return (float) edgeDuplications.end()->first; }
+    [[nodiscard]] float highestEdgeDuplication() const { return (float) edgeDuplications.end()->first; }
 
-    const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
+    [[nodiscard]] const vtkSmartPointer<vtkMutableUndirectedGraph> &getGraph() const { return graph; }
+
+    [[nodiscard]] const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
 
     vtkMutableUndirectedGraph* getGraph() { return graph; }
 

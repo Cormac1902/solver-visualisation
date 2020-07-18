@@ -12,6 +12,8 @@
 #include <vtkPointSource.h>
 
 #include <utility>
+#include <mutex>
+#include <vtkSphereSource.h>
 
 #include "Display.h"
 #include "Interaction.h"
@@ -34,10 +36,14 @@ int max_line_width_threshold = 250, min_line_width_threshold = 2500;
 Vector3D min_p, max_p;
 
 Graph3D* current_graph;
+std::mutex graph_mutex;
 
-vtkPolyDataMapper *Display::mapper = vtkPolyDataMapper::New();
-vtkActor *Display::actor = vtkActor::New();
-vtkRenderWindow *Display::renderWindow = vtkRenderWindow::New();
+vtkSmartPointer<vtkPolyDataMapper> Display::edgeMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+vtkSmartPointer<vtkActor> Display::edgeActor = vtkSmartPointer<vtkActor>::New();
+vtkSmartPointer<vtkPolyDataMapper> Display::vertexMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+vtkSmartPointer<vtkActor> Display::vertexActor = vtkSmartPointer<vtkActor>::New();
+vtkSmartPointer<vtkGlyph3D> Display::glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
+vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
 vector<vector<long>> Display::clauses = {};
 
 // ----------------------------------------------------------------------
@@ -48,17 +54,22 @@ void Display::display() {
 
     switchDisplay(graph_stack.back(), k);
 
-    actor->SetMapper(mapper);
+    edgeActor->SetMapper(edgeMapper);
 
-    actor->GetProperty()->EdgeVisibilityOn();
-    actor->GetProperty()->RenderLinesAsTubesOn();
-    actor->GetProperty()->RenderPointsAsSpheresOn();
-    actor->GetProperty()->VertexVisibilityOn();
+    edgeActor->GetProperty()->EdgeVisibilityOn();
+    edgeActor->GetProperty()->RenderLinesAsTubesOn();
+//    edgeActor->GetProperty()->RenderPointsAsSpheresOn();
+//    edgeActor->GetProperty()->VertexVisibilityOn();
 
-    mapper->InterpolateScalarsBeforeMappingOn();
-    mapper->ScalarVisibilityOn();
+    edgeMapper->InterpolateScalarsBeforeMappingOn();
+    edgeMapper->ScalarVisibilityOn();
 
-    // actor->GetProperty()->BackfaceCullingOn();
+    vertexActor->SetMapper(vertexMapper);
+
+    vertexMapper->InterpolateScalarsBeforeMappingOn();
+    vertexMapper->ScalarVisibilityOn();
+
+    // edgeActor->GetProperty()->BackfaceCullingOn();
 
     vtkSmartPointer<vtkCamera> camera = vtkSmartPointer<vtkCamera>::New();
     camera->SetPosition(0, 0, 20);
@@ -83,7 +94,8 @@ void Display::display() {
     renderWindow->SetWindowName("Solver Visualisation");
     renderWindow->ShowCursor();
 
-    renderer->AddActor(actor);
+    renderer->AddActor(edgeActor);
+    renderer->AddActor(vertexActor);
 
     renderWindow->Render();
 
@@ -100,31 +112,46 @@ void Display::switchDisplay(Graph3D *g, double l) {
         g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
     }
 
-    mapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
-//    mapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
+    edgeMapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
+//    edgeMapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
 
     if (g->highestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
     }
 
-    float numberOfLines = mapper->GetInput()->GetNumberOfLines();
+    float numberOfLines = edgeMapper->GetInput()->GetNumberOfLines();
 
     auto lineWidth = min(max_line_width,
                          ((float) (min_line_width_threshold - max_line_width_threshold) / numberOfLines) +
                          min_line_width);
 
-    actor->GetProperty()->SetLineWidth(lineWidth);
-    actor->GetProperty()->SetPointSize(lineWidth * 3);
+    edgeActor->GetProperty()->SetLineWidth(lineWidth);
+//    edgeActor->GetProperty()->SetPointSize(lineWidth * 3);
 
     current_graph = g;
 
+    vtkSmartPointer<vtkSphereSource> sphereSource =
+            vtkSmartPointer<vtkSphereSource>::New();
+
+//    sphereSource->SetCenter(0.0, 0.0, 0.0);
+    sphereSource->SetRadius(lineWidth * 3 / 1000);
+    // Make the surface smooth.
+//    sphereSource->SetPhiResolution(100);
+//    sphereSource->SetThetaResolution(100);
+
+    glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
+    glyph3D->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
+    glyph3D->Update();
+
+    vertexMapper->SetInputConnection(glyph3D->GetOutputPort());
+
 /*    vtkSmartPointer<vtkPointSource> pointSource =
             vtkSmartPointer<vtkPointSource>::New();
-    pointSource->SetNumberOfPoints(mapper->GetInput()->GetNumberOfPoints());
+    pointSource->SetNumberOfPoints(edgeMapper->GetInput()->GetNumberOfPoints());
     pointSource->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
     pointSource->Update();
 
-    mapper->SetInputConnection(pointSource->GetOutputPort());*/
+    edgeMapper->SetInputConnection(pointSource->GetOutputPort());*/
 
     /*vtkSmartPointer<vtkNamedColors> namedColors =
             vtkSmartPointer<vtkNamedColors>::New();
@@ -137,11 +164,21 @@ void Display::switchDisplay(Graph3D *g, double l) {
     colors->InsertNextTupleValue(namedColors->GetColor3ub("Mint").GetData());
     colors->InsertNextTupleValue(namedColors->GetColor3ub("Peacock").GetData());
 
-    mapper->GetInput()->GetPointData()->AddArray(colors);*/
+    edgeMapper->GetInput()->GetPointData()->AddArray(colors);*/
 
 }
 
 void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
+    std::scoped_lock lock{graph_mutex};
+
+//    std::cout << (add ? "Add" : "Remove") << " request received: [ ";
+//
+//    for (auto const& value : clause) {
+//        std::cout << value << " ";
+//    }
+//
+//    std::cout << "]" << std::endl;
+
     auto highestEdgeDuplication = g->highestEdgeDuplication();
 
     if (add) {
@@ -250,7 +287,7 @@ void Display::solve() {
     SATSolver s;
     vector<Lit> cmsatClause;
 
-    s.set_num_threads(4);
+//    s.set_num_threads(4);
 
     //fill the solver, run solve, etc.
 

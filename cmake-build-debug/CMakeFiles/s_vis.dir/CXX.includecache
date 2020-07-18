@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.cpp
+iostream
+-
+API.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.h
+Display.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.h
+zmq.hpp
+-
+msgpack.hpp
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/msgpack.hpp
+
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp
 vtkCamera.h
 -
@@ -25,6 +39,10 @@ vtkPointSource.h
 -
 utility
 -
+mutex
+-
+vtkSphereSource.h
+-
 Display.h
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
 Interaction.h
@@ -36,6 +54,8 @@ vtkVertexGlyphFilter.h
 vtkPolyDataMapper.h
 -
 vtkRenderWindow.h
+-
+vtkGlyph3D.h
 -
 Graph.h
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
@@ -66,6 +86,14 @@ vtkMutableUndirectedGraph.h
 Node.h
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
 
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.cpp
+Interaction.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
+Display.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+zmq.hpp
+-
+
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
 vtkInteractorStyleTrackballCamera.h
 -
@@ -84,6 +112,20 @@ Vector.h
 cmath
 -
 ostream
+-
+
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cnf3d2.cpp
+Display.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
+string
+-
+thread
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/thread
+API.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.h
+unistd.h
+-
+windows.h
 -
 
 /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
@@ -866,6 +908,16 @@ cmath
 cstdlib
 -
 
+/home/cormac/projects/VTK/Filters/Core/vtkFiltersCoreModule.h
+vtkAutoInit.h
+/home/cormac/projects/VTK/Filters/Core/vtkAutoInit.h
+
+/home/cormac/projects/VTK/Filters/Core/vtkGlyph3D.h
+vtkFiltersCoreModule.h
+/home/cormac/projects/VTK/Filters/Core/vtkFiltersCoreModule.h
+vtkPolyDataAlgorithm.h
+/home/cormac/projects/VTK/Filters/Core/vtkPolyDataAlgorithm.h
+
 /home/cormac/projects/VTK/Filters/General/vtkFiltersGeneralModule.h
 
 /home/cormac/projects/VTK/Filters/General/vtkVertexGlyphFilter.h
@@ -883,6 +935,12 @@ vtkPolyDataAlgorithm.h
 /home/cormac/projects/VTK/Filters/Sources/vtkPolyDataAlgorithm.h
 
 /home/cormac/projects/VTK/Filters/Sources/vtkPointSource.h
+vtkFiltersSourcesModule.h
+/home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
+vtkPolyDataAlgorithm.h
+/home/cormac/projects/VTK/Filters/Sources/vtkPolyDataAlgorithm.h
+
+/home/cormac/projects/VTK/Filters/Sources/vtkSphereSource.h
 vtkFiltersSourcesModule.h
 /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
 vtkPolyDataAlgorithm.h
