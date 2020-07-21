@@ -124,7 +124,7 @@ void Display::switchDisplay(Graph3D *g, double l) {
         g->reColour();
     }
 
-    float numberOfLines = edgeMapper->GetInput()->GetNumberOfLines();
+    auto numberOfLines = edgeMapper->GetInput()->GetNumberOfLines();
 
     auto lineWidth = min(max_line_width,
                          ((float) (min_line_width_threshold - max_line_width_threshold) / numberOfLines) +
@@ -138,6 +138,8 @@ void Display::switchDisplay(Graph3D *g, double l) {
     auto sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 
     sphereSource->SetRadius(lineWidth * 3 / 1000);
+    sphereSource->SetThetaResolution(100);
+    sphereSource->SetPhiResolution(100);
 
     glyph3D->SetScaleModeToScaleByScalar();
     glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
@@ -353,6 +355,8 @@ void Display::init(char *filename) {
         a = b;
         level++;
     }
+
+    graph_stack.back()->calculate_absolute_variance();
 
     // compute (random) layout of coarsest graph (with 2 nodes)
     graph_stack.back()->init_coarsest_graph_positions(k);

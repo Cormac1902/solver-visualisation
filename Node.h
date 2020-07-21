@@ -25,10 +25,12 @@ private:
 
     set<ExtNode3D> neighbor_nodes;
 
+    float occurrences;
+
     int c_weight; // used for graph coarsening (weight: number of merged nodes)
 
 public:
-    explicit Node3D(long id = 0) : ident(id), mark(0), c_weight(1) {}
+    explicit Node3D(long id = 0) : ident(id), mark(0), occurrences(1), c_weight(1) {}
 
     ~Node3D() = default;
 
@@ -40,6 +42,10 @@ public:
     void set_id(unsigned long i);
 
     void set_weight(int i);
+
+    void set_occurrences(float i) { occurrences = i; }
+
+    void increment_occurrences() { occurrences++; }
 
     bool add_neighbor(Node3D *n, EdgeAttribute a = NT_3_PLUS_CLAUSE);
     // returns true iff element was not already present
@@ -53,6 +59,8 @@ public:
     // EdgeAttribute edge_attribute(Node3D* other_end) const;
 
     [[nodiscard]] const set<ExtNode3D> &neighbors() const;
+
+    [[nodiscard]] float no_of_occurrences() const { return occurrences; }
 
     friend class Graph3D;
 };

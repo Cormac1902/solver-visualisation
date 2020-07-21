@@ -25,6 +25,9 @@ private:
 
     int number_edges; // number of edges contained in graph
     float largest_node;
+    double node_occurrences;
+    double previous_mean;
+    double absolute_variance;
 
     bool positioned; // whether graph has been positioned
     bool drawn; // whether graph has been drawn
@@ -49,8 +52,17 @@ private:
     vtkColor4ub twoClauseColour;
     vtkColor4ub threePlusClauseColour;
 
+    vtkColor4ub positiveColour;
+    vtkColor4ub negativeColour;
+
     // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
     map<pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> edgeColourMap;
+
+    void online_absolute_variance(Node3D& node);
+
+    void online_absolute_variance(float x);
+
+    void online_absolute_variance_remove(float x);
 
     void add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a);
 
@@ -66,9 +78,18 @@ private:
 
     void set_colour(pair<unsigned int, vtkColor4ub>& colour) const;
 
+    double node_occurrences_mean() { return node_occurrences / (float) nr_nodes(); }
+
+    double average_absolute_variance() { return absolute_variance / nr_nodes(); }
+
+    double node_occurrences_previous_mean(float x) { return (node_occurrences - x) / ((float) nr_nodes() - 1); }
+
 public:
     Graph3D() : number_edges(0),
                 largest_node(0),
+                node_occurrences(0),
+                previous_mean(0),
+                absolute_variance(0),
                 positioned(false),
                 drawn(false),
                 edgeDuplications({}),
@@ -76,10 +97,14 @@ public:
                 allMatching({})
                 {
         auto namedColours = vtkSmartPointer<vtkNamedColors>::New();
-        twoClauseColour = namedColours->GetColor4ub("Tomato");
-        threePlusClauseColour = namedColours->GetColor4ub("Mint");
+        twoClauseColour = namedColours->GetColor4ub("sky_blue_deep"); // Tomato
+        threePlusClauseColour = namedColours->GetColor4ub("Cyan"); // Mint
+        positiveColour = namedColours->GetColor4ub("Green");
+        negativeColour = namedColours->GetColor4ub("Red");
     } // constructs empty graph
     ~Graph3D() = default;
+
+    void calculate_absolute_variance();
 
     // modifiers
     void add_node(const Node3D &n);          // node 'n' is copied into graph

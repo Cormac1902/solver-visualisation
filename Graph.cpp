@@ -13,6 +13,9 @@
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
+double min_scale = .5, max_scale = 2;
+int large_graph = 100;
+
 void Graph3D::add_node(const Node3D &n) {
     assert(nodes.find(n.id()) == nodes.end()); // node not already present
 
@@ -52,16 +55,19 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     assert(ins_x == ins_y); // either none or both edges must have existed before insertion
 #endif
 
-    if (ins_x) number_edges++;
+    if (ins_x) {
+        number_edges++;
+    }
 
-    auto neighbours_size = max(nodes[x].neighbors().size(), nodes[y].neighbors().size());
+    /*auto neighbours_size = max(nodes[x].no_of_occurrences(), nodes[y].no_of_occurrences());
+
     if (neighbours_size > largest_node) {
         largest_node = neighbours_size;
-    }
+    }*/
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
-    pair<vtkIdType, pair<unsigned, vtkColor4ub>>& edgeColour = edgeColourMap[{x, y}];
+    pair<vtkIdType, pair<unsigned, vtkColor4ub>> &edgeColour = edgeColourMap[{x, y}];
     auto newEdge = edgeColour.second.first == 0;
     change_edge_duplication(edgeColour.second.first);
     if (edgeColour.second.second[0] != threePlusClauseColour[0]
@@ -79,21 +85,23 @@ void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) 
 
 void Graph3D::add_graph_edge(unsigned long x, ExtNode3D y) {
     add_graph_edge(x,
-            std::distance(std::begin(nodes), nodes.find(matchMap[y.first->id()])),
-            y.second);
+                   std::distance(std::begin(nodes), nodes.find(matchMap[y.first->id()])),
+                   y.second);
 }
 
 void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a) {
     add_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
-            std::distance(std::begin(nodes), nodes.find(matchMap[y])),
-            a);
+                   std::distance(std::begin(nodes), nodes.find(matchMap[y])),
+                   a);
 }
 
-void Graph3D::add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned int, vtkColor4ub>>>& edge) {
+void Graph3D::add_edge_to_graph(
+        pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned int, vtkColor4ub>>> &edge) {
     add_edge_to_graph(edge.first, edge.second);
 }
 
-void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<vtkIdType, pair<unsigned int, vtkColor4ub>>& colour) {
+void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices,
+                                pair<vtkIdType, pair<unsigned int, vtkColor4ub>> &colour) {
     graph->AddEdge(vertices.first, vertices.second);
     set_colour(colour.second);
     colour.first = edgeColours->InsertNextTupleValue(colour.second.second.GetData());
@@ -115,7 +123,7 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
 }
 
 void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
-    pair<vtkIdType, pair<unsigned, vtkColor4ub>>& edgeColour = edgeColourMap[{x, y}];
+    pair<vtkIdType, pair<unsigned, vtkColor4ub>> &edgeColour = edgeColourMap[{x, y}];
     if (edgeColour.second.first > 0) {
         change_edge_duplication(edgeColour.second.first, false);
         set_colour(edgeColour.second);
@@ -125,7 +133,7 @@ void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
 
 void Graph3D::remove_graph_edge_from_ids(unsigned long x, unsigned long y) {
     remove_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
-                   std::distance(std::begin(nodes), nodes.find(matchMap[y])));
+                      std::distance(std::begin(nodes), nodes.find(matchMap[y])));
 }
 
 void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
@@ -144,7 +152,7 @@ void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
 
 void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
     if (increment) {
-        if(duplication > 0) {
+        if (duplication > 0) {
             edgeDuplications[duplication]--;
         }
         duplication++;
@@ -156,7 +164,7 @@ void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
         }
         duplication--;
     }
-    if(duplication > 0) {
+    if (duplication > 0) {
         edgeDuplications[duplication]++;
     }
 }
@@ -214,7 +222,13 @@ vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
                     add_node(n);
                     allMatching[n.id()] = {};
                     matchMap[n.id()] = n.id();
+                } else {
+                    nodes[i].increment_occurrences();
+                    if (nodes[i].no_of_occurrences() > largest_node) {
+                        largest_node = nodes[i].no_of_occurrences();
+                    }
                 }
+                node_occurrences++;
             }
 
             // insert edges
@@ -227,6 +241,44 @@ vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
     }
 
     return clauses;
+}
+
+void Graph3D::calculate_absolute_variance() {
+    absolute_variance = 0.0;
+    for (auto& node : nodes) {
+        absolute_variance += abs(node.second.no_of_occurrences() - node_occurrences_mean());
+    }
+}
+
+void Graph3D::online_absolute_variance(Node3D &node) {
+//    cout << node.id() << ": " << node.no_of_occurrences() << endl;
+    online_absolute_variance(node.no_of_occurrences());
+//    cout << average_absolute_variance() << endl;
+}
+
+// TODO: Check accuracy
+void Graph3D::online_absolute_variance(float x) {
+    if (x > 1) {
+        online_absolute_variance_remove(x - 1);
+    }
+    node_occurrences++;
+    auto delta = nr_nodes() > 1 ? x - node_occurrences_previous_mean(x) : 0;
+//    auto squaredDelta = delta * (x - node_occurrences_mean());
+//    cout << node_occurrences_mean() << endl;
+//    cout << x << endl;
+//    cout << "Add delta: " << squaredDelta << endl;
+    absolute_variance += sqrt(abs(delta * (x - node_occurrences_mean())));
+//    cout << "Add variance: " << absolute_variance << endl;
+}
+
+void Graph3D::online_absolute_variance_remove(float x) {
+//    auto squaredDelta = (x - node_occurrences_mean()) * (x - node_occurrences_previous_mean(x));
+//    cout << "Curr: " << x << " - " << node_occurrences_mean() << " = " << (x - node_occurrences_mean()) << endl;
+//    cout << "Prev: " << x << " - " << node_occurrences_previous_mean(x) << " = "
+//         << (x - node_occurrences_previous_mean(x)) << endl;
+//    cout << "Remove delta: " << squaredDelta << endl;
+    absolute_variance -= sqrt(abs((x - node_occurrences_mean()) * (x - node_occurrences_previous_mean(x))));
+//    cout << "Remove variance: " << absolute_variance << endl;
 }
 
 // one_of_each_component is reset
@@ -279,7 +331,7 @@ Graph3D *Graph3D::coarsen() {
     Node3D *curr_min_weight_node;
 
     // build matching
-    for (auto & node : nodes) {
+    for (auto &node : nodes) {
         Node3D &node_1 = node.second;
         if (node_1.mark != 0)
             continue;   // already paired
@@ -305,7 +357,7 @@ Graph3D *Graph3D::coarsen() {
     }
 
     // remove markings
-    for (auto & node : nodes)
+    for (auto &node : nodes)
         node.second.mark = 0;
 
     // build coarsened graph
@@ -314,22 +366,31 @@ Graph3D *Graph3D::coarsen() {
     auto *result = new Graph3D();
     result->set_all_matching(allMatching);
     result->set_match_map(matchMap);
+    result->node_occurrences = node_occurrences;
 
     // a) set up nodes
     for (k = matching.begin(); k != matching.end(); k++) {
         Node3D n(k->second); // use second partner of each pair as merged node's id
-        if (k->first == k->second)
-            n.set_weight(nodes[k->first].weight());
-        else
-            n.set_weight(nodes[k->first].weight() + nodes[k->second].weight());
-        // weight of merged node is sum of constituents
+        auto prev = nodes[k->first];
+        if (k->first == k->second) {
+            n.set_weight(prev.weight());
+            n.set_occurrences(prev.no_of_occurrences());
+        } else {
+            auto secondPrev = nodes[k->second];
+            n.set_weight(prev.weight() + secondPrev.weight()); // weight of merged node is sum of constituents
+            n.set_occurrences(prev.no_of_occurrences() + secondPrev.no_of_occurrences());
+        }
+        if (n.no_of_occurrences() > result->largest_node) {
+            result->largest_node = n.no_of_occurrences();
+        }
         result->add_node(n);
         result->add_match(k->first, k->second);
-
     }
     // b) set up edges
     unsigned long new_node_1_id, new_node_2_id;
-    for (auto & i : nodes) {
+    for (auto &i : nodes) {
+        absolute_variance += abs(i.second.no_of_occurrences() - node_occurrences_mean());
+        cout << absolute_variance << endl;
         Node3D &node = i.second;
         k = matching.find(node.id());
         new_node_1_id = (k == matching.end() ? node.id() : matching[node.id()]);
@@ -396,7 +457,7 @@ void Graph3D::compute_layout(double k) {
     // put nodes into space grid (with cube length 2k)
     vector<Node3D *> grid_neighbors;
     SpaceGrid3D sg(2.0 * k);  // R = 2.0 * k
-    for (auto & node : nodes)
+    for (auto &node : nodes)
         sg.insert_node(&node.second);
 #endif
 
@@ -406,7 +467,7 @@ void Graph3D::compute_layout(double k) {
 
         converged = true;
 
-        for (auto & node : nodes) {
+        for (auto &node : nodes) {
             Node3D &v = node.second;
 
             theta = Vector3D(0.0, 0.0, 0.0);
@@ -454,7 +515,7 @@ void Graph3D::compute_layout(double k) {
 pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
     Vector3D curr_min(DBL_MAX, DBL_MAX, DBL_MAX), curr_max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
 
-    for (auto & node : nodes) {
+    for (auto &node : nodes) {
         Node3D &n = node.second;
         if (n.position().x < curr_min.x)
             curr_min.x = n.position().x;
@@ -476,7 +537,7 @@ pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
 // move all points p to q = a * p + b for a vector b and a float a
 
 void Graph3D::rescale(double a, const Vector3D &b) {
-    for (auto & node : nodes) {
+    for (auto &node : nodes) {
         Node3D &n = node.second;
         n.set_pos(a * n.position() + b);
     }
@@ -511,12 +572,6 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 //        = vtkSmartPointer<vtkIntArray>::New();
             edgeColours->SetNumberOfComponents(4);
             edgeColours->SetName("Edge Colours");
-
-/*        coloursLookupTable = vtkSmartPointer<vtkLookupTable>::New();
-        coloursLookupTable->SetNumberOfTableValues(2);
-        coloursLookupTable->SetTableValue(0, twoClauseColour.GetRed(), twoClauseColour.GetGreen(), twoClauseColour.GetBlue()); // red
-        coloursLookupTable->SetTableValue(1, threePlusClauseColour.GetRed(), threePlusClauseColour.GetGreen(), threePlusClauseColour.GetBlue()); // green
-        coloursLookupTable->Build();*/
         }
 
         graph->SetNumberOfVertices(nodes.size());
@@ -524,11 +579,14 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
         for (auto i = nodes.begin(); i != nodes.end(); i++) {
             const Node3D &node = i->second;
             points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
-            scales->InsertNextValue((node.neighbors().size() / largest_node) * 1.5);
+            auto scale = average_absolute_variance() == 0 ? 1 :
+                    ((node.no_of_occurrences() - node_occurrences_mean()) / average_absolute_variance()) + 1;
+//            cout << scale << endl;
+            scales->InsertNextValue(scale < min_scale ? min_scale : min(scale, max_scale));
 
             if (colourPoints) {
                 vertexColours->InsertNextTupleValue(
-                        (node.neighbors().size() == largest_node ? twoClauseColour : threePlusClauseColour).GetData());
+                        (node.no_of_occurrences() == largest_node ? positiveColour : negativeColour).GetData());
             }
             if (draw_edges) {
                 const Node3D &u = i->second;
@@ -575,7 +633,7 @@ void Graph3D::reColour() {
 //    graphToPolyData->Modified();
 }
 
-void Graph3D::set_colour(pair<unsigned int, vtkColor4ub>& colour) const {
+void Graph3D::set_colour(pair<unsigned int, vtkColor4ub> &colour) const {
     colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication());
 }
 
@@ -591,7 +649,7 @@ ostream &operator<<(ostream &os, const Graph3D &g) {
     }
     os << endl;
     os << "Edges:" << endl;
-    for (const auto & node : g.nodes) {
+    for (const auto &node : g.nodes) {
         const Node3D *n = &node.second;
         const set<ExtNode3D> &nbs = n->neighbors();
         os << "\t";

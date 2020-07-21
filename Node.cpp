@@ -24,8 +24,7 @@ bool Node3D::add_neighbor(Node3D *n, EdgeAttribute a) {
         // search for already existing 2-clause first
         if (neighbor_nodes.find(pair<Node3D *, EdgeAttribute>(n, NT_2_CLAUSE)) != neighbor_nodes.end())
             return false; // do not insert new edge
-    pair<set<ExtNode3D>::iterator, bool> res =
-            neighbor_nodes.insert(pair<Node3D *, EdgeAttribute>(n, a));
+    auto res = neighbor_nodes.insert(pair<Node3D *, EdgeAttribute>(n, a));
 
     return res.second;
 }
