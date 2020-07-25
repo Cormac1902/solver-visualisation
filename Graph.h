@@ -78,11 +78,13 @@ private:
 
     void set_colour(pair<unsigned int, vtkColor4ub>& colour) const;
 
-    double node_occurrences_mean() { return node_occurrences / (float) nr_nodes(); }
+    [[nodiscard]] float get_scale(const Node3D& node) const;
 
-    double average_absolute_variance() { return absolute_variance / nr_nodes(); }
+    [[nodiscard]] double node_occurrences_mean() const { return node_occurrences / (float) nr_nodes(); }
 
-    double node_occurrences_previous_mean(float x) { return (node_occurrences - x) / ((float) nr_nodes() - 1); }
+    [[nodiscard]] double average_absolute_variance() const { return absolute_variance / nr_nodes(); }
+
+    [[nodiscard]] double node_occurrences_previous_mean(float x) const { return (node_occurrences - x) / ((float) nr_nodes() - 1); }
 
 public:
     Graph3D() : number_edges(0),
@@ -121,10 +123,12 @@ public:
 
     void remove_graph_edges_from_clause(vector<long> clause);
 
-    vector<vector<long>> build_from_cnf(istream &is); // read file in DIMACS format, build graph
+    void increase_variable_activity(unsigned long i);
+
+    pair<vector<vector<long>>, unsigned int> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
-    int nr_nodes() { return nodes.size(); }
+    [[nodiscard]] int nr_nodes() const { return nodes.size(); }
 
     [[nodiscard]] int nr_edges() const { return number_edges; }
 
@@ -143,6 +147,8 @@ public:
     [[nodiscard]] const vtkSmartPointer<vtkPolyData> &getVertexPolydata() const { return vertexPolydata; }
 
     vtkMutableUndirectedGraph* getGraph() { return graph; }
+
+    [[nodiscard]] unsigned int no_of_occurrences() const { return node_occurrences; }
 
     // misc
     int independent_components(vector<int> *one_of_each_comp);
@@ -176,6 +182,8 @@ public:
     void drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, bool adaptive_node_size);
 
     void reColour();
+
+    void reScale();
 
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);

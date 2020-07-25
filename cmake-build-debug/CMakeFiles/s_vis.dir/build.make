@@ -34,10 +34,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/114/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /snap/clion/121/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/114/bin/cmake/linux/bin/cmake -E remove -f
+RM = /snap/clion/121/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -174,6 +174,32 @@ CMakeFiles/s_vis.dir/API.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s_vis.dir/API.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.cpp -o CMakeFiles/s_vis.dir/API.cpp.s
 
+CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o: CMakeFiles/s_vis.dir/flags.make
+CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o: ../CryptoWalkSAT.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o -c /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/CryptoWalkSAT.cpp
+
+CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/CryptoWalkSAT.cpp > CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.i
+
+CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/CryptoWalkSAT.cpp -o CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.s
+
+CMakeFiles/s_vis.dir/WalkSAT.c.o: CMakeFiles/s_vis.dir/flags.make
+CMakeFiles/s_vis.dir/WalkSAT.c.o: ../WalkSAT.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/s_vis.dir/WalkSAT.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/s_vis.dir/WalkSAT.c.o   -c /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.c
+
+CMakeFiles/s_vis.dir/WalkSAT.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/s_vis.dir/WalkSAT.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.c > CMakeFiles/s_vis.dir/WalkSAT.c.i
+
+CMakeFiles/s_vis.dir/WalkSAT.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/s_vis.dir/WalkSAT.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.c -o CMakeFiles/s_vis.dir/WalkSAT.c.s
+
 # Object files for target s_vis
 s_vis_OBJECTS = \
 "CMakeFiles/s_vis.dir/Vector.cpp.o" \
@@ -184,7 +210,9 @@ s_vis_OBJECTS = \
 "CMakeFiles/s_vis.dir/cnf3d2.cpp.o" \
 "CMakeFiles/s_vis.dir/InteractionCallback.cpp.o" \
 "CMakeFiles/s_vis.dir/Display.cpp.o" \
-"CMakeFiles/s_vis.dir/API.cpp.o"
+"CMakeFiles/s_vis.dir/API.cpp.o" \
+"CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o" \
+"CMakeFiles/s_vis.dir/WalkSAT.c.o"
 
 # External object files for target s_vis
 s_vis_EXTERNAL_OBJECTS =
@@ -198,6 +226,8 @@ s_vis: CMakeFiles/s_vis.dir/cnf3d2.cpp.o
 s_vis: CMakeFiles/s_vis.dir/InteractionCallback.cpp.o
 s_vis: CMakeFiles/s_vis.dir/Display.cpp.o
 s_vis: CMakeFiles/s_vis.dir/API.cpp.o
+s_vis: CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o
+s_vis: CMakeFiles/s_vis.dir/WalkSAT.c.o
 s_vis: CMakeFiles/s_vis.dir/build.make
 s_vis: /home/cormac/projects/VTK-build/lib/libvtkRenderingOpenGL2-9.0.so.9.0.0
 s_vis: /home/cormac/projects/VTK-build/lib/libvtkViewsInfovis-9.0.so.9.0.0
@@ -233,7 +263,7 @@ s_vis: /home/cormac/projects/VTK-build/lib/libvtksys-9.0.so.9.0.0
 s_vis: /usr/lib/x86_64-linux-gnu/libm4ri.so
 s_vis: /usr/lib/x86_64-linux-gnu/libsqlite3.so
 s_vis: CMakeFiles/s_vis.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable s_vis"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable s_vis"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/s_vis.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -204,6 +204,12 @@
 		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.h">
 			<Option target="s_vis"/>
 		</Unit>
+		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/CryptoWalkSAT.cpp">
+			<Option target="s_vis"/>
+		</Unit>
+		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/CryptoWalkSAT.h">
+			<Option target="s_vis"/>
+		</Unit>
 		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.cpp">
 			<Option target="s_vis"/>
 		</Unit>
@@ -244,6 +250,12 @@
 			<Option target="s_vis"/>
 		</Unit>
 		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h">
+			<Option target="s_vis"/>
+		</Unit>
+		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.c">
+			<Option target="s_vis"/>
+		</Unit>
+		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.h">
 			<Option target="s_vis"/>
 		</Unit>
 		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cnf3d2.cpp">

@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/114/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /snap/clion/121/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/114/bin/cmake/linux/bin/cmake -E remove -f
+RM = /snap/clion/121/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visu
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/snap/clion/114/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/snap/clion/121/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/snap/clion/114/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/snap/clion/121/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -149,6 +149,33 @@ API.s: API.cpp.s
 API.cpp.s:
 	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/API.cpp.s
 .PHONY : API.cpp.s
+
+CryptoWalkSAT.o: CryptoWalkSAT.cpp.o
+
+.PHONY : CryptoWalkSAT.o
+
+# target to build an object file
+CryptoWalkSAT.cpp.o:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o
+.PHONY : CryptoWalkSAT.cpp.o
+
+CryptoWalkSAT.i: CryptoWalkSAT.cpp.i
+
+.PHONY : CryptoWalkSAT.i
+
+# target to preprocess a source file
+CryptoWalkSAT.cpp.i:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.i
+.PHONY : CryptoWalkSAT.cpp.i
+
+CryptoWalkSAT.s: CryptoWalkSAT.cpp.s
+
+.PHONY : CryptoWalkSAT.s
+
+# target to generate assembly for a file
+CryptoWalkSAT.cpp.s:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.s
+.PHONY : CryptoWalkSAT.cpp.s
 
 Display.o: Display.cpp.o
 
@@ -339,6 +366,33 @@ Vector.cpp.s:
 	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Vector.cpp.s
 .PHONY : Vector.cpp.s
 
+WalkSAT.o: WalkSAT.c.o
+
+.PHONY : WalkSAT.o
+
+# target to build an object file
+WalkSAT.c.o:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/WalkSAT.c.o
+.PHONY : WalkSAT.c.o
+
+WalkSAT.i: WalkSAT.c.i
+
+.PHONY : WalkSAT.i
+
+# target to preprocess a source file
+WalkSAT.c.i:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/WalkSAT.c.i
+.PHONY : WalkSAT.c.i
+
+WalkSAT.s: WalkSAT.c.s
+
+.PHONY : WalkSAT.s
+
+# target to generate assembly for a file
+WalkSAT.c.s:
+	$(MAKE) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/WalkSAT.c.s
+.PHONY : WalkSAT.c.s
+
 cnf3d2.o: cnf3d2.cpp.o
 
 .PHONY : cnf3d2.o
@@ -378,6 +432,9 @@ help:
 	@echo "... API.o"
 	@echo "... API.i"
 	@echo "... API.s"
+	@echo "... CryptoWalkSAT.o"
+	@echo "... CryptoWalkSAT.i"
+	@echo "... CryptoWalkSAT.s"
 	@echo "... Display.o"
 	@echo "... Display.i"
 	@echo "... Display.s"
@@ -399,6 +456,9 @@ help:
 	@echo "... Vector.o"
 	@echo "... Vector.i"
 	@echo "... Vector.s"
+	@echo "... WalkSAT.o"
+	@echo "... WalkSAT.i"
+	@echo "... WalkSAT.s"
 	@echo "... cnf3d2.o"
 	@echo "... cnf3d2.i"
 	@echo "... cnf3d2.s"

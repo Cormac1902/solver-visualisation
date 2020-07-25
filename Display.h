@@ -1,6 +1,6 @@
 //
 // Created by corma on 30-Apr-20.
-//
+//walking sa appy
 
 #ifndef INC_3DVIS_DISPLAY_H
 #define INC_3DVIS_DISPLAY_H
@@ -11,6 +11,7 @@
 #include <vtkGlyph3D.h>
 #include "Graph.h"
 #include <cryptominisat5/cryptominisat.h>
+#include "cryptominisat5/dimacsparser.h"
 
 using namespace CMSat;
 
@@ -25,6 +26,7 @@ class Display {
     static vtkSmartPointer<vtkRenderWindow> renderWindow;
 
     static vector<vector<long>> clauses;
+    static unsigned int longest_clause;
 
     static void display();
 
@@ -38,6 +40,8 @@ class Display {
 
     static void removeEdgesFromClause(Graph3D *g, vector<long> clause);
 
+    static void increaseVariableActivity(Graph3D *g, unsigned long i);
+
     static void changeGraph(unsigned graphLevel);
 
     static void positionGraph(unsigned graphLevel);
@@ -46,7 +50,11 @@ class Display {
 
     static void solve();
 
+    static void walksat();
+
     static vector<long> clauseFromCMSATClause(const vector<Lit>& cmsatClause);
+
+    static int** intArrayFromClauseVector();
 
     friend class Interaction;
 
@@ -56,6 +64,8 @@ public:
     static void addEdgesFromClause(vector<long> clause);
 
     static void removeEdgesFromClause(vector<long> clause);
+
+    static void increaseVariableActivity(unsigned long i);
 };
 
 

@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
 //    using namespace std::chrono_literals;
 
     auto api = new API();
-    std::thread t2(&API::run_add_socket, api);
-    std::thread t3(&API::run_remove_socket, api);
+    std::thread t2(&API::run_add_clause_socket, api);
+    std::thread t3(&API::run_remove_clause_socket, api);
 
     t1.join();
     t2.join();

@@ -4,7 +4,7 @@ When the graphics display appears (and has the focus)
 the following commands may be used:
 'n': display next (finer) graph
 'e': toggle edge display
-'a': toggle node size adjustment
+'a': toggle node clauseSize adjustment
 '2': toggle 2-clauses (only for graph with L=0)
 'g': go; compute all graphs down to level L=0
 'r': reset display (zoom, orientation,...)

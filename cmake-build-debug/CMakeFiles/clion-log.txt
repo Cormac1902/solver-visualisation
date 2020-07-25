@@ -1,4 +1,4 @@
-/snap/clion/114/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
+/snap/clion/121/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation
 -- Cryptominisat version: 5.6
 -- VTK_VERSION: 9.0.0
 -- Configuring done

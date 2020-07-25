@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.c
+WalkSAT.h
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.h
+
+/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.h
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+math.h
+-
+sys/types.h
+-
+limits.h
+-
+signal.h
+-
+sys/times.h
+-
+sys/time.h
+-
+unistd.h
+-
+time.h
+-
+windows.h
+-
+mmsystem.h
+-
+sys/time.h
+-
+

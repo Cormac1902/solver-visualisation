@@ -169,12 +169,13 @@ void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
     }
 }
 
-vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
+pair<vector<vector<long>>, unsigned int> Graph3D::build_from_cnf(istream &is) {
     long p;
     char c;
     bool positive = true;
     vector<long> clause;
     vector<vector<long>> clauses;
+    unsigned int longestClause = 0;
     Node3D n;
 
     while (!is.eof()) {
@@ -214,6 +215,7 @@ vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
         if (!clause.empty()) {
 
             clauses.push_back(clause);
+            longestClause = max(longestClause, (unsigned int) clause.size());
             // insert nodes
             for (long &i : clause) {
                 i = abs(i);
@@ -240,20 +242,22 @@ vector<vector<long>> Graph3D::build_from_cnf(istream &is) {
         }
     }
 
-    return clauses;
+    return {clauses, longestClause};
 }
 
 void Graph3D::calculate_absolute_variance() {
     absolute_variance = 0.0;
-    for (auto& node : nodes) {
+    for (auto &node : nodes) {
         absolute_variance += abs(node.second.no_of_occurrences() - node_occurrences_mean());
     }
 }
 
 void Graph3D::online_absolute_variance(Node3D &node) {
-//    cout << node.id() << ": " << node.no_of_occurrences() << endl;
-    online_absolute_variance(node.no_of_occurrences());
-//    cout << average_absolute_variance() << endl;
+    if (nr_nodes() < 100) {
+        calculate_absolute_variance();
+    } else {
+        online_absolute_variance(node.no_of_occurrences());
+    }
 }
 
 // TODO: Check accuracy
@@ -390,7 +394,7 @@ Graph3D *Graph3D::coarsen() {
     unsigned long new_node_1_id, new_node_2_id;
     for (auto &i : nodes) {
         absolute_variance += abs(i.second.no_of_occurrences() - node_occurrences_mean());
-        cout << absolute_variance << endl;
+//        cout << absolute_variance << endl;
         Node3D &node = i.second;
         k = matching.find(node.id());
         new_node_1_id = (k == matching.end() ? node.id() : matching[node.id()]);
@@ -579,10 +583,8 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
         for (auto i = nodes.begin(); i != nodes.end(); i++) {
             const Node3D &node = i->second;
             points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
-            auto scale = average_absolute_variance() == 0 ? 1 :
-                    ((node.no_of_occurrences() - node_occurrences_mean()) / average_absolute_variance()) + 1;
 //            cout << scale << endl;
-            scales->InsertNextValue(scale < min_scale ? min_scale : min(scale, max_scale));
+            scales->InsertNextValue(get_scale(node));
 
             if (colourPoints) {
                 vertexColours->InsertNextTupleValue(
@@ -633,8 +635,28 @@ void Graph3D::reColour() {
 //    graphToPolyData->Modified();
 }
 
+void Graph3D::increase_variable_activity(unsigned long i) {
+    nodes[i].increment_occurrences();
+    online_absolute_variance(nodes[i]);
+}
+
+void Graph3D::reScale() {
+    for (auto i = 0; i < scales->GetNumberOfValues(); i++) {
+        scales->SetValue(i, get_scale(nodes[i]));
+    }
+}
+
 void Graph3D::set_colour(pair<unsigned int, vtkColor4ub> &colour) const {
     colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication());
+}
+
+float Graph3D::get_scale(const Node3D &node) const {
+    auto scale = (
+                         ((node.no_of_occurrences() - node_occurrences_mean())
+                          / (average_absolute_variance() < 1 ? 1 : average_absolute_variance()))
+                         / 4)
+                 + 1;
+    return scale < min_scale ? min_scale : min(scale, max_scale);
 }
 
 ostream &operator<<(ostream &os, const Graph3D &g) {

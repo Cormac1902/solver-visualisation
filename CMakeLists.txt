@@ -12,14 +12,19 @@ set(SOURCE_FILES Vector.cpp
         cnf3d2.cpp
         InteractionCallback.cpp
         Display.cpp
-        API.cpp)
+        API.cpp
+        CryptoWalkSAT.cpp
+        WalkSAT.c)
 set(HEADERS Vector.h
         Node.h
         Graph.h
         SpaceGrid.h
         Interaction.h
         InteractionCallback.h
-        Display.h API.h)
+        Display.h
+        API.h
+        CryptoWalkSAT.h
+        WalkSAT.h)
 set(CC_FLAGS "-O3 -Wall -DNDEBUG -DUSE_SPACE_GRID")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CC_FLAGS}")

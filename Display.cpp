@@ -17,6 +17,8 @@
 
 #include "Display.h"
 #include "Interaction.h"
+#include "CryptoWalkSAT.h"
+#include "WalkSAT.h"
 
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple
@@ -27,7 +29,7 @@ vector<Graph3D*> graph_stack;
 double k = 1.0; // old: 5.0
 double f_k = sqrt(4.0 / 7.0);
 
-bool draw_edges = true, adaptive_size = true; // run_anim = false
+bool draw_edges = true, adaptive_size = true; // run_anim = falseClauses
 bool draw_only_2clauses = false;
 
 float min_line_width = 3, max_line_width = 12;
@@ -45,6 +47,7 @@ vtkSmartPointer<vtkActor> Display::vertexActor = vtkSmartPointer<vtkActor>::New(
 vtkSmartPointer<vtkGlyph3D> Display::glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
 vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
 vector<vector<long>> Display::clauses = {};
+unsigned int Display::longest_clause = 0;
 
 // ----------------------------------------------------------------------
 
@@ -194,6 +197,14 @@ void Display::removeEdgesFromClause(vector<long> clause) {
     removeEdgesFromClause(current_graph, std::move(clause));
 }
 
+void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
+    g->increase_variable_activity(i);
+}
+
+void Display::increaseVariableActivity(unsigned long i) {
+    increaseVariableActivity(current_graph, i);
+}
+
 void Display::setupNodes(Graph3D *g) {
     Node3D n(1), m(2), o(3);
 
@@ -265,7 +276,6 @@ double Display::kFromGraphLevel(unsigned int graphLevel) {
     return k * pow(f_k, graph_stack.size() - graphLevel - 2);
 }
 
-
 void Display::solve() {
 
     SATSolver s;
@@ -273,12 +283,12 @@ void Display::solve() {
 
 //    s.set_num_threads(4);
 
-    //fill the solver, run solve, etc.
+    //fill the solver, run solve_walksat, etc.
 
     s.new_vars(graph_stack[0]->nr_nodes());
 
-    for (auto &clause : clauses) {
-        for (auto &var : clause) {
+    for (auto &clause_it : clauses) {
+        for (auto &var : clause_it) {
             cmsatClause.emplace_back(abs(var) - 1, var < 0);
         }
         s.add_clause(cmsatClause);
@@ -306,13 +316,47 @@ void Display::solve() {
 
 }
 
-vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
-    vector<long> clause;
-    clause.reserve(cmsatClause.size());
-    for (auto &lit : cmsatClause) {
-        clause.push_back(lit.var());
+void Display::walksat() {
+    std::cout << "Solving..." << std::endl;
+
+    auto intArray = intArrayFromClauseVector();
+
+    solve_walksat(longest_clause, intArray, graph_stack.front()->nr_nodes(), clauses.size());
+
+    std::cout << "Finished solving" << std::endl;
+
+}
+
+int** Display::intArrayFromClauseVector() {
+    vector<long> clause_it;
+    unsigned int j;
+
+    unsigned long noOfClauses = clauses.size();
+
+    int** array = new int*[noOfClauses];
+
+    for (unsigned int i = 0; i < noOfClauses; i++) {
+        clause_it = clauses.at(i);
+        array[i] = new int[longest_clause];
+        for (j = 0; j < clause_it.size(); j++) {
+            array[i][j] = clause_it.at(j);
+        }
+        while (j < longest_clause) {
+            array[i][j] = 0;
+            j++;
+        }
     }
-    return clause;
+
+    return array;
+}
+
+vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
+    vector<long> return_clause;
+    return_clause.reserve(cmsatClause.size());
+    for (auto &lit : cmsatClause) {
+        return_clause.push_back(lit.var());
+    }
+    return return_clause;
 }
 
 // builds (global) stack of coarsened graphs
@@ -324,13 +368,17 @@ void Display::init(char *filename) {
     if (filename == nullptr)
         setupNodes(g);
     else {
-        if (strncmp("-", filename, 1) == 0)
-            clauses = g->build_from_cnf(cin);
+        pair<vector<vector<long>>, unsigned int> built;
+        if (strncmp("-", filename, 1) == 0) {
+            built = g->build_from_cnf(cin);
+        }
         else {
             ifstream is(filename);
-            clauses = g->build_from_cnf(is);
+            built = g->build_from_cnf(is);
             is.close();
         }
+        clauses = built.first;
+        longest_clause = built.second;
     }
     cout << "Built initial graph G=(V,E) with |V| = " << g->nr_nodes() << " and |E| = "
          << g->nr_edges() << "." << endl;
