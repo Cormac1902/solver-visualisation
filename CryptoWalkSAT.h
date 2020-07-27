@@ -130,11 +130,11 @@ THE SOFTWARE.
 
         Lit *storebase = NULL; //all the literals of all the clauses
         Lit **clause = NULL; /* clauses to be satisfied */
-        /* indexed as clause[clause_num][literal_num] */
-        uint32_t *clsize = NULL;       /* length of each clause */
+        /* indexed as clause_array[clause_num][literal_num] */
+        uint32_t *clsize = NULL;       /* length of each clause_array */
         uint32_t *false_cls = NULL;     /* clauses which are falseClauses */
-        uint32_t *map_cl_to_false_cls = NULL; /* where each clause is listed in falseClauses */
-        uint32_t *numtruelit = NULL; /* number of true literals in each clause */
+        uint32_t *map_cl_to_false_cls = NULL; /* where each clause_array is listed in falseClauses */
+        uint32_t *numtruelit = NULL; /* number of true literals in each clause_array */
         uint32_t longestclause;
 
         /* Data structures for vars: arrays of clauseSize numvars indexed by var */

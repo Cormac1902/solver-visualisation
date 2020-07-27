@@ -133,7 +133,7 @@ void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
             assert(breakcount[toflip] > 0);
             breakcount[toflip]--;
 
-            /* Increment the makecount of all vars in the clause */
+            /* Increment the makecount of all vars in the clause_array */
             uint32_t sz = clsize[cli];
             Lit* litptr = clause[cli];
             for (uint32_t j = 0; j < sz; j++) {
@@ -142,15 +142,15 @@ void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
             }
 
         } else if (numtruelit[cli] == 1) {
-            /* Find the lit in this clause that makes it true, and inc its breakcount */
+            /* Find the lit in this clause_array that makes it true, and inc its breakcount */
             Lit *litptr = clause[cli];
             while (1) {
-                /* lit = clause[cli][j]; */
+                /* lit = clause_array[cli][j]; */
                 Lit lit = *(litptr++);
                 if (value(lit) == l_True) {
                     breakcount[lit.var()]++;
 
-                    /* Swap lit into first position in clause */
+                    /* Swap lit into first position in clause_array */
                     if ((--litptr) != clause[cli]) {
                         Lit temp = clause[cli][0];
                         clause[cli][0] = *(litptr);
@@ -174,32 +174,32 @@ void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
             uint32_t position_in_false_cls = map_cl_to_false_cls[cli];
             numfalse--;
 
-            //the postiion in false_cls where this clause was is now replaced with
+            //the postiion in false_cls where this clause_array was is now replaced with
             //the one at the end
             false_cls[position_in_false_cls] = last_false_cl;
 
-            //update map_cl_to_false_cls of the clause
+            //update map_cl_to_false_cls of the clause_array
             map_cl_to_false_cls[last_false_cl] = position_in_false_cls;
 
             /* Increment toflip's breakcount */
             breakcount[toflip]++;
 
-            /* Decrement the makecount of all vars in the clause */
+            /* Decrement the makecount of all vars in the clause_array */
             uint32_t sz = clsize[cli];
             Lit* litptr = clause[cli];
             for (uint32_t j = 0; j < sz; j++) {
-                /* lit = clause[cli][j]; */
+                /* lit = clause_array[cli][j]; */
                 Lit lit = *(litptr++);
                 assert(makecount[lit.var()] > 0);
                 makecount[lit.var()]--;
             }
 
         } else if (numtruelit[cli] == 2) {
-            /* Find the lit in this clause other than toflip that makes it true,
+            /* Find the lit in this clause_array other than toflip that makes it true,
              * and decrement its breakcount */
             Lit *litptr = clause[cli];
             while (1) {
-                /* lit = clause[cli][j]; */
+                /* lit = clause_array[cli][j]; */
                 Lit lit = *(litptr++);
                 if (value(lit) == l_True && (toflip != lit.var())) {
                     assert(breakcount[lit.var()] > 0);
@@ -330,7 +330,7 @@ CryptoWalkSAT::add_cl_ret CryptoWalkSAT::add_this_clause(const T& cl, uint32_t& 
 //        }
 
         if (val == l_True) {
-            //clause is SAT, skip!
+            //clause_array is SAT, skip!
             cl_shortening_triggered = true;
             sat = true;
             continue;
@@ -353,7 +353,7 @@ CryptoWalkSAT::add_cl_ret CryptoWalkSAT::add_this_clause(const T& cl, uint32_t& 
 //    if (sz == 0) {
 //        //it's unsat because of assumptions
 //        if (verbosity) {
-//            cout << "c [walksat] UNSAT because of assumptions in clause " << endl;
+//            cout << "c [walksat] UNSAT because of assumptions in clause_array " << endl;
 //        }
 //        return add_cl_ret::unsat;
 //    }

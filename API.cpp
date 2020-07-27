@@ -28,30 +28,23 @@ unsigned long API::unpack_long(zmq::message_t &message) {
 }
 
 [[noreturn]] void API::run_add_clause_socket() {
-//    std::cout << "Running add socket" << std::endl;
-
     while (true) {
         zmq::message_t request;
 
         // Receive a request from client
         add_clause_socket.recv(&request);
 
-//        std::cout << "Add request received" << std::endl;
-
         Display::addEdgesFromClause(unpack_vector(request));
     }
 }
 
 [[noreturn]] void API::run_remove_clause_socket() {
-//    std::cout << "Running remove socket" << std::endl;
 
     while (true) {
         zmq::message_t request;
 
         // Receive a request from client
         remove_clause_socket.recv(&request);
-
-//        std::cout << "Remove request received" << std::endl;
 
         Display::removeEdgesFromClause(unpack_vector(request));
     }

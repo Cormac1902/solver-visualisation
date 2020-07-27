@@ -9,6 +9,8 @@
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.c
 WalkSAT.h
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.h
+zmq.h
+-
 
 /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/WalkSAT.h
 stdio.h

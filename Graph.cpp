@@ -254,6 +254,7 @@ void Graph3D::calculate_absolute_variance() {
 
 void Graph3D::online_absolute_variance(Node3D &node) {
     if (nr_nodes() < 100) {
+        node_occurrences++;
         calculate_absolute_variance();
     } else {
         online_absolute_variance(node.no_of_occurrences());
@@ -636,8 +637,13 @@ void Graph3D::reColour() {
 }
 
 void Graph3D::increase_variable_activity(unsigned long i) {
+    i = matchMap[i];
     nodes[i].increment_occurrences();
     online_absolute_variance(nodes[i]);
+
+    reScale();
+
+    vertexPolydata->Modified();
 }
 
 void Graph3D::reScale() {

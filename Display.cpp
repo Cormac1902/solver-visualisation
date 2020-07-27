@@ -46,6 +46,7 @@ vtkSmartPointer<vtkPolyDataMapper> Display::vertexMapper = vtkSmartPointer<vtkPo
 vtkSmartPointer<vtkActor> Display::vertexActor = vtkSmartPointer<vtkActor>::New();
 vtkSmartPointer<vtkGlyph3D> Display::glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
 vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+vtkSmartPointer<vtkSphereSource> Display::sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 vector<vector<long>> Display::clauses = {};
 unsigned int Display::longest_clause = 0;
 
@@ -69,13 +70,18 @@ void Display::display() {
 
     vertexActor->SetMapper(vertexMapper);
 
-//    vertexActor->GetProperty()->EdgeVisibilityOn();
-//    vertexActor->GetProperty()->RenderLinesAsTubesOn();
-//    vertexActor->GetProperty()->VertexVisibilityOn();
-//    vertexActor->GetProperty()->RenderPointsAsSpheresOn();
+    sphereSource->SetThetaResolution(100);
+    sphereSource->SetPhiResolution(100);
+
+    glyph3D->SetScaleModeToScaleByScalar();
+    glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
 
     vertexMapper->InterpolateScalarsBeforeMappingOn();
     vertexMapper->ScalarVisibilityOn();
+
+    vertexMapper->SetInputConnection(glyph3D->GetOutputPort());
+    vertexMapper->SetScalarModeToUsePointFieldData();
+    vertexMapper->SelectColorArray(1);
 
     // edgeActor->GetProperty()->BackfaceCullingOn();
 
@@ -136,35 +142,16 @@ void Display::switchDisplay(Graph3D *g, double l) {
     edgeActor->GetProperty()->SetLineWidth(lineWidth);
 //    edgeActor->GetProperty()->SetPointSize(lineWidth * 3);
 
+    sphereSource->SetRadius(lineWidth * 3 / 1000);
+
     current_graph = g;
 
-    auto sphereSource = vtkSmartPointer<vtkSphereSource>::New();
-
-    sphereSource->SetRadius(lineWidth * 3 / 1000);
-    sphereSource->SetThetaResolution(100);
-    sphereSource->SetPhiResolution(100);
-
-    glyph3D->SetScaleModeToScaleByScalar();
-    glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
     glyph3D->SetInputData(g->getVertexPolydata());
     glyph3D->Update();
-
-    vertexMapper->SetInputConnection(glyph3D->GetOutputPort());
-    vertexMapper->SetScalarModeToUsePointFieldData();
-    vertexMapper->SelectColorArray(1);
-
 }
 
 void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
     std::scoped_lock lock{graph_mutex};
-
-//    std::cout << (add ? "Add" : "Remove") << " request received: [ ";
-//
-//    for (auto const& value : clause) {
-//        std::cout << value << " ";
-//    }
-//
-//    std::cout << "]" << std::endl;
 
     auto highestEdgeDuplication = g->highestEdgeDuplication();
 
@@ -198,7 +185,12 @@ void Display::removeEdgesFromClause(vector<long> clause) {
 }
 
 void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
+    std::scoped_lock lock{graph_mutex};
+
     g->increase_variable_activity(i);
+
+//    renderWindow->Render();
+//    glyph3D->Update();
 }
 
 void Display::increaseVariableActivity(unsigned long i) {
@@ -304,7 +296,7 @@ void Display::solve() {
 //    while (ret) {
 //        ret = s.get_next_small_clause(lits);
 //        if (ret) {
-//            //deal with clause in "lits"
+//            //deal with clause_array in "lits"
 //            // add_to_my_db(lits);
 //            addEdgesFromClause(current_graph, clauseFromCMSATClause(lits));
 //        }
@@ -319,9 +311,7 @@ void Display::solve() {
 void Display::walksat() {
     std::cout << "Solving..." << std::endl;
 
-    auto intArray = intArrayFromClauseVector();
-
-    solve_walksat(longest_clause, intArray, graph_stack.front()->nr_nodes(), clauses.size());
+    solve_walksat(longest_clause, intArrayFromClauseVector(), graph_stack.front()->nr_nodes(), clauses.size());
 
     std::cout << "Finished solving" << std::endl;
 

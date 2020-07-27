@@ -9,6 +9,7 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
 #include <vtkGlyph3D.h>
+#include <vtkSphereSource.h>
 #include "Graph.h"
 #include <cryptominisat5/cryptominisat.h>
 #include "cryptominisat5/dimacsparser.h"
@@ -24,6 +25,8 @@ class Display {
     static vtkSmartPointer<vtkGlyph3D> glyph3D;
 
     static vtkSmartPointer<vtkRenderWindow> renderWindow;
+
+    static vtkSmartPointer<vtkSphereSource> sphereSource;
 
     static vector<vector<long>> clauses;
     static unsigned int longest_clause;

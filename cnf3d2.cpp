@@ -22,10 +22,12 @@ int main(int argc, char *argv[]) {
     auto api = new API();
     std::thread t2(&API::run_add_clause_socket, api);
     std::thread t3(&API::run_remove_clause_socket, api);
+    std::thread t4(&API::run_increase_variable_activity_socket, api);
 
     t1.join();
     t2.join();
     t3.join();
+    t4.join();
 
     return EXIT_SUCCESS;
 }

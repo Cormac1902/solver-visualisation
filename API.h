@@ -9,6 +9,10 @@
 
 #endif //INC_3DVIS_API_H
 
+static int ADD_CLAUSE_SOCKET = 29786;
+static int REMOVE_CLAUSE_SOCKET = 29787;
+static int VARIABLE_ACTIVITY_SOCKET = 29788;
+
 class API {
 private:
     zmq::context_t context;
@@ -17,15 +21,18 @@ private:
     static msgpack::object unpack(zmq::message_t &message);
     static std::vector<long> unpack_vector(zmq::message_t &message);
     static unsigned long unpack_long(zmq::message_t &message);
+    static std::string port_string(int port) {
+        return "tcp://*:" + std::to_string(port);
+    }
 
 public:
     API() : context(3),
             add_clause_socket(context, ZMQ_PULL),
             remove_clause_socket(context, ZMQ_PULL),
             variable_activity_socket(context, ZMQ_PULL) {
-        add_clause_socket.bind("tcp://*:29786");
-        remove_clause_socket.bind("tcp://*:29787");
-        variable_activity_socket.bind("tcp://*:29788");
+        add_clause_socket.bind(port_string(ADD_CLAUSE_SOCKET));
+        remove_clause_socket.bind(port_string(REMOVE_CLAUSE_SOCKET));
+        variable_activity_socket.bind(port_string(VARIABLE_ACTIVITY_SOCKET));
     }
 
     [[noreturn]] void run_add_clause_socket();

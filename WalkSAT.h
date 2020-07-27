@@ -67,20 +67,22 @@ extern "C" {
 
 
 #if BSD || OSX || LINUX
+
 #include <sys/times.h>
 #include <sys/time.h>
 #include <unistd.h>
+
 #elif WINDOWS
 #include <time.h>
-  #include <windows.h>
-  #include <mmsystem.h>
+#include <windows.h>
+#include <mmsystem.h>
 #elif POSIX
 #include <sys/time.h>
 #endif
 
 #if POSIX || WINDOWS
 #define random() rand()
-  #define srandom(seed) srand(seed)
+#define srandom(seed) srand(seed)
 #endif
 
 /************************************/
@@ -92,7 +94,7 @@ extern "C" {
 #define FALSE 0
 #define BIG 1000000000           /* a number bigger that the possible number of violated clauses */
 
-#define HISTMAX 64		/* length of histogram of tail */
+#define HISTMAX 64        /* length of histogram of tail */
 #define MAXATTEMPT 10           /* max number of times to attempt to find a non-tabu variable to flip */
 #define denominator 100000       /* denominator used in fractions to represent probabilities */
 #define ONE_PERCENT 1000         /* ONE_PERCENT / denominator = 0.01 */
@@ -113,44 +115,44 @@ int numatom;                    /* number of atoms */
 int numclause;                  /* number of clauses */
 int numliterals;                /* number of instances of literals across all clauses */
 
-int numfalse;			/* number of falseClauses clauses */
+int numfalse;            /* number of falseClauses clauses */
 int numfreebie;                 /* number of freebies */
 
 
 /* Data structures for clauses */
 
-int ** clause;			/* clauses to be satisfied */
-/* indexed as clause[clause_num][literal_num] */
-int * clauseSize;			/* length of each clause */
-int * falseClauses;			/* clauses which are falseClauses */
-int * lowfalse;                 /* clauses that are falseClauses in the best solution found so far */
-int * wherefalse;		/* where each clause is listed in falseClauses */
-int * numtruelit;		/* number of true literals in each clause */
+int **clause_array;            /* clauses to be satisfied */
+/* indexed as clause_array[clause_num][literal_num] */
+int *clauseSize;            /* length of each clause_array */
+int *falseClauses;            /* clauses which are falseClauses */
+int *lowfalse;                 /* clauses that are falseClauses in the best solution found so far */
+int *wherefalse;        /* where each clause_array is listed in falseClauses */
+int *numtruelit;        /* number of true literals in each clause_array */
 int longestclause;
 
 /* Data structures for atoms: arrays of size numatom+1 indexed by atom */
 
-int *atom;		    /* value of each atom */
+int *atom;            /* value of each atom */
 int *lowatom;               /* value of best state found so far */
 int *solution;              /* value of solution */
-BIGINT *changed;	    /* step at which atom was last flipped */
-int *breakcount;	    /* number of clauses that become unsat if var if flipped */
-int *makecount;	            /* number of clauses that become sat if var if flipped */
+BIGINT *changed;        /* step at which atom was last flipped */
+int *breakcount;        /* number of clauses that become unsat if var if flipped */
+int *makecount;                /* number of clauses that become sat if var if flipped */
 int *freebielist;           /* list of freebies */
 int *wherefreebie;          /* where atom appears in freebies list, -1 if it does not appear */
 
 /* Data structures literals: arrays of clauseSize 2*numatom+1, indexed by literal+numatom */
 
-int **occurrence;      	        /* where each literal occurs, clauseSize 2*numatom+1            */
+int **occurrence;                /* where each literal occurs, clauseSize 2*numatom+1            */
 /* indexed as occurrence[literal+numatom][occurrence_num] */
 
-int *numoccurrence;     	/* number of times each literal occurs, clauseSize 2*numatom+1  */
+int *numoccurrence;        /* number of times each literal occurs, clauseSize 2*numatom+1  */
 /* indexed as numoccurrence[literal+numatom]              */
 
 /* Data structures for lists of clauses used in heuristics */
 
-int * best;
-int * besttabu;
+int *best;
+int *besttabu;
 int *any;
 
 /************************************/
@@ -159,17 +161,17 @@ int *any;
 
 /* Options */
 
-FILE * cnfStream;
+FILE *cnfStream;
 //int status_flag;		/* value returned from main procedure */
 int abort_flag;
-int heuristic;		/* heuristic to be used */
+int heuristic;        /* heuristic to be used */
 
-int numerator;	        /* make random flip with numerator/denominator frequency */
+int numerator;            /* make random flip with numerator/denominator frequency */
 /*int arc4;
 double walk_probability;
 int plus_flag; *//* for novelty heuristics */
-int tabu_length;		/* length of tabu list */
-BIGINT numflip;		/* number of changes so far */
+int tabu_length;        /* length of tabu list */
+BIGINT numflip;        /* number of changes so far */
 /*int numrun;
 BIGINT cutoff;
 BIGINT base_cutoff;
@@ -211,7 +213,7 @@ DWORD win_time;     /* elapsed time in ms, since windows boot up */
 
 /* Histogram of tail */
 
-BIGINT tailhist[HISTMAX];	/* histogram of num unsat in tail of run */
+BIGINT tailhist[HISTMAX];    /* histogram of num unsat in tail of run */
 long histtotal;
 //int tail;
 int tail_start_flip;
@@ -233,7 +235,7 @@ char outfile[MAXFILENAME];*/
 
 double expertime;
 //BIGINT flips_this_solution;
-int lowbad;		        /* lowest number of bad clauses during try */
+int lowbad;                /* lowest number of bad clauses during try */
 /*BIGINT totalflip;		*//* total number of flips in all tries so far *//*
 BIGINT totalsuccessflip;	*//* total number of flips in all tries which succeeded so far *//*
 int numsuccesstry;		*//* total found solutions */
@@ -279,6 +281,11 @@ double nonsuc_mean_std_dev_avgfalse;
 //int nonsuc_number_sampled_runs;
 double nonsuc_ratio_mean_avgfalse;
 
+void *context;
+void *variable_activity_sender;
+
+char *int_to_send;
+
 /* Hamming calculations */
 
 /*char hamming_target_file[MAXFILENAME];
@@ -286,20 +293,26 @@ char hamming_data_file[MAXFILENAME];*/
 int hamming_sample_freq;
 //int hamming_flag;
 int hamming_distance;
-int * hamming_target;
-FILE * hamming_fp;
+int *hamming_target;
+FILE *hamming_fp;
 
 /**************************************/
 /* Inline utility functions           */
 /**************************************/
 
-static inline int ABS(int x) { return x<0 ? -x : x ; }
+static inline int ABS(int x) { return x < 0 ? -x : x; }
+
+static inline int LENGTH(int x) {
+    if (x == 0) return 1;
+
+    return (int) floor(log10(abs(x))) + 1;
+}
 
 static inline int RANDMOD(int x) {
 #if OSX || BSD
     return x > 1 ? (arc4 ? arc4random_uniform((uint32_t) x) : random()%x) : 0;
 #else
-    return x > 1 ? random()%x : 0;
+    return x > 1 ? random() % x : 0;
 #endif
 }
 
@@ -310,14 +323,12 @@ static inline int MIN(int x, int y) { return x < y ? x : y; }
 
 static inline int onfreebielist(int v) { return wherefreebie[v] != -1; }
 
-static inline void addtofreebielist(int v)
-{
+static inline void addtofreebielist(int v) {
     freebielist[numfreebie] = v;
     wherefreebie[v] = numfreebie++;
 }
 
-static inline void removefromfreebielist(int v)
-{
+static inline void removefromfreebielist(int v) {
     int swapv;
     int wherev;
 
@@ -334,58 +345,112 @@ static inline void removefromfreebielist(int v)
     wherefreebie[swapv] = wherev;
 }
 
+static inline char *INT_STRING(int x) {
+    sprintf(int_to_send, "%d", x);
+    return int_to_send;
+}
+
+static inline char *PORT_STRING(int port) {
+    char *prefix = "tcp://localhost:";
+    char *str = (char*) malloc(strlen(prefix) + LENGTH(port));
+    sprintf(str, "%s", prefix);
+    sprintf(str + strlen(str), "%d", port);
+    return str;
+}
+
 /************************************/
 /* Forward declarations             */
 /************************************/
 
-void parse_parameters(int argc,char *argv[]);
+void parse_parameters(int argc, char *argv[]);
+
 void print_parameters();
 
 int pickrandom(void);
+
 int pickbest(void);
+
 int picktabu(void);
+
 int picknovelty(void);
+
 int pickrnovelty(void);
+
 int pickalternate(void);
+
 int pickbigflip(void);
+
 int pickgsat(void);
 
-enum heuristics { RANDOM, BEST, TABU, NOVELTY, RNOVELTY,
-    ALTERNATE, BIGFLIP, GSAT};
+enum heuristics {
+    RANDOM, BEST, TABU, NOVELTY, RNOVELTY,
+    ALTERNATE, BIGFLIP, GSAT
+};
+
 static int (*pickcode[])(void) =
         {pickrandom, pickbest, picktabu,
          picknovelty, pickrnovelty,
          pickalternate, pickbigflip, pickgsat};
 
 double elapsed_seconds(void);
+
 int countunsat(void);
+
 void scanone(int argc, char *argv[], int i, int *varptr);
+
 void scanonell(int argc, char *argv[], int i, BIGINT *varptr);
+
 void scanoned(int argc, char *argv[], int i, double *varptr);
+
 void init(void);
-void initprob(unsigned int longest_cl, int** clauses, int num_atom, int num_clause);
+
+void initprob(unsigned int longest_cl, int **clauses, int num_atom, int num_clause);
+
 void flipatom(int toflip);
+
 void print_false_clauses(int lowbad);
+
 void save_false_clauses(int lowbad);
+
 void print_low_assign(int lowbad);
+
 void save_low_assign(void);
+
 void save_solution(void);
+
 void print_current_assign(void);
+
 void handle_interrupt(int sig);
+
 long super(int i);
-void print_sol_file(char * filename);
+
+void print_sol_file(char *filename);
+
 void print_statistics_header(void);
+
 void initialize_statistics(void);
+
 void update_statistics_start_try(void);
+
 void print_statistics_start_flip(void);
+
 void update_and_print_statistics_end_try(void);
+
 void update_statistics_end_flip(void);
+
 void print_statistics_final(void);
+
 void print_sol_cnf(void);
+
 void read_hamming_file(void);
+
 void open_hamming_data(void);
+
 int calc_hamming_dist(int atom[], int hamming_target[], int numatom);
-int solve_walksat(unsigned int longest_cl, int** clauses, int num_atom, int num_clause);
+
+int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_clause);
+
+void send_variable_activity(int var);
 
 #ifdef __cplusplus
 }
