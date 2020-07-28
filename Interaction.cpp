@@ -4,7 +4,7 @@
 
 #include "Interaction.h"
 #include "Display.h"
-#include <zmq.hpp>
+#include "thread"
 
 void Interaction::OnKeyPress() {
     // Get the keypress
@@ -17,7 +17,9 @@ void Interaction::OnKeyPress() {
     if (key == "s" || key == "S") {
         Display::solve();
     } else if (key == "w" || key == "W") {
-        Display::walksat();
+//        Display::walksat();
+        std::thread walksatThread(Display::walksat);
+        walksatThread.join();
     } else {
         try {
             Display::changeGraph(std::stoi(key));

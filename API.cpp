@@ -2,29 +2,38 @@
 // Created by cormac on 30/06/2020.
 //
 
-#include <iostream>
 #include "API.h"
 #include "Display.h"
 
-msgpack::object API::unpack(zmq::message_t &message) {
+msgpack::object_handle *API::unpack(zmq::message_t &message) {
     msgpack::sbuffer buffer;
     buffer.write(static_cast<const char *>(message.data()), message.size());
 
     // deserialize it.
-    msgpack::object_handle result;
-    msgpack::unpack(result, buffer.data(), buffer.size());
+    auto *result = new msgpack::object_handle;
+    msgpack::unpack(*result, buffer.data(), buffer.size());
 
-    msgpack::object obj(result.get());
-
-    return obj;
+    return result;
 }
 
-std::vector<long> API::unpack_vector(zmq::message_t& message) {
-    return unpack(message).as<std::vector<long>>();
+std::vector<long> API::unpack_vector(zmq::message_t &message) {
+    auto resultPtr = unpack(message);
+
+    auto clause = resultPtr->get().as<std::vector<long>>();
+
+    delete resultPtr;
+
+    return clause;
 }
 
-unsigned long API::unpack_long(zmq::message_t &message) {
-    return unpack(message).as<unsigned long>();
+long API::unpack_long(zmq::message_t &message) {
+    auto resultPtr = unpack(message);
+
+    auto var = resultPtr->get().as<long>();
+
+    delete resultPtr;
+
+    return var;
 }
 
 [[noreturn]] void API::run_add_clause_socket() {
@@ -50,12 +59,22 @@ unsigned long API::unpack_long(zmq::message_t &message) {
     }
 }
 
+[[noreturn]] void API::run_assign_variable_truth_value() {
+    while (true) {
+        zmq::message_t request;
+
+        variable_assignment_socket.recv(&request);
+
+
+    }
+}
+
 [[noreturn]] void API::run_increase_variable_activity_socket() {
-    while(true) {
+    while (true) {
         zmq::message_t request;
 
         variable_activity_socket.recv(&request);
 
-        Display::increaseVariableActivity(unpack_long(request));
+        Display::increaseVariableActivity(abs(unpack_long(request)));
     }
 }

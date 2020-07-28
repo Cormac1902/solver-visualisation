@@ -45,6 +45,8 @@ class Display {
 
     static void increaseVariableActivity(Graph3D *g, unsigned long i);
 
+    static void assignVariable(Graph3D *g, unsigned long i, bool value);
+
     static void changeGraph(unsigned graphLevel);
 
     static void positionGraph(unsigned graphLevel);
@@ -69,6 +71,8 @@ public:
     static void removeEdgesFromClause(vector<long> clause);
 
     static void increaseVariableActivity(unsigned long i);
+
+    static void assignVariable(unsigned long i, bool value);
 };
 
 

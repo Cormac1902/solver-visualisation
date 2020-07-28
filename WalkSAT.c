@@ -73,7 +73,8 @@ char hamming_target_file[MAXFILENAME] = {0};
 char hamming_data_file[MAXFILENAME] = {0};
 int hamming_flag = FALSE;
 
-static int VARIABLE_ACTIVITY_SOCKET_C = 29788;
+static int VARIABLE_ASSIGNMENT_SOCKET_C = 29788;
+static int VARIABLE_ACTIVITY_SOCKET_C = 29789;
 
 /************************************/
 /* Main                             */

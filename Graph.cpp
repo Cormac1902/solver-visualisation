@@ -646,6 +646,13 @@ void Graph3D::increase_variable_activity(unsigned long i) {
     vertexPolydata->Modified();
 }
 
+void Graph3D::assign_variable_truth_value(unsigned long i, bool value) {
+    i = matchMap[i];
+    vertexColours->SetTypedTuple(i, (value ? positiveColour : negativeColour).GetData());
+
+    vertexPolydata->Modified();
+}
+
 void Graph3D::reScale() {
     for (auto i = 0; i < scales->GetNumberOfValues(); i++) {
         scales->SetValue(i, get_scale(nodes[i]));

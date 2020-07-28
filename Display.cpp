@@ -197,6 +197,16 @@ void Display::increaseVariableActivity(unsigned long i) {
     increaseVariableActivity(current_graph, i);
 }
 
+void Display::assignVariable(Graph3D *g, unsigned long i, bool value) {
+    std::scoped_lock lock{graph_mutex};
+
+    g->assign_variable_truth_value(i, value);
+}
+
+void Display::assignVariable(unsigned long i, bool value) {
+    assignVariable(current_graph, i, value);
+}
+
 void Display::setupNodes(Graph3D *g) {
     Node3D n(1), m(2), o(3);
 
