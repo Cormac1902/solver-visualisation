@@ -189,7 +189,7 @@ void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
 
     g->increase_variable_activity(i);
 
-//    renderWindow->Render();
+    renderWindow->Render();
 //    glyph3D->Update();
 }
 

@@ -86,6 +86,8 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     context = zmq_ctx_new();
     variable_activity_sender = zmq_socket(context, ZMQ_PUSH);
     zmq_connect(variable_activity_sender, PORT_STRING(VARIABLE_ACTIVITY_SOCKET_C));
+    variable_assignment_sender = zmq_socket(context, ZMQ_PUSH);
+    zmq_connect(variable_assignment_sender, PORT_STRING(VARIABLE_ASSIGNMENT_SOCKET_C));
 
     int_to_send = malloc(LENGTH(num_atom) + 1);
 
@@ -133,13 +135,20 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     print_statistics_final();
 
     zmq_close(variable_activity_sender);
+    zmq_close(variable_assignment_sender);
     zmq_ctx_destroy(context);
 
     return status_flag;
 }
 
+const char* INT_STRING(int x) {
+    sprintf(int_to_send, "%d", x);
+    return int_to_send;
+}
+
 void send_variable_activity(int var) {
     zmq_send(variable_activity_sender, INT_STRING(var), LENGTH(var), 0);
+    zmq_send(variable_assignment_sender, INT_STRING(var), LENGTH(var), 0);
 }
 
 void flipatom(int toflip) {

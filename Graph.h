@@ -55,6 +55,8 @@ private:
     vtkColor4ub positiveColour;
     vtkColor4ub negativeColour;
 
+    static vtkSmartPointer<vtkLookupTable> vertexColours;
+
     // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
     map<pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> edgeColourMap;
 

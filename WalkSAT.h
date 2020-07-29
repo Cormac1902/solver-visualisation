@@ -283,6 +283,7 @@ double nonsuc_ratio_mean_avgfalse;
 
 void *context;
 void *variable_activity_sender;
+void *variable_assignment_sender;
 
 char *int_to_send;
 
@@ -345,13 +346,10 @@ static inline void removefromfreebielist(int v) {
     wherefreebie[swapv] = wherev;
 }
 
-static inline char *INT_STRING(int x) {
-    sprintf(int_to_send, "%d", x);
-    return int_to_send;
-}
+const char *INT_STRING(int x);
 
 static inline char *PORT_STRING(int port) {
-    char *prefix = "tcp://localhost:";
+    const char *prefix = "tcp://localhost:";
     char *str = (char*) malloc(strlen(prefix) + LENGTH(port));
     sprintf(str, "%s", prefix);
     sprintf(str + strlen(str), "%d", port);

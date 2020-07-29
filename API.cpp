@@ -27,13 +27,14 @@ std::vector<long> API::unpack_vector(zmq::message_t &message) {
 }
 
 long API::unpack_long(zmq::message_t &message) {
-    auto resultPtr = unpack(message);
+    msgpack::sbuffer buffer;
+    buffer.write(static_cast<const char *>(message.data()), message.size());
 
-    auto var = resultPtr->get().as<long>();
+    // deserialize it.
+    msgpack::object_handle result;
+    msgpack::unpack(result, buffer.data(), buffer.size());
 
-    delete resultPtr;
-
-    return var;
+    return result.get().as<long>();
 }
 
 [[noreturn]] void API::run_add_clause_socket() {
@@ -65,7 +66,9 @@ long API::unpack_long(zmq::message_t &message) {
 
         variable_assignment_socket.recv(&request);
 
+        auto var = unpack_long(request);
 
+        Display::assignVariable(abs(var), var < 0);
     }
 }
 
