@@ -1,3 +1,0 @@
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cmake-build-debug/CMakeFiles/s_vis.dir
