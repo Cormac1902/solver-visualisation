@@ -4,7 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/s_vis.dir/Display.cpp.o"
   "CMakeFiles/s_vis.dir/Graph.cpp.o"
   "CMakeFiles/s_vis.dir/Interaction.cpp.o"
-  "CMakeFiles/s_vis.dir/InteractionCallback.cpp.o"
   "CMakeFiles/s_vis.dir/Node.cpp.o"
   "CMakeFiles/s_vis.dir/SpaceGrid.cpp.o"
   "CMakeFiles/s_vis.dir/Vector.cpp.o"

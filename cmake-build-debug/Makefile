@@ -278,33 +278,6 @@ Interaction.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/Interaction.cpp.s
 .PHONY : Interaction.cpp.s
 
-InteractionCallback.o: InteractionCallback.cpp.o
-
-.PHONY : InteractionCallback.o
-
-# target to build an object file
-InteractionCallback.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/InteractionCallback.cpp.o
-.PHONY : InteractionCallback.cpp.o
-
-InteractionCallback.i: InteractionCallback.cpp.i
-
-.PHONY : InteractionCallback.i
-
-# target to preprocess a source file
-InteractionCallback.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/InteractionCallback.cpp.i
-.PHONY : InteractionCallback.cpp.i
-
-InteractionCallback.s: InteractionCallback.cpp.s
-
-.PHONY : InteractionCallback.s
-
-# target to generate assembly for a file
-InteractionCallback.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s_vis.dir/build.make CMakeFiles/s_vis.dir/InteractionCallback.cpp.s
-.PHONY : InteractionCallback.cpp.s
-
 Node.o: Node.cpp.o
 
 .PHONY : Node.o
@@ -464,9 +437,6 @@ help:
 	@echo "... Interaction.o"
 	@echo "... Interaction.i"
 	@echo "... Interaction.s"
-	@echo "... InteractionCallback.o"
-	@echo "... InteractionCallback.i"
-	@echo "... InteractionCallback.s"
 	@echo "... Node.o"
 	@echo "... Node.i"
 	@echo "... Node.s"

@@ -44,7 +44,7 @@ long API::unpack_long(zmq::message_t &message) {
         // Receive a request from client
         add_clause_socket.recv(&request);
 
-        Display::addEdgesFromClause(unpack_vector(request));
+        display.addEdgesFromClause(unpack_vector(request));
     }
 }
 
@@ -56,7 +56,7 @@ long API::unpack_long(zmq::message_t &message) {
         // Receive a request from client
         remove_clause_socket.recv(&request);
 
-        Display::removeEdgesFromClause(unpack_vector(request));
+        display.removeEdgesFromClause(unpack_vector(request));
     }
 }
 
@@ -68,7 +68,7 @@ long API::unpack_long(zmq::message_t &message) {
 
         auto var = unpack_long(request);
 
-        Display::assignVariable(abs(var), var < 0);
+        display.assignVariable(abs(var), var < 0);
     }
 }
 
@@ -78,6 +78,6 @@ long API::unpack_long(zmq::message_t &message) {
 
         variable_activity_socket.recv(&request);
 
-        Display::increaseVariableActivity(abs(unpack_long(request)));
+        display.increaseVariableActivity(abs(unpack_long(request)));
     }
 }

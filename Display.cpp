@@ -9,11 +9,9 @@
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkPointData.h>
-#include <vtkFloatArray.h>
 
 #include <utility>
 #include <mutex>
-#include <vtkSphereSource.h>
 
 #include "Display.h"
 #include "Interaction.h"
@@ -24,35 +22,19 @@
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
-vector<Graph3D*> graph_stack;
+static double k = 1.0; // old: 5.0
+static double f_k = sqrt(4.0 / 7.0);
 
-double k = 1.0; // old: 5.0
-double f_k = sqrt(4.0 / 7.0);
+static bool draw_edges = true, adaptive_size = true, draw_only_2clauses = false; // run_anim = falseClauses
 
-bool draw_edges = true, adaptive_size = true; // run_anim = falseClauses
-bool draw_only_2clauses = false;
+static float min_line_width = 3, max_line_width = 12;
+static int max_line_width_threshold = 250, min_line_width_threshold = 2500;
 
-float min_line_width = 3, max_line_width = 12;
-int max_line_width_threshold = 250, min_line_width_threshold = 2500;
-
-Vector3D min_p, max_p;
-
-Graph3D* current_graph;
 std::mutex graph_mutex;
-
-vtkSmartPointer<vtkPolyDataMapper> Display::edgeMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-vtkSmartPointer<vtkActor> Display::edgeActor = vtkSmartPointer<vtkActor>::New();
-vtkSmartPointer<vtkPolyDataMapper> Display::vertexMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-vtkSmartPointer<vtkActor> Display::vertexActor = vtkSmartPointer<vtkActor>::New();
-vtkSmartPointer<vtkGlyph3D> Display::glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
-vtkSmartPointer<vtkRenderWindow> Display::renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-vtkSmartPointer<vtkSphereSource> Display::sphereSource = vtkSmartPointer<vtkSphereSource>::New();
-vector<vector<long>> Display::clauses = {};
-unsigned int Display::longest_clause = 0;
 
 // ----------------------------------------------------------------------
 
-void Display::display() {
+void Display::display(Interaction &interaction) {
 
 //    changeGraph(0);
 
@@ -98,11 +80,8 @@ void Display::display() {
             vtkSmartPointer<vtkRenderWindowInteractor>::New();
     renderWindowInteractor->SetRenderWindow(renderWindow);
 
-    Interaction *interactor = Interaction::New();
-
-    auto interactorPointer = vtkSmartPointer<Interaction>::Take(interactor);
-    renderWindowInteractor->SetInteractorStyle(interactor);
-    interactor->SetCurrentRenderer(renderer);
+    renderWindowInteractor->SetInteractorStyle(&interaction);
+    interaction.SetCurrentRenderer(renderer);
 
     renderWindow->SetSize(1920, 1080);
     renderWindow->SetWindowName("Solver Visualisation");
@@ -165,7 +144,7 @@ void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
         g->reColour();
     }
 
-    renderWindow->Render();
+//    renderWindow->Render();
 }
 
 void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
@@ -189,7 +168,7 @@ void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
 
     g->increase_variable_activity(i);
 
-    renderWindow->Render();
+//    renderWindow->Render();
 //    glyph3D->Update();
 }
 
@@ -318,22 +297,22 @@ void Display::solve() {
 
 }
 
-void Display::walksat() {
+int Display::walksat(Display *display) {
     std::cout << "Solving..." << std::endl;
 
-    solve_walksat(longest_clause, intArrayFromClauseVector(), graph_stack.front()->nr_nodes(), clauses.size());
-
-    std::cout << "Finished solving" << std::endl;
-
+    return solve_walksat(display->longest_clause,
+                  intArrayFromClauseVector(display->clauses, display->longest_clause),
+                  display->graph_stack.front()->nr_nodes(),
+                  display->clauses.size());
 }
 
-int** Display::intArrayFromClauseVector() {
+int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause) {
     vector<long> clause_it;
     unsigned int j;
 
     unsigned long noOfClauses = clauses.size();
 
-    int** array = new int*[noOfClauses];
+    int **array = new int *[noOfClauses];
 
     for (unsigned int i = 0; i < noOfClauses; i++) {
         clause_it = clauses.at(i);
@@ -360,7 +339,7 @@ vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
 }
 
 // builds (global) stack of coarsened graphs
-void Display::init(char *filename) {
+void Display::init(char *filename, Interaction *interaction) {
     auto *g = new Graph3D();
     graph_stack.push_back(g);
 
@@ -371,8 +350,7 @@ void Display::init(char *filename) {
         pair<vector<vector<long>>, unsigned int> built;
         if (strncmp("-", filename, 1) == 0) {
             built = g->build_from_cnf(cin);
-        }
-        else {
+        } else {
             ifstream is(filename);
             built = g->build_from_cnf(is);
             is.close();
@@ -412,5 +390,5 @@ void Display::init(char *filename) {
     min_p = ep.first;
     max_p = ep.second;
 
-    display();
+    display(*interaction);
 }

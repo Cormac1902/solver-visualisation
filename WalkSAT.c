@@ -76,6 +76,11 @@ int hamming_flag = FALSE;
 static int VARIABLE_ASSIGNMENT_SOCKET_C = 29788;
 static int VARIABLE_ACTIVITY_SOCKET_C = 29789;
 
+static int (*pickcode[])(void) =
+        {pickrandom, pickbest, picktabu,
+         picknovelty, pickrnovelty,
+         pickalternate, pickbigflip, pickgsat};
+
 /************************************/
 /* Main                             */
 /************************************/
@@ -94,7 +99,7 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
 #if BSD || LINUX || OSX
     ticks_per_second = sysconf(_SC_CLK_TCK);
     gettimeofday(&tv, &tzp);
-    seed = (unsigned int) (((tv.tv_sec & 0177) * 1000000) + tv.tv_usec);
+    seed = (((tv.tv_sec & 0177) * 1000000) + tv.tv_usec);
 #elif WINDOWS
     seed = (unsigned int)(timeGetTime());
 #elif POSIX
@@ -141,14 +146,14 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     return status_flag;
 }
 
-const char* INT_STRING(int x) {
-    sprintf(int_to_send, "%d", x);
+const char *INT_STRING(int i) {
+    sprintf(int_to_send, "%d", i);
     return int_to_send;
 }
 
 void send_variable_activity(int var) {
-    zmq_send(variable_activity_sender, INT_STRING(var), LENGTH(var), 0);
-    zmq_send(variable_assignment_sender, INT_STRING(var), LENGTH(var), 0);
+//    zmq_send(variable_activity_sender, INT_STRING(var), LENGTH(var), 0);
+//    zmq_send(variable_assignment_sender, INT_STRING(var), LENGTH(var), 0);
 }
 
 void flipatom(int toflip) {
@@ -357,7 +362,7 @@ void parse_parameters(int argc, char *argv[]) {
         else if (strcmp(argv[i], "-hamming") == 0 && i < argc - 3) {
             sscanf(argv[++i], " %s", hamming_target_file);
             sscanf(argv[++i], " %s", hamming_data_file);
-            sscanf(argv[++i], " %i", &hamming_sample_freq);
+            strtol(argv[++i], (char **) " %i", hamming_sample_freq);
             hamming_flag = TRUE;
             numrun = 1;
         } else if (strcmp(argv[i], "-low") == 0)
@@ -382,7 +387,7 @@ void parse_parameters(int argc, char *argv[]) {
 
         else if (strcmp(argv[i], "-noise") == 0) {
             scanone(argc, argv, ++i, &numerator);
-            if (i < argc - 1 && sscanf(argv[i + 1], "%i", &temp) == 1) {
+            if (i < argc - 1 && strtol(argv[i + 1], (char **) "%i", temp) == 1) {
                 walk_probability = ((double) numerator) / temp;
                 i++;
             } else {
@@ -930,7 +935,7 @@ void update_and_print_statistics_end_try(void) {
         r = 0;
     }
 
-    undo_fraction = ((double) undo_count) / numflip;
+    undo_fraction = (double) undo_count / (double) numflip;
 
     printf(" %9i %9i %9.2f %9.2f %9.2f %9" BIGFORMAT " %9.6f %9i",
            lowbad, numfalse, avgfalse, std_dev_avgfalse, ratio_avgfalse, numflip, undo_fraction,
@@ -968,7 +973,7 @@ void update_and_print_statistics_end_try(void) {
 
 
 void print_statistics_final(void) {
-    seconds_per_flip = expertime / totalflip;
+    seconds_per_flip = expertime / (double) totalflip;
     printf("\ntotal elapsed seconds = %f\n", expertime);
     printf("average flips per second = %f\n", ((double) totalflip) / expertime);
     printf("number solutions found = %i\n", numsuccesstry);
@@ -1058,12 +1063,12 @@ void print_statistics_final(void) {
 }
 
 
-int calc_hamming_dist(int atom[], int hamming_target[], int numatom) {
+int calc_hamming_dist(const int _atom[], const int _hamming_target[], int _numatom) {
     int i;
     int dist = 0;
 
-    for (i = 1; i <= numatom; i++) {
-        if (atom[i] != hamming_target[i]) dist++;
+    for (i = 1; i <= _numatom; i++) {
+        if (_atom[i] != _hamming_target[i]) dist++;
     }
     return dist;
 }
@@ -1088,7 +1093,6 @@ void read_hamming_file(void) {
         fprintf(stderr, "Cannot open %s\n", initfile);
         exit(1);
     }
-    i = 0;
     for (i = 1; i < numatom + 1; i++)
         hamming_target[i] = 0;
 
@@ -1103,12 +1107,12 @@ void read_hamming_file(void) {
 }
 
 
-void print_false_clauses(int lowbad) {
+void print_false_clauses(int _lowbad) {
     int i, j;
     int cl;
 
     printf("Unsatisfied clauses:\n");
-    for (i = 0; i < lowbad; i++) {
+    for (i = 0; i < _lowbad; i++) {
         cl = lowfalse[i];
         for (j = 0; j < clauseSize[cl]; j++) {
             printf("%i ", clause_array[cl][j]);
@@ -1119,10 +1123,10 @@ void print_false_clauses(int lowbad) {
 }
 
 
-void save_false_clauses(int lowbad) {
+void save_false_clauses(int _lowbad) {
     int i;
 
-    for (i = 0; i < lowbad; i++)
+    for (i = 0; i < _lowbad; i++)
         lowfalse[i] = falseClauses[i];
 }
 
@@ -1151,10 +1155,10 @@ void print_sol_file(char *filename) {
 }
 
 
-void print_low_assign(int lowbad) {
+void print_low_assign(int _lowbad) {
     int i;
 
-    printf("Begin assign with lowest # bad = %d\n", lowbad);
+    printf("Begin assign with lowest # bad = %d\n", _lowbad);
     for (i = 1; i <= numatom; i++) {
         printf(" %i", lowatom[i] == 0 ? -i : i);
         if (i % 10 == 0) printf("\n");
@@ -1219,7 +1223,7 @@ long super(int i) {
 }
 
 
-void handle_interrupt(int sig) {
+void handle_interrupt() {
     if (abort_flag) exit(-1);
     abort_flag = TRUE;
 }
@@ -1441,7 +1445,6 @@ int pickalternate(void) {
     return ABS(best[RANDMOD(numbest)]);
 }
 
-
 int pickbigflip(void) {
     int numbreak;
     int tofix;
@@ -1499,9 +1502,10 @@ int pickbigflip(void) {
 
 
 int pickrnovelty(void) {
-    int var, diff, birthdate;
+    int var, diff;
+    long long birthdate, youngest_birthdate;
     int diffdiff;
-    int youngest, youngest_birthdate, best, second_best, best_diff, second_best_diff;
+    int youngest, _best, second_best, best_diff, second_best_diff;
     int tofix, clausesize, i;
 
     tofix = falseClauses[RANDMOD(numfalse)];
@@ -1527,11 +1531,11 @@ int pickrnovelty(void) {
             youngest_birthdate = birthdate;
             youngest = var;
         }
-        if (diff > best_diff || (diff == best_diff && changed[var] < changed[best])) {
+        if (diff > best_diff || (diff == best_diff && changed[var] < changed[_best])) {
             /* found new best, demote best to 2nd best */
-            second_best = best;
+            second_best = _best;
             second_best_diff = best_diff;
-            best = var;
+            _best = var;
             best_diff = diff;
         } else if (diff > second_best_diff || (diff == second_best_diff && changed[var] < changed[second_best])) {
             /* found new second best */
@@ -1539,7 +1543,7 @@ int pickrnovelty(void) {
             second_best_diff = diff;
         }
     }
-    if (best != youngest) return best;
+    if (_best != youngest) return _best;
 
     diffdiff = best_diff - second_best_diff;
 
@@ -1547,19 +1551,19 @@ int pickrnovelty(void) {
     if (diffdiff <= 0) {
         fprintf(stderr, "rnovelty+ code error!\n");
         fprintf(stderr, "diffdiff = %i\n", diffdiff);
-        fprintf(stderr, "best = %i   best_diff = %i   second_best = %i    second_best_diff = %i\n", best, best_diff,
+        fprintf(stderr, "best = %i   best_diff = %i   second_best = %i    second_best_diff = %i\n", _best, best_diff,
                 second_best, second_best_diff);
         exit(-1);
     }
 
     /* (1) p < 0.5 and n > 1 */
-    if (numerator * 2 < denominator && diffdiff > 1) return best;
+    if (numerator * 2 < denominator && diffdiff > 1) return _best;
 
     /* (2) p < 0.5 and n = 1                                 */
     /*     with probability 2p pick 2nd best, otherwise best */
     if (numerator * 2 < denominator && diffdiff == 1) {
         if ((RANDMOD(denominator)) < 2 * numerator) return second_best;
-        return best;
+        return _best;
     }
 
     /* (3) p >= 0.5 and n = 1 */
@@ -1570,15 +1574,16 @@ int pickrnovelty(void) {
 
     if ((RANDMOD(denominator)) < 2 * (numerator - (denominator / 2))) return second_best;
 
-    return best;
+    return _best;
 
 }
 
 
 int picknovelty(void) {
-    int var, diff, birthdate;
+    int var, diff;
+    long long birthdate, youngest_birthdate;
     int diffdiff;
-    int youngest, youngest_birthdate, best, second_best, best_diff, second_best_diff;
+    int youngest, _best, second_best, best_diff, second_best_diff;
     int tofix, clausesize, i;
 
     tofix = falseClauses[RANDMOD(numfalse)];
@@ -1604,11 +1609,11 @@ int picknovelty(void) {
             youngest_birthdate = birthdate;
             youngest = var;
         }
-        if (diff > best_diff || (diff == best_diff && changed[var] < changed[best])) {
+        if (diff > best_diff || (diff == best_diff && changed[var] < changed[_best])) {
             /* found new best, demote best to 2nd best */
-            second_best = best;
+            second_best = _best;
             second_best_diff = best_diff;
-            best = var;
+            _best = var;
             best_diff = diff;
         } else if (diff > second_best_diff || (diff == second_best_diff && changed[var] < changed[second_best])) {
             /* found new second best */
@@ -1618,11 +1623,11 @@ int picknovelty(void) {
     }
 
     /* Case 1: If best variable not youngest, select it */
-    if (best != youngest) return best;
+    if (_best != youngest) return _best;
 
     /* Case 2: with probability p select second best, else best */
     if ((RANDMOD(denominator)) <= numerator) return second_best;
-    return best;
+    return _best;
 }
 
 

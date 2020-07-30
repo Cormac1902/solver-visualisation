@@ -21,11 +21,11 @@ public:
     static Vector3D init_random();
     // generate a random vector with all coordinates in the range [-1,1]
 
-    double norm() const {
+    [[nodiscard]] double norm() const {
         return sqrt(x * x + y * y + z * z);
     }
 
-    Vector3D normalize() const {
+    [[nodiscard]] Vector3D normalize() const {
         double f = 1.0 / norm();
         return Vector3D(f * x, f * y, f * z);
     }

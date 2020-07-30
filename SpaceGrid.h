@@ -56,7 +56,7 @@ public:
 
     // ----- auxiliary functions -----
 
-    GridIndex grid_index(const Vector3D &p) const;
+    [[nodiscard]] GridIndex grid_index(const Vector3D &p) const;
     // Compute grid index of cube into which a node with position p falls.
 
 };

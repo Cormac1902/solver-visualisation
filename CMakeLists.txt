@@ -10,7 +10,6 @@ set(SOURCE_FILES Vector.cpp
         SpaceGrid.cpp
         Interaction.cpp
         cnf3d2.cpp
-        InteractionCallback.cpp
         Display.cpp
         API.cpp
         CryptoWalkSAT.cpp
@@ -20,7 +19,6 @@ set(HEADERS Vector.h
         Graph.h
         SpaceGrid.h
         Interaction.h
-        InteractionCallback.h
         Display.h
         API.h
         CryptoWalkSAT.h

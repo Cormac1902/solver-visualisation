@@ -15,14 +15,14 @@ void Interaction::OnKeyPress() {
     }
 
     if (key == "s" || key == "S") {
-        Display::solve();
+        display->solve();
     } else if (key == "w" || key == "W") {
-//        Display::walksat();
-        std::thread walksatThread(Display::walksat);
+        std::thread walksatThread(Display::walksat, display);
         walksatThread.join();
+        std::cout << "Finished solving" << std::endl;
     } else {
         try {
-            Display::changeGraph(std::stoi(key));
+            display->changeGraph(std::stoi(key));
         } catch (std::invalid_argument &e) {
         }
     }

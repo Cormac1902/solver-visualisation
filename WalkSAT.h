@@ -301,26 +301,26 @@ FILE *hamming_fp;
 /* Inline utility functions           */
 /**************************************/
 
-static inline int ABS(int x) { return x < 0 ? -x : x; }
+static inline int ABS(int i) { return i < 0 ? -i : i; }
 
-static inline int LENGTH(int x) {
-    if (x == 0) return 1;
+static inline int LENGTH(int i) {
+    if (i == 0) return 1;
 
-    return (int) floor(log10(abs(x))) + 1;
+    return (int) floor(log10(abs(i))) + 1;
 }
 
-static inline int RANDMOD(int x) {
+static inline int RANDMOD(int i) {
 #if OSX || BSD
-    return x > 1 ? (arc4 ? arc4random_uniform((uint32_t) x) : random()%x) : 0;
+    return i > 1 ? (arc4 ? arc4random_uniform((uint32_t) i) : random()%i) : 0;
 #else
-    return x > 1 ? random() % x : 0;
+    return i > 1 ? (int) random() % i : 0;
 #endif
 }
 
 
-static inline int MAX(int x, int y) { return x > y ? x : y; }
+static inline int MAX(int i, int j) { return i > j ? i : j; }
 
-static inline int MIN(int x, int y) { return x < y ? x : y; }
+static inline int MIN(int i, int j) { return i < j ? i : j; }
 
 static inline int onfreebielist(int v) { return wherefreebie[v] != -1; }
 
@@ -350,7 +350,7 @@ const char *INT_STRING(int x);
 
 static inline char *PORT_STRING(int port) {
     const char *prefix = "tcp://localhost:";
-    char *str = (char*) malloc(strlen(prefix) + LENGTH(port));
+    char *str = (char *) malloc(strlen(prefix) + LENGTH(port) + 1);
     sprintf(str, "%s", prefix);
     sprintf(str + strlen(str), "%d", port);
     return str;
@@ -385,11 +385,6 @@ enum heuristics {
     ALTERNATE, BIGFLIP, GSAT
 };
 
-static int (*pickcode[])(void) =
-        {pickrandom, pickbest, picktabu,
-         picknovelty, pickrnovelty,
-         pickalternate, pickbigflip, pickgsat};
-
 double elapsed_seconds(void);
 
 int countunsat(void);
@@ -406,11 +401,11 @@ void initprob(unsigned int longest_cl, int **clauses, int num_atom, int num_clau
 
 void flipatom(int toflip);
 
-void print_false_clauses(int lowbad);
+void print_false_clauses(int _lowbad);
 
-void save_false_clauses(int lowbad);
+void save_false_clauses(int _lowbad);
 
-void print_low_assign(int lowbad);
+void print_low_assign(int _lowbad);
 
 void save_low_assign(void);
 
@@ -418,7 +413,7 @@ void save_solution(void);
 
 void print_current_assign(void);
 
-void handle_interrupt(int sig);
+void handle_interrupt();
 
 long super(int i);
 
@@ -444,7 +439,7 @@ void read_hamming_file(void);
 
 void open_hamming_data(void);
 
-int calc_hamming_dist(int atom[], int hamming_target[], int numatom);
+int calc_hamming_dist(const int atom[], const int hamming_target[], int numatom);
 
 int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_clause);
 

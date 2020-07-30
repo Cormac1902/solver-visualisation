@@ -228,12 +228,6 @@
 		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h">
 			<Option target="s_vis"/>
 		</Unit>
-		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.cpp">
-			<Option target="s_vis"/>
-		</Unit>
-		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.h">
-			<Option target="s_vis"/>
-		</Unit>
 		<Unit filename="/home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.cpp">
 			<Option target="s_vis"/>
 		</Unit>

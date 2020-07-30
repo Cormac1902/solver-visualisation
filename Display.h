@@ -1,6 +1,5 @@
 //
-// Created by corma on 30-Apr-20.
-//walking sa appy
+// Created by Cormac on 30-Apr-20.
 
 #ifndef INC_3DVIS_DISPLAY_H
 #define INC_3DVIS_DISPLAY_H
@@ -10,69 +9,89 @@
 #include <vtkRenderWindow.h>
 #include <vtkGlyph3D.h>
 #include <vtkSphereSource.h>
+#include <vtkActor.h>
 #include "Graph.h"
 #include <cryptominisat5/cryptominisat.h>
 #include "cryptominisat5/dimacsparser.h"
+#include "Interaction.h"
 
 using namespace CMSat;
 
 class Display {
-    static vtkSmartPointer<vtkPolyDataMapper> edgeMapper;
-    static vtkSmartPointer<vtkActor> edgeActor;
+    vector<Graph3D *> graph_stack;
+    Graph3D *current_graph{};
 
-    static vtkSmartPointer<vtkPolyDataMapper> vertexMapper;
-    static vtkSmartPointer<vtkActor> vertexActor;
-    static vtkSmartPointer<vtkGlyph3D> glyph3D;
+    vtkSmartPointer<vtkPolyDataMapper> edgeMapper;
+    vtkSmartPointer<vtkActor> edgeActor;
 
-    static vtkSmartPointer<vtkRenderWindow> renderWindow;
+    vtkSmartPointer<vtkPolyDataMapper> vertexMapper;
+    vtkSmartPointer<vtkActor> vertexActor;
+    vtkSmartPointer<vtkGlyph3D> glyph3D;
 
-    static vtkSmartPointer<vtkSphereSource> sphereSource;
+    vtkSmartPointer<vtkRenderWindow> renderWindow;
 
-    static vector<vector<long>> clauses;
-    static unsigned int longest_clause;
+    vtkSmartPointer<vtkSphereSource> sphereSource;
 
-    static void display();
+    vector<vector<long>> clauses;
+    unsigned int longest_clause{};
+
+    Vector3D min_p, max_p;
+
+    void display(Interaction &interaction);
 
     static void setupNodes(Graph3D *g);
 
-    static void switchDisplay(Graph3D *g, double l);
+    void switchDisplay(Graph3D *g, double l);
 
-    static void changeGraphFromClause(Graph3D *g, vector<long> clause, bool add = true);
+    void changeGraphFromClause(Graph3D *g, vector<long> clause, bool add = true);
 
-    static void addEdgesFromClause(Graph3D *g, vector<long> clause);
+    void addEdgesFromClause(Graph3D *g, vector<long> clause);
 
-    static void removeEdgesFromClause(Graph3D *g, vector<long> clause);
+    void removeEdgesFromClause(Graph3D *g, vector<long> clause);
 
     static void increaseVariableActivity(Graph3D *g, unsigned long i);
 
     static void assignVariable(Graph3D *g, unsigned long i, bool value);
 
-    static void changeGraph(unsigned graphLevel);
+    void changeGraph(unsigned graphLevel);
 
-    static void positionGraph(unsigned graphLevel);
+    void positionGraph(unsigned graphLevel);
 
-    static double kFromGraphLevel(unsigned graphLevel);
+    double kFromGraphLevel(unsigned graphLevel);
 
-    static void solve();
+    void solve();
 
-    static void walksat();
+    static int walksat(Display *display);
 
-    static vector<long> clauseFromCMSATClause(const vector<Lit>& cmsatClause);
+    static vector<long> clauseFromCMSATClause(const vector<Lit> &cmsatClause);
 
-    static int** intArrayFromClauseVector();
+    static int **intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause);
 
     friend class Interaction;
 
 public:
-    static void init(char *filename);
+    Display() :
+            graph_stack({}),
+            clauses({}),
+            longest_clause(0) {
+        edgeMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+        edgeActor = vtkSmartPointer<vtkActor>::New();
+        vertexMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+        vertexActor = vtkSmartPointer<vtkActor>::New();
+        glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
+        renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+        sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+    }
 
-    static void addEdgesFromClause(vector<long> clause);
+    void init(char *filename, Interaction *interaction);
 
-    static void removeEdgesFromClause(vector<long> clause);
+    void addEdgesFromClause(vector<long> clause);
 
-    static void increaseVariableActivity(unsigned long i);
+    void removeEdgesFromClause(vector<long> clause);
 
-    static void assignVariable(unsigned long i, bool value);
+    void increaseVariableActivity(unsigned long i);
+
+    void assignVariable(unsigned long i, bool value);
 };
 
 

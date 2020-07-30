@@ -14,6 +14,7 @@
 #include <vtkUndirectedGraph.h>
 #include <vtkMutableUndirectedGraph.h>
 #include <vtkFloatArray.h>
+#include <vtkLookupTable.h>
 #include "Node.h"
 
 using namespace std;
@@ -32,7 +33,7 @@ private:
     bool positioned; // whether graph has been positioned
     bool drawn; // whether graph has been drawn
 
-    map<unsigned, unsigned > edgeDuplications; // tracks highest number of recurring edges
+    map<unsigned, unsigned> edgeDuplications; // tracks highest number of recurring edges
 
     vtkSmartPointer<vtkMutableUndirectedGraph> graph;
     vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
@@ -55,12 +56,12 @@ private:
     vtkColor4ub positiveColour;
     vtkColor4ub negativeColour;
 
-    static vtkSmartPointer<vtkLookupTable> vertexColours;
+//    vtkSmartPointer<vtkLookupTable> vertexColours;
 
     // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
     map<pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> edgeColourMap;
 
-    void online_absolute_variance(Node3D& node);
+    void online_absolute_variance(Node3D &node);
 
     void online_absolute_variance(float x);
 
@@ -70,23 +71,27 @@ private:
 
     void add_graph_edge(unsigned long x, ExtNode3D y);
 
-    void add_edge_to_graph(pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>>& edge);
+    void add_edge_to_graph(
+            pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> &edge);
 
-    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices, pair<vtkIdType, pair<unsigned, vtkColor4ub>>& colour);
+    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices,
+                           pair<vtkIdType, pair<unsigned, vtkColor4ub>> &colour);
 
     void remove_graph_edge(unsigned long x, unsigned long y);
 
-    void change_edge_duplication(unsigned& duplication, bool increment = true);
+    void change_edge_duplication(unsigned &duplication, bool increment = true);
 
-    void set_colour(pair<unsigned int, vtkColor4ub>& colour) const;
+    void set_colour(pair<unsigned int, vtkColor4ub> &colour) const;
 
-    [[nodiscard]] float get_scale(const Node3D& node) const;
+    [[nodiscard]] float get_scale(const Node3D &node) const;
 
     [[nodiscard]] double node_occurrences_mean() const { return node_occurrences / (float) nr_nodes(); }
 
     [[nodiscard]] double average_absolute_variance() const { return absolute_variance / nr_nodes(); }
 
-    [[nodiscard]] double node_occurrences_previous_mean(float x) const { return (node_occurrences - x) / ((float) nr_nodes() - 1); }
+    [[nodiscard]] double node_occurrences_previous_mean(float x) const {
+        return (node_occurrences - x) / ((float) nr_nodes() - 1);
+    }
 
 public:
     Graph3D() : number_edges(0),
@@ -98,13 +103,22 @@ public:
                 drawn(false),
                 edgeDuplications({}),
                 graphToPolyData(vtkSmartPointer<vtkGraphToPolyData>::New()),
-                allMatching({})
-                {
+                allMatching({}),
+                twoClauseColour(),
+                threePlusClauseColour(),
+                positiveColour(),
+                negativeColour() {
         auto namedColours = vtkSmartPointer<vtkNamedColors>::New();
         twoClauseColour = namedColours->GetColor4ub("sky_blue_deep"); // Tomato
         threePlusClauseColour = namedColours->GetColor4ub("Cyan"); // Mint
         positiveColour = namedColours->GetColor4ub("Green");
         negativeColour = namedColours->GetColor4ub("Red");
+
+        /*vertexColours = vtkSmartPointer<vtkLookupTable>::New();
+        vertexColours->SetNumberOfTableValues(2);
+        vertexColours->SetTableValue(0, namedColours->GetColor4d("Green").GetData());
+        vertexColours->SetTableValue(1, namedColours->GetColor4d("Red").GetData());
+        vertexColours->Build();*/
     } // constructs empty graph
     ~Graph3D() = default;
 
@@ -142,17 +156,11 @@ public:
 
     [[nodiscard]] float highestEdgeDuplication() const { return (float) edgeDuplications.end()->first; }
 
-    [[nodiscard]] const vtkSmartPointer<vtkMutableUndirectedGraph> &getGraph() const { return graph; }
-
     [[nodiscard]] const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
-
-    [[nodiscard]] const vtkSmartPointer<vtkPoints> &getPoints() const { return points; }
 
     [[nodiscard]] const vtkSmartPointer<vtkPolyData> &getVertexPolydata() const { return vertexPolydata; }
 
-    vtkMutableUndirectedGraph* getGraph() { return graph; }
-
-    [[nodiscard]] unsigned int no_of_occurrences() const { return node_occurrences; }
+    [[nodiscard]] unsigned int no_of_occurrences() const { return (unsigned int) node_occurrences; }
 
     // misc
     int independent_components(vector<int> *one_of_each_comp);

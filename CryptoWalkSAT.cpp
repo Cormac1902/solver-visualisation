@@ -11,15 +11,13 @@
 #include <iomanip>
 //#define SLOW_DEBUG
 
-uint32_t CryptoWalkSAT::RANDMOD(uint32_t d)
-{
-    return d > 1 ? mtrand.randInt(d-1) : 0;
+uint32_t CryptoWalkSAT::RANDMOD(uint32_t d) {
+    return d > 1 ? mtrand.randInt(d - 1) : 0;
 }
 
 CryptoWalkSAT::CryptoWalkSAT() = default;
 
-CryptoWalkSAT::~CryptoWalkSAT()
-{
+CryptoWalkSAT::~CryptoWalkSAT() {
     free(storebase);
     free(clause);
     free(clsize);
@@ -38,8 +36,7 @@ CryptoWalkSAT::~CryptoWalkSAT()
     free(changed);
 }
 
-lbool CryptoWalkSAT::main(const vector<vector<long>>& clauses, const Graph3D* largest_graph)
-{
+lbool CryptoWalkSAT::main(const vector<vector<long>> &clauses, const Graph3D *largest_graph) {
     //It might not work well with few number of variables
     //rnovelty could also die/exit(-1), etc.
 //    if (solver->nVars() < 50) {
@@ -86,9 +83,9 @@ lbool CryptoWalkSAT::main(const vector<vector<long>>& clauses, const Graph3D* la
         update_and_print_statistics_end_try();
 
         //Trying to early exit in case it's not really working
-        int diff = (int)last_low_bad-(int)lowbad;
+        int diff = (int) last_low_bad - (int) lowbad;
         if ((numtry > 3 && lowbad > 1000)
-            || (numtry > 3 && lowbad > 300 && diff < 20 )
+            || (numtry > 3 && lowbad > 300 && diff < 20)
             || (numtry > 10 && lowbad > 50)
                 ) {
             if (verbosity) {
@@ -102,8 +99,7 @@ lbool CryptoWalkSAT::main(const vector<vector<long>>& clauses, const Graph3D* la
     return l_Undef;
 }
 
-void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
-{
+void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip) {
     Lit toenforce;
     uint32_t numocc;
     changed[toflip] = numflip;
@@ -135,7 +131,7 @@ void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
 
             /* Increment the makecount of all vars in the clause_array */
             uint32_t sz = clsize[cli];
-            Lit* litptr = clause[cli];
+            Lit *litptr = clause[cli];
             for (uint32_t j = 0; j < sz; j++) {
                 Lit lit = *(litptr++);
                 makecount[lit.var()]++;
@@ -170,7 +166,7 @@ void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
         numtruelit[cli]++;
         if (numtruelit[cli] == 1) {
             assert(numfalse > 0);
-            const uint32_t last_false_cl = false_cls[numfalse-1];
+            const uint32_t last_false_cl = false_cls[numfalse - 1];
             uint32_t position_in_false_cls = map_cl_to_false_cls[cli];
             numfalse--;
 
@@ -186,7 +182,7 @@ void CryptoWalkSAT::CryptoWalkSAT::flipvar(uint32_t toflip)
 
             /* Decrement the makecount of all vars in the clause_array */
             uint32_t sz = clsize[cli];
-            Lit* litptr = clause[cli];
+            Lit *litptr = clause[cli];
             for (uint32_t j = 0; j < sz; j++) {
                 /* lit = clause_array[cli][j]; */
                 Lit lit = *(litptr++);
@@ -238,12 +234,12 @@ void CryptoWalkSAT::check_make_break() {
         }
     }
 
-    for(size_t i = 0; i < numvars; i++) {
+    for (size_t i = 0; i < numvars; i++) {
         assert(breakcount_check[i] == breakcount[i]);
         assert(makecount_check[i] == makecount[i]);
     }
 
-    for(size_t i = 0; i < numclauses; i++) {
+    for (size_t i = 0; i < numclauses; i++) {
         assert(numtruelit_check[i] == numtruelit[i]);
     }
     assert(numfalse == numfalse_check);
@@ -253,20 +249,18 @@ void CryptoWalkSAT::check_make_break() {
 /* Initialization                   */
 /************************************/
 
-void CryptoWalkSAT::parse_parameters()
-{
+void CryptoWalkSAT::parse_parameters() {
     numerator = walk_probability * denominator;
 }
 
-void CryptoWalkSAT::init_for_round()
-{
+void CryptoWalkSAT::init_for_round() {
     assert(solver->decisionLevel() == 0);
     assert(solver->okay());
 
     if (adaptive) {
         walk_probability = 0.0;
-        numerator = (uint32_t)(walk_probability * denominator);
-        stagnation_timer = (uint32_t)(numclauses * adaptive_theta);
+        numerator = (uint32_t) (walk_probability * denominator);
+        stagnation_timer = (uint32_t) (numclauses * adaptive_theta);
         last_adaptive_objective = std::numeric_limits<uint32_t>::max();
     }
 
@@ -277,7 +271,7 @@ void CryptoWalkSAT::init_for_round()
         makecount[i] = 0;
         //all assumed and already set variables have been removed
         //from the problem already, so the stuff below is safe.
-        assigns[i] = mtrand.randInt(1) ? l_True: l_False;
+        assigns[i] = mtrand.randInt(1) ? l_True : l_False;
     }
 
     /* initialize truth assignment and changed time */
@@ -314,12 +308,11 @@ void CryptoWalkSAT::init_for_round()
 }
 
 
-
 template<class T>
-CryptoWalkSAT::add_cl_ret CryptoWalkSAT::add_this_clause(const T& cl, uint32_t& i, uint32_t& storeused) {
+CryptoWalkSAT::add_cl_ret CryptoWalkSAT::add_this_clause(const T &cl, uint32_t &i, uint32_t &storeused) {
     uint32_t sz = 0;
     bool sat = false;
-    for(size_t i3 = 0; i3 < cl.size(); i3++) {
+    for (size_t i3 = 0; i3 < cl.size(); i3++) {
         auto lit = litFromVar(cl[i3]);
         assert(solver->varData[lit.var()].removed == Removed::none);
         auto val = l_Undef;
@@ -338,13 +331,13 @@ CryptoWalkSAT::add_cl_ret CryptoWalkSAT::add_this_clause(const T& cl, uint32_t& 
             cl_shortening_triggered = true;
             continue;
         }
-        storebase[storeused+sz] = *lit;
+        storebase[storeused + sz] = *lit;
         numoccurrence[lit->toInt()]++;
         sz++;
     }
     if (sat) {
-        for(uint32_t i3 = 0; i3 < sz; i3++) {
-            Lit lit = storebase[storeused+i3];
+        for (uint32_t i3 = 0; i3 < sz; i3++) {
+            Lit lit = storebase[storeused + i3];
             assert(numoccurrence[lit.toInt()] > 0);
             numoccurrence[lit.toInt()]--;
         }
@@ -368,8 +361,7 @@ CryptoWalkSAT::add_cl_ret CryptoWalkSAT::add_this_clause(const T& cl, uint32_t& 
     return add_cl_ret::added_cl;
 }
 
-bool CryptoWalkSAT::init_problem(const vector<vector<long>>& clauses, const Graph3D* largest_graph)
-{
+bool CryptoWalkSAT::init_problem(const vector<vector<long>> &clauses, const Graph3D *largest_graph) {
 //    if (solver->check_assumptions_contradict_foced_assignment())
 //    {
 //        return falseClauses;
@@ -384,26 +376,26 @@ bool CryptoWalkSAT::init_problem(const vector<vector<long>>& clauses, const Grap
     numvars = largest_graph->nr_nodes();
     numclauses = clauses.size();
 
-    clause = (Lit **)calloc(sizeof(Lit *), numclauses);
-    clsize = (uint32_t *)calloc(sizeof(uint32_t), numclauses);
+    clause = (Lit **) calloc(sizeof(Lit *), numclauses);
+    clsize = (uint32_t *) calloc(sizeof(uint32_t), numclauses);
 
     //falseClauses-true lits
-    false_cls = (uint32_t *)calloc(sizeof(uint32_t), numclauses);
-    map_cl_to_false_cls = (uint32_t *)calloc(sizeof(uint32_t), numclauses);
-    numtruelit = (uint32_t *)calloc(sizeof(uint32_t), numclauses);
+    false_cls = (uint32_t *) calloc(sizeof(uint32_t), numclauses);
+    map_cl_to_false_cls = (uint32_t *) calloc(sizeof(uint32_t), numclauses);
+    numtruelit = (uint32_t *) calloc(sizeof(uint32_t), numclauses);
 
-    occurrence = (uint32_t **)calloc(sizeof(uint32_t *), (2 * numvars));
-    numoccurrence = (uint32_t *)calloc(sizeof(uint32_t), (2 * numvars));
-    assigns = (lbool *)calloc(sizeof(lbool), numvars);
-    best_assigns = (lbool *)calloc(sizeof(lbool), numvars);
-    breakcount = (uint32_t *)calloc(sizeof(uint32_t), numvars);
-    changed = (int64_t *)calloc(sizeof(int64_t), numvars);
-    makecount = (uint32_t *)calloc(sizeof(uint32_t), numvars);
+    occurrence = (uint32_t **) calloc(sizeof(uint32_t *), (2 * numvars));
+    numoccurrence = (uint32_t *) calloc(sizeof(uint32_t), (2 * numvars));
+    assigns = (lbool *) calloc(sizeof(lbool), numvars);
+    best_assigns = (lbool *) calloc(sizeof(lbool), numvars);
+    breakcount = (uint32_t *) calloc(sizeof(uint32_t), numvars);
+    changed = (int64_t *) calloc(sizeof(int64_t), numvars);
+    makecount = (uint32_t *) calloc(sizeof(uint32_t), numvars);
     occur_list_alloc = NULL;
 
-    for(uint32_t i2 = 0; i2 < numvars; i2 ++) {
+    for (uint32_t i2 = 0; i2 < numvars; i2++) {
         /* ties in age between unchanged variables broken for lowest-numbered */
-        changed[i2] = 0-(int32_t)i2-1000;
+        changed[i2] = 0 - (int32_t) i2 - 1000;
     }
 
     numliterals = 0;
@@ -417,12 +409,12 @@ bool CryptoWalkSAT::init_problem(const vector<vector<long>>& clauses, const Grap
 //    solver->check_stats();
     // Init from graph
     uint32_t storesize = largest_graph->no_of_occurrences();
-    storebase = (Lit *)malloc(storesize*sizeof(Lit));
+    storebase = (Lit *) malloc(storesize * sizeof(Lit));
     i = 0;
-    for(const auto& cl : clauses) {
+    for (const auto &cl : clauses) {
 //        assert(!cl->freed());
 //        assert(!cl->getRemoved());
-        assert(storeused+cl->clauseSize() <= storesize);
+        assert(storeused + cl->clauseSize() <= storesize);
 
         if (add_this_clause(cl, i, storeused) == add_cl_ret::unsat) {
             return false;
@@ -433,9 +425,9 @@ bool CryptoWalkSAT::init_problem(const vector<vector<long>>& clauses, const Grap
     numclauses = i;
 
     /* allocate occurence lists */
-    occur_list_alloc = (uint32_t *)calloc(sizeof(uint32_t), numliterals);
+    occur_list_alloc = (uint32_t *) calloc(sizeof(uint32_t), numliterals);
     i = 0;
-    for (uint32_t i2 = 0; i2 < numvars*2; i2++) {
+    for (uint32_t i2 = 0; i2 < numvars * 2; i2++) {
         const Lit lit = Lit::toLit(i2);
         if (i > numliterals) {
             if (verbosity) {
@@ -473,8 +465,7 @@ bool CryptoWalkSAT::init_problem(const vector<vector<long>>& clauses, const Grap
 /* Printing and Statistics          */
 /************************************/
 
-void CryptoWalkSAT::print_parameters()
-{
+void CryptoWalkSAT::print_parameters() {
     if (verbosity) {
         cout << "c [walksat] Mate Soos, based on WALKSAT v56 by Henry Kautz" << endl;
         cout << "c [walksat] cutoff = %" << cutoff << endl;
@@ -484,8 +475,7 @@ void CryptoWalkSAT::print_parameters()
     }
 }
 
-void CryptoWalkSAT::initialize_statistics()
-{
+void CryptoWalkSAT::initialize_statistics() {
     x = 0;
     r = 0;
     tail_start_flip = tail * numvars;
@@ -493,8 +483,7 @@ void CryptoWalkSAT::initialize_statistics()
     cout << "c [walksat] tail starts after flip = " << tail_start_flip << endl;
 }
 
-void CryptoWalkSAT::print_statistics_header()
-{
+void CryptoWalkSAT::print_statistics_header() {
     if (verbosity) {
         cout << "c [walksat] numvars = " << numvars << ", numclauses = "
              << numclauses << ", numliterals = " << numliterals << endl;
@@ -505,15 +494,13 @@ void CryptoWalkSAT::print_statistics_header()
     }
 }
 
-void CryptoWalkSAT::update_statistics_start_try()
-{
+void CryptoWalkSAT::update_statistics_start_try() {
     lowbad = numfalse;
     sample_size = 0;
     sumfalse = 0.0;
 }
 
-void CryptoWalkSAT::update_statistics_end_flip()
-{
+void CryptoWalkSAT::update_statistics_end_flip() {
     if (adaptive) {
         /* Reference for adaptie noise option:
          * An Adaptive Noise Mechanism for CryptoWalkSAT (Corrected). Holger H. Hoos.
@@ -521,26 +508,26 @@ void CryptoWalkSAT::update_statistics_end_flip()
 
         if (numfalse < last_adaptive_objective) {
             last_adaptive_objective = numfalse;
-            stagnation_timer = (int)(numclauses * adaptive_theta);
+            stagnation_timer = (int) (numclauses * adaptive_theta);
             /* p = p - p * (phi)/2
                p = (1 - phi/2) * p
                p = (1 - phi/2) * (numerator / denominator)
                p (denominator) = (1 - phi/2) * numerator
                numerator = (1 - phi/2) * numerator
             */
-            numerator = (int)((1.0 - adaptive_phi / 2.0) * numerator);
+            numerator = (int) ((1.0 - adaptive_phi / 2.0) * numerator);
         } else {
             stagnation_timer = stagnation_timer - 1;
             if (stagnation_timer <= 0) {
                 last_adaptive_objective = numfalse;
-                stagnation_timer = (int)(numclauses * adaptive_theta);
+                stagnation_timer = (int) (numclauses * adaptive_theta);
                 /* p = p + (1 - p) * phi
                  * denominator * p = denominator * p + denominator * (1 - p) * phi
                  * numerator = numerator + denominator * (1 - p) * phi;
                  * numerator = numerator + denominator * (1 - numerator/denominator) * phi;
                  * numerator = numerator + (denominator - numerator) * phi;
                  */
-                numerator = numerator + (int)((denominator - numerator) * adaptive_phi);
+                numerator = numerator + (int) ((denominator - numerator) * adaptive_phi);
             }
         }
     }
@@ -550,7 +537,7 @@ void CryptoWalkSAT::update_statistics_end_flip()
     }
     if (numfalse < lowestbad) {
         lowestbad = numfalse;
-        for(uint32_t i = 0; i < numvars; i++) {
+        for (uint32_t i = 0; i < numvars; i++) {
             best_assigns[i] = assigns[i];
         }
 
@@ -561,8 +548,7 @@ void CryptoWalkSAT::update_statistics_end_flip()
     }
 }
 
-void CryptoWalkSAT::update_and_print_statistics_end_try()
-{
+void CryptoWalkSAT::update_and_print_statistics_end_try() {
     totalflip += numflip;
     x += numflip;
     r++;
@@ -588,7 +574,7 @@ void CryptoWalkSAT::update_and_print_statistics_end_try()
         found_solution = true;
         totalsuccessflip += numflip;
         integer_sum_x += x;
-        sum_x = (double)integer_sum_x;
+        sum_x = (double) integer_sum_x;
         sum_r += r;
         x = 0;
         r = 0;
@@ -614,8 +600,7 @@ void CryptoWalkSAT::update_and_print_statistics_end_try()
     }
 }
 
-void CryptoWalkSAT::print_statistics_final()
-{
+void CryptoWalkSAT::print_statistics_final() {
 //    totalTime = cpuTime() - startTime;
 //    seconds_per_flip = ratio_for_stat(totalTime, totalflip);
     if (verbosity) {
@@ -649,24 +634,24 @@ void CryptoWalkSAT::print_statistics_final()
         }
 
         if (verbosity) {
-            cout << "c [walksat] final numbad level statistics"  << endl;
-            cout << "c [walksat]     statistics over all runs:"  << endl;
+            cout << "c [walksat] final numbad level statistics" << endl;
+            cout << "c [walksat]     statistics over all runs:" << endl;
             cout << "c [walksat]       overall mean avg numbad = " << mean_avgfalse << endl;
-            cout << "c [walksat]     statistics on successful runs:"  << endl;
+            cout << "c [walksat]     statistics on successful runs:" << endl;
             cout << "c [walksat]       successful mean avg numbad = " << suc_mean_avgfalse << endl;
-            cout << "c [walksat]     statistics on nonsuccessful runs:"  << endl;
-            cout << "c [walksat]       nonsuccessful mean avg numbad level = " << nonsuc_mean_avgfalse  << endl;
+            cout << "c [walksat]     statistics on nonsuccessful runs:" << endl;
+            cout << "c [walksat]       nonsuccessful mean avg numbad level = " << nonsuc_mean_avgfalse << endl;
         }
     }
 
     if (!found_solution) {
-        if (verbosity >=2) {
-            cout << "c [walksat] ASSIGNMENT NOT FOUND"  << endl;
+        if (verbosity >= 2) {
+            cout << "c [walksat] ASSIGNMENT NOT FOUND" << endl;
         }
     }
 
     if (found_solution) {
-        cout << "c [walksat] ASSIGNMENT FOUND"  << endl;
+        cout << "c [walksat] ASSIGNMENT FOUND" << endl;
 
 //        for(size_t i = 0; i < numvars; i++) {
 //            varData[i].polarity = best_assigns[i] == l_True;
@@ -678,8 +663,7 @@ void CryptoWalkSAT::print_statistics_final()
 /* Utility Functions                                   */
 /*******************************************************/
 //ONLY used for checking solution
-uint32_t CryptoWalkSAT::countunsat()
-{
+uint32_t CryptoWalkSAT::countunsat() {
     uint32_t unsat = 0;
     for (uint32_t i = 0; i < numclauses; i++) {
         bool bad = true;
@@ -697,10 +681,9 @@ uint32_t CryptoWalkSAT::countunsat()
     return unsat;
 }
 
-void CryptoWalkSAT::check_num_occurs()
-{
+void CryptoWalkSAT::check_num_occurs() {
     vector<uint32_t> n_occur;
-    n_occur.resize(numvars*2, 0);
+    n_occur.resize(numvars * 2, 0);
     for (uint32_t i = 0; i < numclauses; i++) {
         uint32_t sz = clsize[i];
         assert(sz >= 1);
@@ -714,14 +697,14 @@ void CryptoWalkSAT::check_num_occurs()
     }
 
     /* Check every lit in the occurence lists */
-    for (uint32_t i = 0; i < numvars*2; i++) {
+    for (uint32_t i = 0; i < numvars * 2; i++) {
         Lit lit = Lit::toLit(i);
         for (uint32_t j = 0; j < numoccurrence[lit.toInt()]; j++) {
             uint32_t clnum = occurrence[lit.toInt()][j];
-            Lit* cl = clause[clnum];
+            Lit *cl = clause[clnum];
             uint32_t sz = clsize[clnum];
             bool found = false;
-            for(uint32_t k = 0; k < sz; k++) {
+            for (uint32_t k = 0; k < sz; k++) {
                 if (cl[k] == lit) {
                     found = true;
                 }
@@ -735,8 +718,7 @@ void CryptoWalkSAT::check_num_occurs()
 /*                  Heuristics                                  */
 /****************************************************************/
 
-uint32_t CryptoWalkSAT::pickrnovelty()
-{
+uint32_t CryptoWalkSAT::pickrnovelty() {
     uint32_t tofix = false_cls[RANDMOD(numfalse)];
     uint32_t clausesize = clsize[tofix];
     if (clausesize == 1)
@@ -757,7 +739,7 @@ uint32_t CryptoWalkSAT::pickrnovelty()
 
     for (uint32_t i = 0; i < clausesize; i++) {
         uint32_t var = clause[tofix][i].var();
-        int64_t diff = (int64_t)makecount[var] - (int64_t)breakcount[var];
+        int64_t diff = (int64_t) makecount[var] - (int64_t) breakcount[var];
         int64_t birthdate = changed[var];
         if (birthdate > youngest_birthdate) {
             youngest_birthdate = birthdate;

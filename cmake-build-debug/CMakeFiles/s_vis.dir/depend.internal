@@ -9,10 +9,12 @@ CMakeFiles/s_vis.dir/API.cpp.o
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
+ /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
  /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
  /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt64Array.h
+ /home/cormac/projects/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
  /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
  /home/cormac/projects/VTK/Common/Color/vtkNamedColors.h
  /home/cormac/projects/VTK/Common/Core/vtkABI.h
@@ -21,6 +23,7 @@ CMakeFiles/s_vis.dir/API.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkAssume.h
  /home/cormac/projects/VTK/Common/Core/vtkAutoInit.h
  /home/cormac/projects/VTK/Common/Core/vtkBuffer.h
+ /home/cormac/projects/VTK/Common/Core/vtkCommand.h
  /home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
  /home/cormac/projects/VTK/Common/Core/vtkConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkDataArray.h
@@ -43,6 +46,7 @@ CMakeFiles/s_vis.dir/API.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkIntArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongLongArray.h
+ /home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
  /home/cormac/projects/VTK/Common/Core/vtkMath.h
  /home/cormac/projects/VTK/Common/Core/vtkMathConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkMeta.h
@@ -53,6 +57,7 @@ CMakeFiles/s_vis.dir/API.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
  /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
  /home/cormac/projects/VTK/Common/Core/vtkPoints.h
+ /home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
  /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointer.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointerBase.h
@@ -66,6 +71,7 @@ CMakeFiles/s_vis.dir/API.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkTypeListMacros.h
  /home/cormac/projects/VTK/Common/Core/vtkTypeTraits.h
  /home/cormac/projects/VTK/Common/Core/vtkUnicodeString.h
+ /home/cormac/projects/VTK/Common/Core/vtkUnsignedCharArray.h
  /home/cormac/projects/VTK/Common/Core/vtkVTK_USE_SCALED_SOA_ARRAYS.h
  /home/cormac/projects/VTK/Common/Core/vtkVariant.h
  /home/cormac/projects/VTK/Common/Core/vtkVariantCast.h
@@ -101,11 +107,18 @@ CMakeFiles/s_vis.dir/API.cpp.o
  /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
  /home/cormac/projects/VTK/Filters/Sources/vtkGraphToPolyData.h
  /home/cormac/projects/VTK/Filters/Sources/vtkSphereSource.h
+ /home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
  /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper.h
  /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper3D.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkActor.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkInteractorObserver.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkInteractorStyle.h
  /home/cormac/projects/VTK/Rendering/Core/vtkMapper.h
  /home/cormac/projects/VTK/Rendering/Core/vtkPolyDataMapper.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkProp.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkProp3D.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindow.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindowInteractor.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
  /home/cormac/projects/VTK/Utilities/KWIML/vtk_kwiml.h
  /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/abi.h
@@ -149,6 +162,7 @@ CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkIntArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongLongArray.h
+ /home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
  /home/cormac/projects/VTK/Common/Core/vtkMath.h
  /home/cormac/projects/VTK/Common/Core/vtkMathConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkMeta.h
@@ -159,6 +173,7 @@ CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
  /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
  /home/cormac/projects/VTK/Common/Core/vtkPoints.h
+ /home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
  /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointer.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointerBase.h
@@ -172,6 +187,7 @@ CMakeFiles/s_vis.dir/CryptoWalkSAT.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkTypeListMacros.h
  /home/cormac/projects/VTK/Common/Core/vtkTypeTraits.h
  /home/cormac/projects/VTK/Common/Core/vtkUnicodeString.h
+ /home/cormac/projects/VTK/Common/Core/vtkUnsignedCharArray.h
  /home/cormac/projects/VTK/Common/Core/vtkVTK_USE_SCALED_SOA_ARRAYS.h
  /home/cormac/projects/VTK/Common/Core/vtkVariant.h
  /home/cormac/projects/VTK/Common/Core/vtkVariantCast.h
@@ -251,6 +267,7 @@ CMakeFiles/s_vis.dir/Display.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkIntArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongLongArray.h
+ /home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
  /home/cormac/projects/VTK/Common/Core/vtkMath.h
  /home/cormac/projects/VTK/Common/Core/vtkMathConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkMeta.h
@@ -261,6 +278,7 @@ CMakeFiles/s_vis.dir/Display.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
  /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
  /home/cormac/projects/VTK/Common/Core/vtkPoints.h
+ /home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
  /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointer.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointerBase.h
@@ -379,6 +397,7 @@ CMakeFiles/s_vis.dir/Graph.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkIntArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongLongArray.h
+ /home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
  /home/cormac/projects/VTK/Common/Core/vtkMath.h
  /home/cormac/projects/VTK/Common/Core/vtkMathConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkMeta.h
@@ -389,6 +408,7 @@ CMakeFiles/s_vis.dir/Graph.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
  /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
  /home/cormac/projects/VTK/Common/Core/vtkPoints.h
+ /home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
  /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointer.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointerBase.h
@@ -482,6 +502,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkIntArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongLongArray.h
+ /home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
  /home/cormac/projects/VTK/Common/Core/vtkMath.h
  /home/cormac/projects/VTK/Common/Core/vtkMathConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkMeta.h
@@ -492,6 +513,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
  /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
  /home/cormac/projects/VTK/Common/Core/vtkPoints.h
+ /home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
  /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointer.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointerBase.h
@@ -505,6 +527,7 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkTypeListMacros.h
  /home/cormac/projects/VTK/Common/Core/vtkTypeTraits.h
  /home/cormac/projects/VTK/Common/Core/vtkUnicodeString.h
+ /home/cormac/projects/VTK/Common/Core/vtkUnsignedCharArray.h
  /home/cormac/projects/VTK/Common/Core/vtkVTK_USE_SCALED_SOA_ARRAYS.h
  /home/cormac/projects/VTK/Common/Core/vtkVariant.h
  /home/cormac/projects/VTK/Common/Core/vtkVariantCast.h
@@ -543,50 +566,14 @@ CMakeFiles/s_vis.dir/Interaction.cpp.o
  /home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
  /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper.h
  /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper3D.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkActor.h
  /home/cormac/projects/VTK/Rendering/Core/vtkInteractorObserver.h
  /home/cormac/projects/VTK/Rendering/Core/vtkInteractorStyle.h
  /home/cormac/projects/VTK/Rendering/Core/vtkMapper.h
  /home/cormac/projects/VTK/Rendering/Core/vtkPolyDataMapper.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkProp.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkProp3D.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindow.h
- /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindowInteractor.h
- /home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
- /home/cormac/projects/VTK/Utilities/KWIML/vtk_kwiml.h
- /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/abi.h
- /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/include/kwiml/abi.h
- /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/include/kwiml/int.h
- /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/int.h
-CMakeFiles/s_vis.dir/InteractionCallback.cpp.o
- /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
- /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.cpp
- /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/InteractionCallback.h
- /home/cormac/projects/VTK-build/Filters/Core/vtkFiltersCoreModule.h
- /home/cormac/projects/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
- /home/cormac/projects/VTK/Common/Core/vtkABI.h
- /home/cormac/projects/VTK/Common/Core/vtkAutoInit.h
- /home/cormac/projects/VTK/Common/Core/vtkCallbackCommand.h
- /home/cormac/projects/VTK/Common/Core/vtkCommand.h
- /home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
- /home/cormac/projects/VTK/Common/Core/vtkConfigure.h
- /home/cormac/projects/VTK/Common/Core/vtkDebugLeaksManager.h
- /home/cormac/projects/VTK/Common/Core/vtkIOStream.h
- /home/cormac/projects/VTK/Common/Core/vtkIOStreamFwd.h
- /home/cormac/projects/VTK/Common/Core/vtkIndent.h
- /home/cormac/projects/VTK/Common/Core/vtkOStrStreamWrapper.h
- /home/cormac/projects/VTK/Common/Core/vtkOStreamWrapper.h
- /home/cormac/projects/VTK/Common/Core/vtkObject.h
- /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
- /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
- /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
- /home/cormac/projects/VTK/Common/Core/vtkSystemIncludes.h
- /home/cormac/projects/VTK/Common/Core/vtkTimeStamp.h
- /home/cormac/projects/VTK/Common/Core/vtkType.h
- /home/cormac/projects/VTK/Common/Core/vtkVersionMacros.h
- /home/cormac/projects/VTK/Common/Core/vtkWeakPointerBase.h
- /home/cormac/projects/VTK/Common/Core/vtkWin32Header.h
- /home/cormac/projects/VTK/Common/Core/vtkWrappingHints.h
- /home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
- /home/cormac/projects/VTK/Rendering/Core/vtkInteractorObserver.h
- /home/cormac/projects/VTK/Rendering/Core/vtkInteractorStyle.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindowInteractor.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
  /home/cormac/projects/VTK/Utilities/KWIML/vtk_kwiml.h
@@ -610,11 +597,13 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/API.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Display.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Graph.h
+ /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Interaction.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Node.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/Vector.h
  /home/cormac/OneDrive/Family/Cormac/College/NUIG/Masters/Visualisations/solver-visualisation/cnf3d2.cpp
  /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt32Array.h
  /home/cormac/projects/VTK-build/Common/Core/vtkTypeInt64Array.h
+ /home/cormac/projects/VTK-build/Interaction/Style/vtkInteractionStyleModule.h
  /home/cormac/projects/VTK/Common/Color/vtkCommonColorModule.h
  /home/cormac/projects/VTK/Common/Color/vtkNamedColors.h
  /home/cormac/projects/VTK/Common/Core/vtkABI.h
@@ -623,6 +612,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkAssume.h
  /home/cormac/projects/VTK/Common/Core/vtkAutoInit.h
  /home/cormac/projects/VTK/Common/Core/vtkBuffer.h
+ /home/cormac/projects/VTK/Common/Core/vtkCommand.h
  /home/cormac/projects/VTK/Common/Core/vtkCommonCoreModule.h
  /home/cormac/projects/VTK/Common/Core/vtkConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkDataArray.h
@@ -645,6 +635,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkIntArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongArray.h
  /home/cormac/projects/VTK/Common/Core/vtkLongLongArray.h
+ /home/cormac/projects/VTK/Common/Core/vtkLookupTable.h
  /home/cormac/projects/VTK/Common/Core/vtkMath.h
  /home/cormac/projects/VTK/Common/Core/vtkMathConfigure.h
  /home/cormac/projects/VTK/Common/Core/vtkMeta.h
@@ -655,6 +646,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkObjectBase.h
  /home/cormac/projects/VTK/Common/Core/vtkObjectFactory.h
  /home/cormac/projects/VTK/Common/Core/vtkPoints.h
+ /home/cormac/projects/VTK/Common/Core/vtkScalarsToColors.h
  /home/cormac/projects/VTK/Common/Core/vtkSetGet.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointer.h
  /home/cormac/projects/VTK/Common/Core/vtkSmartPointerBase.h
@@ -668,6 +660,7 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o
  /home/cormac/projects/VTK/Common/Core/vtkTypeListMacros.h
  /home/cormac/projects/VTK/Common/Core/vtkTypeTraits.h
  /home/cormac/projects/VTK/Common/Core/vtkUnicodeString.h
+ /home/cormac/projects/VTK/Common/Core/vtkUnsignedCharArray.h
  /home/cormac/projects/VTK/Common/Core/vtkVTK_USE_SCALED_SOA_ARRAYS.h
  /home/cormac/projects/VTK/Common/Core/vtkVariant.h
  /home/cormac/projects/VTK/Common/Core/vtkVariantCast.h
@@ -703,11 +696,18 @@ CMakeFiles/s_vis.dir/cnf3d2.cpp.o
  /home/cormac/projects/VTK/Filters/Sources/vtkFiltersSourcesModule.h
  /home/cormac/projects/VTK/Filters/Sources/vtkGraphToPolyData.h
  /home/cormac/projects/VTK/Filters/Sources/vtkSphereSource.h
+ /home/cormac/projects/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
  /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper.h
  /home/cormac/projects/VTK/Rendering/Core/vtkAbstractMapper3D.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkActor.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkInteractorObserver.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkInteractorStyle.h
  /home/cormac/projects/VTK/Rendering/Core/vtkMapper.h
  /home/cormac/projects/VTK/Rendering/Core/vtkPolyDataMapper.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkProp.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkProp3D.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindow.h
+ /home/cormac/projects/VTK/Rendering/Core/vtkRenderWindowInteractor.h
  /home/cormac/projects/VTK/Rendering/Core/vtkRenderingCoreModule.h
  /home/cormac/projects/VTK/Utilities/KWIML/vtk_kwiml.h
  /home/cormac/projects/VTK/Utilities/KWIML/vtkkwiml/abi.h

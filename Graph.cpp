@@ -13,8 +13,8 @@
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
-double min_scale = .5, max_scale = 2;
-int large_graph = 100;
+static double min_scale = .5, max_scale = 2;
+static int large_graph = 100;
 
 void Graph3D::add_node(const Node3D &n) {
     assert(nodes.find(n.id()) == nodes.end()); // node not already present
@@ -70,7 +70,8 @@ void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) 
     pair<vtkIdType, pair<unsigned, vtkColor4ub>> &edgeColour = edgeColourMap[{x, y}];
     auto newEdge = edgeColour.second.first == 0;
     change_edge_duplication(edgeColour.second.first);
-    if (edgeColour.second.second[0] != threePlusClauseColour[0]
+    if (newEdge
+        || edgeColour.second.second[0] != threePlusClauseColour[0]
         || edgeColour.second.second[1] != threePlusClauseColour[1]
         || edgeColour.second.second[2] != threePlusClauseColour[2]) {
         edgeColour.second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
@@ -253,7 +254,7 @@ void Graph3D::calculate_absolute_variance() {
 }
 
 void Graph3D::online_absolute_variance(Node3D &node) {
-    if (nr_nodes() < 100) {
+    if (nr_nodes() < large_graph) {
         node_occurrences++;
         calculate_absolute_variance();
     } else {
@@ -558,13 +559,10 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
         scales = vtkSmartPointer<vtkFloatArray>::New();
 
         vertexColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
-        vertexColours->SetName("Vertex Colours");
-        // vtkSmartPointer<vtkLookupTable> coloursLookupTable;
+        vertexColours->SetNumberOfComponents(3);
 
 //    vtkSmartPointer<vtkIntArray> edgeColours;
         bool colourPoints = true;
-
-        vertexColours->SetNumberOfComponents(3);
 
 //    draw_only_2clauses = true;
 
