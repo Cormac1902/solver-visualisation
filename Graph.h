@@ -141,7 +141,7 @@ public:
 
     void increase_variable_activity(unsigned long i);
 
-    void assign_variable_truth_value(unsigned long i, bool value);
+    void assign_variable_truth_value(unsigned long i, bool value, bool undef = false);
 
     pair<vector<vector<long>>, unsigned int> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 

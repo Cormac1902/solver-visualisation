@@ -67,8 +67,12 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
-    pair<vtkIdType, pair<unsigned, vtkColor4ub>> &edgeColour = edgeColourMap[{x, y}];
-    auto newEdge = edgeColour.second.first == 0;
+    auto edgeColourFind = edgeColourMap.find({x, y});
+    auto newEdge = edgeColourFind == edgeColourMap.end();
+    if (newEdge) {
+        edgeColourMap[{x, y}] = {0, {0, twoClauseColour}};
+    }
+    auto &edgeColour = edgeColourMap[{x, y}];
     change_edge_duplication(edgeColour.second.first);
     if (newEdge
         || edgeColour.second.second[0] != threePlusClauseColour[0]
@@ -77,10 +81,10 @@ void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) 
         edgeColour.second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
     }
     if (newEdge) {
-        add_edge_to_graph({x, y}, edgeColourMap[{x, y}]);
+        add_edge_to_graph({x, y}, edgeColour);
     } else {
         set_colour(edgeColour.second);
-        edgeColours->SetTypedTuple(edgeColour.first, edgeColour.second.second.GetData());
+        edgeColours->SetTypedTuple(edgeColour.second.first, edgeColour.second.second.GetData());
     }
 }
 
@@ -121,6 +125,7 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
     }
 
     graphToPolyData->Modified();
+//    graphToPolyData->Update();
 }
 
 void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
@@ -149,6 +154,7 @@ void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
     }
 
     graphToPolyData->Modified();
+//    graphToPolyData->Update();
 }
 
 void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
@@ -171,7 +177,7 @@ void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
 }
 
 pair<vector<vector<long>>, unsigned int> Graph3D::build_from_cnf(istream &is) {
-    long p;
+    long p = -1;
     char c;
     bool positive = true;
     vector<long> clause;
@@ -371,6 +377,7 @@ Graph3D *Graph3D::coarsen() {
 
     auto *result = new Graph3D();
     result->set_all_matching(allMatching);
+    cout << matchMap.size() << endl;
     result->set_match_map(matchMap);
     result->node_occurrences = node_occurrences;
 
@@ -631,7 +638,8 @@ void Graph3D::reColour() {
         edgeColours->SetTypedTuple(edge.second.first, edge.second.second.second.GetData());
     }
 
-//    graphToPolyData->Modified();
+    graphToPolyData->Modified();
+//    graphToPolyData->Update();
 }
 
 void Graph3D::increase_variable_activity(unsigned long i) {
@@ -641,14 +649,20 @@ void Graph3D::increase_variable_activity(unsigned long i) {
 
     reScale();
 
-    vertexPolydata->Modified();
+//    vertexPolydata->Modified();
+//    vertexPolydata->GetPointData()->Update();
 }
 
-void Graph3D::assign_variable_truth_value(unsigned long i, bool value) {
+void Graph3D::assign_variable_truth_value(unsigned long i, bool value, bool undef) {
     i = matchMap[i];
-    vertexColours->SetTypedTuple(i, (value ? positiveColour : negativeColour).GetData());
+    if (undef) {
 
-    vertexPolydata->Modified();
+    } else {
+        vertexColours->SetTypedTuple(i, (value ? positiveColour : negativeColour).GetData());
+    }
+
+//    vertexPolydata->Modified();
+//    vertexPolydata->GetPointData()->Update();
 }
 
 void Graph3D::reScale() {

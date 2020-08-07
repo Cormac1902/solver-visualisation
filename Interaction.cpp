@@ -17,8 +17,9 @@ void Interaction::OnKeyPress() {
     if (key == "s" || key == "S") {
         display->solve();
     } else if (key == "w" || key == "W") {
-        std::thread walksatThread(Display::walksat, display);
-        walksatThread.join();
+//        std::thread walksatThread(Display::walksat, display);
+//        walksatThread.join();
+        Display::walksat(display);
         std::cout << "Finished solving" << std::endl;
     } else {
         try {

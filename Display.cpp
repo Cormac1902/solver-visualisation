@@ -38,8 +38,6 @@ void Display::display(Interaction &interaction) {
 
 //    changeGraph(0);
 
-    switchDisplay(graph_stack.back(), k);
-
     edgeActor->SetMapper(edgeMapper);
 
     edgeActor->GetProperty()->EdgeVisibilityOn();
@@ -76,8 +74,6 @@ void Display::display(Interaction &interaction) {
     renderer->SetActiveCamera(camera);
 
     renderWindow->AddRenderer(renderer);
-    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
-            vtkSmartPointer<vtkRenderWindowInteractor>::New();
     renderWindowInteractor->SetRenderWindow(renderWindow);
 
     renderWindowInteractor->SetInteractorStyle(&interaction);
@@ -89,6 +85,8 @@ void Display::display(Interaction &interaction) {
 
     renderer->AddActor(edgeActor);
     renderer->AddActor(vertexActor);
+
+    switchDisplay(graph_stack.back(), k);
 
     renderWindow->Render();
 
@@ -144,7 +142,9 @@ void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
         g->reColour();
     }
 
-//    renderWindow->Render();
+    edgeMapper->Update();
+    renderWindow->Render();
+//    renderWindowInteractor->Render();
 }
 
 void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
@@ -168,7 +168,10 @@ void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
 
     g->increase_variable_activity(i);
 
-//    renderWindow->Render();
+    vertexMapper->Update();
+
+    renderWindow->Render();
+//    renderWindowInteractor->Render();
 //    glyph3D->Update();
 }
 
@@ -176,14 +179,19 @@ void Display::increaseVariableActivity(unsigned long i) {
     increaseVariableActivity(current_graph, i);
 }
 
-void Display::assignVariable(Graph3D *g, unsigned long i, bool value) {
+void Display::assignVariable(Graph3D *g, unsigned long i, bool value, bool undef) {
     std::scoped_lock lock{graph_mutex};
 
-    g->assign_variable_truth_value(i, value);
+    g->assign_variable_truth_value(i, value, undef);
+
+    vertexMapper->Update();
+
+    renderWindow->Render();
+//    renderWindowInteractor->Render();
 }
 
-void Display::assignVariable(unsigned long i, bool value) {
-    assignVariable(current_graph, i, value);
+void Display::assignVariable(unsigned long i, bool value, bool undef) {
+    assignVariable(current_graph, i, value, undef);
 }
 
 void Display::setupNodes(Graph3D *g) {

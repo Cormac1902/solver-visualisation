@@ -20,11 +20,11 @@ int main(int argc, char *argv[]) {
     auto display = std::make_unique<Display>();
     auto interaction = std::make_unique<Interaction>();
 
-    interaction->setDisplay(display.get());
-
     std::thread t1(&Display::init, display.get(), argv[1], interaction.get());
 
-    auto api = std::make_unique<API>(*display);
+    interaction->setDisplay(display.get());
+
+    auto api = std::make_unique<API>(display.get());
     std::thread t2(&API::run_add_clause_socket, api.get());
     std::thread t3(&API::run_remove_clause_socket, api.get());
     std::thread t4(&API::run_increase_variable_activity_socket, api.get());

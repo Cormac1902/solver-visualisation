@@ -29,6 +29,7 @@ class Display {
     vtkSmartPointer<vtkGlyph3D> glyph3D;
 
     vtkSmartPointer<vtkRenderWindow> renderWindow;
+    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor;
 
     vtkSmartPointer<vtkSphereSource> sphereSource;
 
@@ -49,9 +50,9 @@ class Display {
 
     void removeEdgesFromClause(Graph3D *g, vector<long> clause);
 
-    static void increaseVariableActivity(Graph3D *g, unsigned long i);
+    void increaseVariableActivity(Graph3D *g, unsigned long i);
 
-    static void assignVariable(Graph3D *g, unsigned long i, bool value);
+    void assignVariable(Graph3D *g, unsigned long i, bool value, bool undef = false);
 
     void changeGraph(unsigned graphLevel);
 
@@ -72,16 +73,16 @@ class Display {
 public:
     Display() :
             graph_stack({}),
+            edgeMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
+            edgeActor(vtkSmartPointer<vtkActor>::New()),
+            vertexMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
+            vertexActor(vtkSmartPointer<vtkActor>::New()),
+            glyph3D(vtkSmartPointer<vtkGlyph3D>::New()),
+            renderWindow(vtkSmartPointer<vtkRenderWindow>::New()),
+            renderWindowInteractor(vtkSmartPointer<vtkRenderWindowInteractor>::New()),
+            sphereSource(vtkSmartPointer<vtkSphereSource>::New()),
             clauses({}),
-            longest_clause(0) {
-        edgeMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-        edgeActor = vtkSmartPointer<vtkActor>::New();
-        vertexMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-        vertexActor = vtkSmartPointer<vtkActor>::New();
-        glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
-        renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-        sphereSource = vtkSmartPointer<vtkSphereSource>::New();
-    }
+            longest_clause(0) {}
 
     void init(char *filename, Interaction *interaction);
 
@@ -91,7 +92,7 @@ public:
 
     void increaseVariableActivity(unsigned long i);
 
-    void assignVariable(unsigned long i, bool value);
+    void assignVariable(unsigned long i, bool value, bool undef = false);
 };
 
 

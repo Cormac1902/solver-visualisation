@@ -152,8 +152,8 @@ const char *INT_STRING(int i) {
 }
 
 void send_variable_activity(int var) {
-//    zmq_send(variable_activity_sender, INT_STRING(var), LENGTH(var), 0);
-//    zmq_send(variable_assignment_sender, INT_STRING(var), LENGTH(var), 0);
+    zmq_send(variable_activity_sender, INT_STRING(var), LENGTH(var), 0);
+    zmq_send(variable_assignment_sender, INT_STRING(var), LENGTH(var), 0);
 }
 
 void flipatom(int toflip) {

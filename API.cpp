@@ -5,37 +5,56 @@
 #include "API.h"
 #include "Display.h"
 
-msgpack::object_handle *API::unpack(zmq::message_t &message) {
+template <typename T>
+T API::unpack(zmq::message_t &message) {
     msgpack::sbuffer buffer;
     buffer.write(static_cast<const char *>(message.data()), message.size());
 
-    // deserialize it.
-    auto *result = new msgpack::object_handle;
-    msgpack::unpack(*result, buffer.data(), buffer.size());
+    msgpack::object_handle result;
+    msgpack::unpack(result, buffer.data(), buffer.size());
 
-    return result;
+//    msgpack::object obj(result.get());
+
+    return result.get().as<T>();
 }
 
 std::vector<long> API::unpack_vector(zmq::message_t &message) {
+    return unpack<std::vector<long>>(message);
+}
+
+/*T API::unpack_t(zmq::message_t &message) {
     auto resultPtr = unpack(message);
 
-    auto clause = resultPtr->get().as<std::vector<long>>();
+    auto clause = resultPtr->get().as<T>();
 
     delete resultPtr;
 
     return clause;
 }
 
-long API::unpack_long(zmq::message_t &message) {
-    msgpack::sbuffer buffer;
-    buffer.write(static_cast<const char *>(message.data()), message.size());
-
-    // deserialize it.
-    msgpack::object_handle result;
-    msgpack::unpack(result, buffer.data(), buffer.size());
-
-    return result.get().as<long>();
+std::vector<long> API::unpack_vector(zmq::message_t &message) {
+    return unpack_t<std::vector<long>>(message);
 }
+
+long API::unpack_long(zmq::message_t &message) {
+    auto resultPtr = unpack(message);
+
+    auto var = resultPtr->get().as<long>();
+
+    delete resultPtr;
+
+    return var;
+}
+
+std::pair<long, bool> API::unpack_long_bool(zmq::message_t &message) {
+    auto resultPtr = unpack(message);
+
+    auto var = resultPtr->get().as<std::pair<long, bool>>();
+
+    delete resultPtr;
+
+    return var;
+}*/
 
 [[noreturn]] void API::run_add_clause_socket() {
     while (true) {
@@ -66,9 +85,15 @@ long API::unpack_long(zmq::message_t &message) {
 
         variable_assignment_socket.recv(&request);
 
-        auto var = unpack_long(request);
+        pair<long, bool> var = {0, false};
 
-        display.assignVariable(abs(var), var < 0);
+        try {
+            var = unpack<pair<long, bool>>(request);
+        } catch (msgpack::v1::type_error &e) {
+            var.first = unpack<long>(request);
+        }
+
+        display.assignVariable(abs(var.first), var.first < 0, var.second);
     }
 }
 
@@ -78,6 +103,6 @@ long API::unpack_long(zmq::message_t &message) {
 
         variable_activity_socket.recv(&request);
 
-        display.increaseVariableActivity(abs(unpack_long(request)));
+        display.increaseVariableActivity(abs(unpack<long>(request)));
     }
 }
