@@ -4,19 +4,18 @@
 
 #include <vtkCamera.h>
 #include <vtkProperty.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkPointData.h>
+#include "vtkExecutive.cxx"
 
 #include <utility>
-#include <mutex>
 
 #include "Display.h"
-#include "Interaction.h"
 #include "CryptoWalkSAT.h"
 #include "WalkSAT.h"
+
+#include <thread>
 
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple
@@ -25,16 +24,19 @@
 static double k = 1.0; // old: 5.0
 static double f_k = sqrt(4.0 / 7.0);
 
+unsigned Display::RENDER_SOCKET = 29790;
+
+unsigned Display::EDGES_UPDATE = 0;
+unsigned Display::VERTICES_UPDATE = 1;
+
 static bool draw_edges = true, adaptive_size = true, draw_only_2clauses = false; // run_anim = falseClauses
 
 static float min_line_width = 3, max_line_width = 12;
 static int max_line_width_threshold = 250, min_line_width_threshold = 2500;
 
-std::mutex graph_mutex;
-
 // ----------------------------------------------------------------------
 
-void Display::display(Interaction &interaction) {
+void Display::display() {
 
 //    changeGraph(0);
 
@@ -69,15 +71,9 @@ void Display::display(Interaction &interaction) {
     camera->SetPosition(0, 0, 20);
     camera->SetFocalPoint(0, 0, 0);
 
-    auto renderer = vtkSmartPointer<vtkRenderer>::New();
-
     renderer->SetActiveCamera(camera);
 
     renderWindow->AddRenderer(renderer);
-    renderWindowInteractor->SetRenderWindow(renderWindow);
-
-    renderWindowInteractor->SetInteractorStyle(&interaction);
-    interaction.SetCurrentRenderer(renderer);
 
     renderWindow->SetSize(1920, 1080);
     renderWindow->SetWindowName("Solver Visualisation");
@@ -88,10 +84,27 @@ void Display::display(Interaction &interaction) {
 
     switchDisplay(graph_stack.back(), k);
 
+//    std::scoped_lock lock{render_window_mutex};
+
     renderWindow->Render();
 
-    renderWindowInteractor->Start();
+    changeGraph(max((unsigned long) 0, graph_stack.size() - 5));
+//
+//    changeGraph(0);
 
+//    walksat(this);
+
+//    std::thread walksatThread(Display::walksat, this);
+//    walksatThread.join();
+
+//    startDisplayInteractor();
+}
+
+void Display::startDisplayInteractor() {
+    interaction.SetCurrentRenderer(renderer);
+    renderWindowInteractor->SetInteractorStyle(&interaction);
+    renderWindowInteractor->SetRenderWindow(renderWindow);
+    renderWindowInteractor->Start();
 }
 
 void Display::switchDisplay(Graph3D *g, double l) {
@@ -124,6 +137,7 @@ void Display::switchDisplay(Graph3D *g, double l) {
     current_graph = g;
 
     glyph3D->SetInputData(g->getVertexPolydata());
+//    glyph3D->SetInputConnection(g->getVertexPolydataAlgorithm()->GetOutputPort());
     glyph3D->Update();
 }
 
@@ -142,8 +156,9 @@ void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
         g->reColour();
     }
 
-    edgeMapper->Update();
-    renderWindow->Render();
+//    edgeMapper->Update();
+//
+//    renderWindow->Render();
 //    renderWindowInteractor->Render();
 }
 
@@ -168,9 +183,9 @@ void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
 
     g->increase_variable_activity(i);
 
-    vertexMapper->Update();
+//    vertexMapper->Update();
 
-    renderWindow->Render();
+//    renderWindow->Render();
 //    renderWindowInteractor->Render();
 //    glyph3D->Update();
 }
@@ -184,9 +199,8 @@ void Display::assignVariable(Graph3D *g, unsigned long i, bool value, bool undef
 
     g->assign_variable_truth_value(i, value, undef);
 
-    vertexMapper->Update();
-
-    renderWindow->Render();
+//    vertexMapper->Update();
+//    renderWindow->Render();
 //    renderWindowInteractor->Render();
 }
 
@@ -267,6 +281,8 @@ double Display::kFromGraphLevel(unsigned int graphLevel) {
 
 void Display::solve() {
 
+    renderWindowInteractor->Disable();
+
     SATSolver s;
     vector<Lit> cmsatClause;
 
@@ -301,17 +317,29 @@ void Display::solve() {
 
     std::cout << "Finished solving" << std::endl;
 
+//    renderWindowInteractor->Enable();
+
 //    s.end_getting_small_clauses();
 
 }
 
 int Display::walksat(Display *display) {
+    if (display->renderWindowInteractor->GetEnabled()) {
+        display->renderWindowInteractor->Disable();
+    }
+
     std::cout << "Solving..." << std::endl;
 
-    return solve_walksat(display->longest_clause,
+    auto ret =  solve_walksat(display->longest_clause,
                   intArrayFromClauseVector(display->clauses, display->longest_clause),
                   display->graph_stack.front()->nr_nodes(),
                   display->clauses.size());
+
+//    display->renderWindowInteractor->Enable();
+
+//    display->startDisplayInteractor();
+
+    return ret;
 }
 
 int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause) {
@@ -347,7 +375,7 @@ vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
 }
 
 // builds (global) stack of coarsened graphs
-void Display::init(char *filename, Interaction *interaction) {
+void Display::init(char *filename) {
     auto *g = new Graph3D();
     graph_stack.push_back(g);
 
@@ -398,5 +426,25 @@ void Display::init(char *filename, Interaction *interaction) {
     min_p = ep.first;
     max_p = ep.second;
 
-    display(*interaction);
+    display();
+
+    run_render_socket();
+}
+
+[[noreturn]] void Display::run_render_socket() {
+    while (true) {
+        zmq::message_t request;
+        unsigned opt;
+
+        // Receive a request from client
+        if (render_socket.recv(request)) {
+            opt = APIHelper::unpack<unsigned>(request);
+            if (opt == EDGES_UPDATE) {
+                current_graph->getGraphToPolyData()->Modified();
+            } else if (opt == VERTICES_UPDATE) {
+                current_graph->getVertexPolydata()->Modified();
+            }
+            renderWindow->Render();
+        }
+    }
 }

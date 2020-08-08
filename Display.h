@@ -6,6 +6,7 @@
 
 #include <vtkVertexGlyphFilter.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkGlyph3D.h>
 #include <vtkSphereSource.h>
@@ -14,10 +15,15 @@
 #include <cryptominisat5/cryptominisat.h>
 #include "cryptominisat5/dimacsparser.h"
 #include "Interaction.h"
+#include <mutex>
+#include <zmq.hpp>
+#include "APIHelper.hpp"
 
 using namespace CMSat;
 
 class Display {
+    std::mutex graph_mutex;
+
     vector<Graph3D *> graph_stack;
     Graph3D *current_graph{};
 
@@ -28,6 +34,7 @@ class Display {
     vtkSmartPointer<vtkActor> vertexActor;
     vtkSmartPointer<vtkGlyph3D> glyph3D;
 
+    vtkSmartPointer<vtkRenderer> renderer;
     vtkSmartPointer<vtkRenderWindow> renderWindow;
     vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor;
 
@@ -38,7 +45,12 @@ class Display {
 
     Vector3D min_p, max_p;
 
-    void display(Interaction &interaction);
+    Interaction& interaction;
+
+    zmq::context_t context;
+    zmq::socket_t render_socket;
+
+    void display();
 
     static void setupNodes(Graph3D *g);
 
@@ -62,8 +74,6 @@ class Display {
 
     void solve();
 
-    static int walksat(Display *display);
-
     static vector<long> clauseFromCMSATClause(const vector<Lit> &cmsatClause);
 
     static int **intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause);
@@ -78,13 +88,26 @@ public:
             vertexMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
             vertexActor(vtkSmartPointer<vtkActor>::New()),
             glyph3D(vtkSmartPointer<vtkGlyph3D>::New()),
+            renderer(vtkSmartPointer<vtkRenderer>::New()),
             renderWindow(vtkSmartPointer<vtkRenderWindow>::New()),
             renderWindowInteractor(vtkSmartPointer<vtkRenderWindowInteractor>::New()),
             sphereSource(vtkSmartPointer<vtkSphereSource>::New()),
             clauses({}),
-            longest_clause(0) {}
+            longest_clause(0),
+            interaction(*new Interaction),
+            context(1),
+            render_socket(context, ZMQ_PULL) {
+        interaction.setDisplay(this);
+        render_socket.bind(APIHelper::port_string(RENDER_SOCKET));
+    }
 
-    void init(char *filename, Interaction *interaction);
+    static unsigned RENDER_SOCKET;
+    static unsigned EDGES_UPDATE;
+    static unsigned VERTICES_UPDATE;
+
+    void init(char *filename);
+
+    void startDisplayInteractor();
 
     void addEdgesFromClause(vector<long> clause);
 
@@ -93,6 +116,10 @@ public:
     void increaseVariableActivity(unsigned long i);
 
     void assignVariable(unsigned long i, bool value, bool undef = false);
+
+    [[noreturn]] void run_render_socket();
+
+    static int walksat(Display *display);
 };
 
 

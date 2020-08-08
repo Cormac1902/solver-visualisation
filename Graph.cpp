@@ -124,7 +124,7 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
         }
     }
 
-    graphToPolyData->Modified();
+//    graphToPolyData->Modified();
 //    graphToPolyData->Update();
 }
 
@@ -153,7 +153,7 @@ void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
         }
     }
 
-    graphToPolyData->Modified();
+//    graphToPolyData->Modified();
 //    graphToPolyData->Update();
 }
 
@@ -377,7 +377,6 @@ Graph3D *Graph3D::coarsen() {
 
     auto *result = new Graph3D();
     result->set_all_matching(allMatching);
-    cout << matchMap.size() << endl;
     result->set_match_map(matchMap);
     result->node_occurrences = node_occurrences;
 
@@ -561,11 +560,6 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
     if (!drawn) {
         drawn = true;
 
-        graph = vtkSmartPointer<vtkMutableUndirectedGraph>::New();
-        points = vtkSmartPointer<vtkPoints>::New();
-        scales = vtkSmartPointer<vtkFloatArray>::New();
-
-        vertexColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
         vertexColours->SetNumberOfComponents(3);
 
 //    vtkSmartPointer<vtkIntArray> edgeColours;
@@ -578,7 +572,6 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 
 
             // Create a vtkUnsignedCharArray container and store the colors in it
-            edgeColours = vtkSmartPointer<vtkUnsignedCharArray>::New();
 //        = vtkSmartPointer<vtkIntArray>::New();
             edgeColours->SetNumberOfComponents(4);
             edgeColours->SetName("Edge Colours");
@@ -619,15 +612,9 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 
         graphToPolyData->Update();
 
-        vertexPolydata = vtkSmartPointer<vtkPolyData>::New();
         vertexPolydata->SetPoints(graphToPolyData->GetOutput()->GetPoints());
         vertexPolydata->GetPointData()->SetScalars(scales);
         vertexPolydata->GetPointData()->AddArray(vertexColours);
-
-        if (colourPoints) {
-//            graph->GetVertexData()->SetScalars(vertexColours);
-//            graphToPolyData->GetOutput()->GetPointData()->SetScalars(vertexColours);
-        }
     }
 
 }
@@ -638,7 +625,7 @@ void Graph3D::reColour() {
         edgeColours->SetTypedTuple(edge.second.first, edge.second.second.second.GetData());
     }
 
-    graphToPolyData->Modified();
+//    graphToPolyData->Modified();
 //    graphToPolyData->Update();
 }
 

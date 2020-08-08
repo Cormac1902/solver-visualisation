@@ -22,6 +22,7 @@ set(HEADERS Vector.h
         Display.h
         API.h
         CryptoWalkSAT.h
+        APIHelper.hpp
         WalkSAT.h)
 set(CC_FLAGS "-O3 -Wall -DNDEBUG -DUSE_SPACE_GRID")
 
@@ -49,7 +50,7 @@ include_directories(${ZeroMQ_INCLUDE_DIR} ${cppzmq_INCLUDE_DIR})
 
 message(STATUS "Cryptominisat version: ${CRYPTOMINISAT5_VERSION_MAJOR}.${CRYPTOMINISAT5_VERSION_MINOR}")
 
-add_executable(s_vis MACOSX_BUNDLE ${SOURCE_FILES} ${HEADERS})
+add_executable(s_vis ${SOURCE_FILES} ${HEADERS})
 
 if (VTK_FOUND)
     message(STATUS "VTK_VERSION: ${VTK_VERSION}")

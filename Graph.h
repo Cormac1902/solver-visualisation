@@ -36,12 +36,12 @@ private:
     map<unsigned, unsigned> edgeDuplications; // tracks highest number of recurring edges
 
     vtkSmartPointer<vtkMutableUndirectedGraph> graph;
+    vtkSmartPointer<vtkPoints> points;
+    vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
+    vtkSmartPointer<vtkPolyData> vertexPolydata;
     vtkSmartPointer<vtkUnsignedCharArray> edgeColours;
     vtkSmartPointer<vtkUnsignedCharArray> vertexColours;
-    vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
-    vtkSmartPointer<vtkPoints> points;
     vtkSmartPointer<vtkFloatArray> scales;
-    vtkSmartPointer<vtkPolyData> vertexPolydata;
 
     map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
@@ -102,7 +102,13 @@ public:
                 positioned(false),
                 drawn(false),
                 edgeDuplications({}),
+                graph(vtkSmartPointer<vtkMutableUndirectedGraph>::New()),
+                points(vtkSmartPointer<vtkPoints>::New()),
                 graphToPolyData(vtkSmartPointer<vtkGraphToPolyData>::New()),
+                vertexPolydata(vtkSmartPointer<vtkPolyData>::New()),
+                edgeColours(vtkSmartPointer<vtkUnsignedCharArray>::New()),
+                vertexColours(vtkSmartPointer<vtkUnsignedCharArray>::New()),
+                scales(vtkSmartPointer<vtkFloatArray>::New()),
                 allMatching({}),
                 twoClauseColour(),
                 threePlusClauseColour(),
