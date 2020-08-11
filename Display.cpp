@@ -2,8 +2,6 @@
 // Created by Cormac on 30-Apr-20.
 //
 
-#include <vtkCamera.h>
-#include <vtkProperty.h>
 #include <vtkLine.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkPointData.h>
@@ -44,51 +42,7 @@ static int max_line_width_threshold = 250, min_line_width_threshold = 2500;
 
 void Display::display() {
 
-//    changeGraph(0);
-
-    edgeActor->SetMapper(edgeMapper);
-
-    edgeActor->GetProperty()->EdgeVisibilityOn();
-    edgeActor->GetProperty()->RenderLinesAsTubesOn();
-//    edgeActor->GetProperty()->RenderPointsAsSpheresOn();
-//    edgeActor->GetProperty()->VertexVisibilityOn();
-
-    edgeMapper->InterpolateScalarsBeforeMappingOn();
-    edgeMapper->ScalarVisibilityOn();
-
-    vertexActor->SetMapper(vertexMapper);
-
-    sphereSource->SetThetaResolution(100);
-    sphereSource->SetPhiResolution(100);
-
-    glyph3D->SetScaleModeToScaleByScalar();
-    glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
-
-    vertexMapper->InterpolateScalarsBeforeMappingOn();
-    vertexMapper->ScalarVisibilityOn();
-
-    vertexMapper->SetInputConnection(glyph3D->GetOutputPort());
-    vertexMapper->SetScalarModeToUsePointFieldData();
-    vertexMapper->SelectColorArray(1);
-
-    // edgeActor->GetProperty()->BackfaceCullingOn();
-
-    auto camera = vtkSmartPointer<vtkCamera>::New();
-    camera->SetPosition(0, 0, 20);
-    camera->SetFocalPoint(0, 0, 0);
-
-    renderer->SetActiveCamera(camera);
-
-    renderWindow->AddRenderer(renderer);
-
-    renderWindow->SetSize(1920, 1080);
-    renderWindow->SetWindowName("Solver Visualisation");
-    renderWindow->ShowCursor();
-
-    renderer->AddActor(edgeActor);
-    renderer->AddActor(vertexActor);
-
-    switchDisplay(graph_stack.back(), k);
+    changeGraph(graphStackSize() - 1);
 
 //    std::scoped_lock lock{render_window_mutex};
 
@@ -102,27 +56,17 @@ void Display::display() {
 
     renderWindow->Render();
 
-    renderWindowInteractor->Start();
-
-//    walksat(this);
-
-//    std::thread walksatThread(Display::walksat, this);
-//    walksatThread.join();
-
-//    startDisplayInteractor();
 }
 
 void Display::switchDisplay(Graph3D *g, double l) {
 
     auto highestEdgeDuplication = g->highestEdgeDuplication();
 
-    // g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
     if (!g->get_drawn()) {
         g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
     }
 
     edgeMapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
-//    edgeMapper->SetInputConnection(g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size)->GetOutputPort());
 
     if (g->highestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
@@ -135,15 +79,12 @@ void Display::switchDisplay(Graph3D *g, double l) {
                          min_line_width);
 
     edgeActor->GetProperty()->SetLineWidth(lineWidth);
-//    edgeActor->GetProperty()->SetPointSize(lineWidth * 3);
 
     sphereSource->SetRadius(lineWidth * 3 / 1000);
 
     current_graph = g;
 
     glyph3D->SetInputData(g->getVertexPolydata());
-//    glyph3D->SetInputConnection(g->getVertexPolydataAlgorithm()->GetOutputPort());
-//    glyph3D->Update();
 
     edgeMapper->Update();
     vertexMapper->Update();
@@ -163,11 +104,6 @@ void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
     if (g->highestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
     }
-
-//    edgeMapper->Update();
-//
-//    renderWindow->Render();
-//    renderWindowInteractor->Render();
 }
 
 void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
@@ -191,11 +127,6 @@ void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
 
     g->increase_variable_activity(i);
 
-//    vertexMapper->Update();
-
-//    renderWindow->Render();
-//    renderWindowInteractor->Render();
-//    glyph3D->Update();
 }
 
 void Display::increaseVariableActivity(unsigned long i) {
@@ -206,10 +137,6 @@ void Display::assignVariable(Graph3D *g, unsigned long i, bool value, bool undef
     std::scoped_lock lock{graph_mutex};
 
     g->assign_variable_truth_value(i, value, undef);
-
-//    vertexMapper->Update();
-//    renderWindow->Render();
-//    renderWindowInteractor->Render();
 }
 
 void Display::assignVariable(unsigned long i, bool value, bool undef) {
@@ -332,7 +259,8 @@ void Display::solve() {
 }
 
 int Display::walksat(Display *display, API* api) {
-    display->renderWindowInteractor->ExitCallback();
+    display->renderWindowInteractor->Delete();
+//    display->renderWindowInteractor->ExitCallback();
 
 //    api->send_stop_interactor();
 

@@ -18,6 +18,8 @@
 #include <mutex>
 #include <zmq.hpp>
 #include "APIHelper.hpp"
+#include "vtkProperty.h"
+#include <vtkCamera.h>
 
 using namespace CMSat;
 
@@ -107,8 +109,44 @@ public:
         APIHelper::bind(render_socket, RENDER_SOCKET);
         APIHelper::connect(change_graph_socket, CHANGE_GRAPH_SOCKET);
         APIHelper::bind(api_running_socket, API_RUNNING_SOCKET);
-        /*render_socket.bind(APIHelper::bind_string(RENDER_SOCKET));
-        change_graph_socket.connect(APIHelper::connect_string(CHANGE_GRAPH_SOCKET));*/
+
+        edgeActor->SetMapper(edgeMapper);
+
+        edgeActor->GetProperty()->EdgeVisibilityOn();
+        edgeActor->GetProperty()->RenderLinesAsTubesOn();
+
+        edgeMapper->InterpolateScalarsBeforeMappingOn();
+        edgeMapper->ScalarVisibilityOn();
+
+        vertexActor->SetMapper(vertexMapper);
+
+        sphereSource->SetThetaResolution(100);
+        sphereSource->SetPhiResolution(100);
+
+        glyph3D->SetScaleModeToScaleByScalar();
+        glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
+
+        vertexMapper->InterpolateScalarsBeforeMappingOn();
+        vertexMapper->ScalarVisibilityOn();
+
+        vertexMapper->SetInputConnection(glyph3D->GetOutputPort());
+        vertexMapper->SetScalarModeToUsePointFieldData();
+        vertexMapper->SelectColorArray(1);
+
+        auto camera = vtkSmartPointer<vtkCamera>::New();
+        camera->SetPosition(0, 0, 20);
+        camera->SetFocalPoint(0, 0, 0);
+
+        renderer->SetActiveCamera(camera);
+
+        renderWindow->AddRenderer(renderer);
+
+        renderWindow->SetSize(1920, 1080);
+        renderWindow->SetWindowName("Solver Visualisation");
+        renderWindow->ShowCursor();
+
+        renderer->AddActor(edgeActor);
+        renderer->AddActor(vertexActor);
     }
 
     static unsigned RENDER_SOCKET;
