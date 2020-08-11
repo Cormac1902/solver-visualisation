@@ -16,6 +16,9 @@
 #include "WalkSAT.h"
 
 #include <thread>
+#include <future>
+
+#include "API.h"
 
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple
@@ -25,9 +28,12 @@ static double k = 1.0; // old: 5.0
 static double f_k = sqrt(4.0 / 7.0);
 
 unsigned Display::RENDER_SOCKET = 29790;
+unsigned Display::CHANGE_GRAPH_SOCKET = 29791;
+unsigned Display::API_RUNNING_SOCKET = 29792;
 
-unsigned Display::EDGES_UPDATE = 0;
-unsigned Display::VERTICES_UPDATE = 1;
+//unsigned Display::EDGES_UPDATE = 0;
+//unsigned Display::VERTICES_UPDATE = 1;
+//unsigned Display::START_INTERACTOR = 2;
 
 static bool draw_edges = true, adaptive_size = true, draw_only_2clauses = false; // run_anim = falseClauses
 
@@ -86,11 +92,17 @@ void Display::display() {
 
 //    std::scoped_lock lock{render_window_mutex};
 
-    renderWindow->Render();
-
     changeGraph(max((unsigned long) 0, graph_stack.size() - 5));
 //
 //    changeGraph(0);
+
+    interaction.SetCurrentRenderer(renderer);
+    renderWindowInteractor->SetInteractorStyle(&interaction);
+    renderWindowInteractor->SetRenderWindow(renderWindow);
+
+    renderWindow->Render();
+
+    renderWindowInteractor->Start();
 
 //    walksat(this);
 
@@ -98,13 +110,6 @@ void Display::display() {
 //    walksatThread.join();
 
 //    startDisplayInteractor();
-}
-
-void Display::startDisplayInteractor() {
-    interaction.SetCurrentRenderer(renderer);
-    renderWindowInteractor->SetInteractorStyle(&interaction);
-    renderWindowInteractor->SetRenderWindow(renderWindow);
-    renderWindowInteractor->Start();
 }
 
 void Display::switchDisplay(Graph3D *g, double l) {
@@ -138,7 +143,10 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
     glyph3D->SetInputData(g->getVertexPolydata());
 //    glyph3D->SetInputConnection(g->getVertexPolydataAlgorithm()->GetOutputPort());
-    glyph3D->Update();
+//    glyph3D->Update();
+
+    edgeMapper->Update();
+    vertexMapper->Update();
 }
 
 void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
@@ -254,7 +262,7 @@ void Display::changeGraph(unsigned graphLevel) {
 
     switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
 
-    renderWindow->Render();
+//    renderWindow->Render();
 
 }
 
@@ -323,34 +331,46 @@ void Display::solve() {
 
 }
 
-int Display::walksat(Display *display) {
-    if (display->renderWindowInteractor->GetEnabled()) {
-        display->renderWindowInteractor->Disable();
-    }
+int Display::walksat(Display *display, API* api) {
+    display->renderWindowInteractor->ExitCallback();
+
+//    api->send_stop_interactor();
 
     std::cout << "Solving..." << std::endl;
 
-    auto ret =  solve_walksat(display->longest_clause,
+    auto walksatAsync = std::async(std::launch::async, solve_walksat, display->longest_clause,
                   intArrayFromClauseVector(display->clauses, display->longest_clause),
                   display->graph_stack.front()->nr_nodes(),
                   display->clauses.size());
+
+    /*std::thread walksatThread(solve_walksat,
+                              display->longest_clause,
+                              intArrayFromClauseVector(display->clauses, display->longest_clause),
+                              display->graph_stack.front()->nr_nodes(),
+                              display->clauses.size());
+    walksatThread.join();*/
+
+    display->run_render_socket();
+
+//    auto renderSocket = std::async(std::launch::deferred, &Display::run_render_socket, display);
+//    renderSocket.get();
 
 //    display->renderWindowInteractor->Enable();
 
 //    display->startDisplayInteractor();
 
-    return ret;
+    return walksatAsync.get();
 }
 
 int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause) {
     vector<long> clause_it;
     unsigned int j;
 
-    unsigned long noOfClauses = clauses.size();
+    auto noOfClauses = clauses.size();
 
-    int **array = new int *[noOfClauses];
+    auto **array = new int *[noOfClauses];
 
-    for (unsigned int i = 0; i < noOfClauses; i++) {
+    for (unsigned long i = 0; i < noOfClauses; i++) {
         clause_it = clauses.at(i);
         array[i] = new int[longest_clause];
         for (j = 0; j < clause_it.size(); j++) {
@@ -428,23 +448,46 @@ void Display::init(char *filename) {
 
     display();
 
-    run_render_socket();
+//    run_render_socket();
 }
 
-[[noreturn]] void Display::run_render_socket() {
+void Display::run_render_socket() {
+    auto running_check = false;
+    while (!running_check) {
+        zmq::message_t request;
+        if (api_running_socket.recv(request)) {
+            api_running_socket.send(request, zmq::send_flags::none);
+            running_check = true;
+        }
+    }
+
     while (true) {
         zmq::message_t request;
-        unsigned opt;
+        zmq::message_t reply;
 
         // Receive a request from client
         if (render_socket.recv(request)) {
-            opt = APIHelper::unpack<unsigned>(request);
-            if (opt == EDGES_UPDATE) {
-                current_graph->getGraphToPolyData()->Modified();
-            } else if (opt == VERTICES_UPDATE) {
-                current_graph->getVertexPolydata()->Modified();
+            switch(unpack_render_enum(request)) {
+                case EDGES_UPDATE:
+                    current_graph->getGraphToPolyData()->Modified();
+                    break;
+                case VERTICES_UPDATE:
+                    current_graph->getVertexPolydata()->Modified();
+                    break;
+                case START_INTERACTOR:
+                    renderWindowInteractor->Start();
+                    return;
+                case STOP_INTERACTOR:
+                    renderWindowInteractor->ExitCallback();
+                    break;
+                case CHANGE_GRAPH:
+                    change_graph_socket.send(request, zmq::send_flags::none);
+                    if (change_graph_socket.recv(reply)) {
+                        changeGraph(APIHelper::unpack<unsigned int>(reply));
+                    }
+                    break;
+
             }
-            renderWindow->Render();
         }
     }
 }

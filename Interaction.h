@@ -10,15 +10,21 @@
 #include "vtkRenderWindowInteractor.h"
 
 class Display;
+class API;
 
 class Interaction : public vtkInteractorStyleTrackballCamera {
 public:
     Display *display;
+    API* api;
 
     static Interaction *New();
 
     void setDisplay(Display *displayRef) {
         display = displayRef;
+    }
+
+    void setAPI(API *apiRef) {
+        api = apiRef;
     }
 
 vtkTypeMacro(Interaction, vtkInteractorStyleTrackballCamera);

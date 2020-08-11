@@ -4,6 +4,7 @@
 
 #include "Interaction.h"
 #include "Display.h"
+#include "API.h"
 #include "thread"
 
 void Interaction::OnKeyPress() {
@@ -17,12 +18,14 @@ void Interaction::OnKeyPress() {
     if (key == "s" || key == "S") {
         display->solve();
     } else if (key == "w" || key == "W") {
-        std::thread walksatThread(Display::walksat, display);
-        walksatThread.join();
-//        Display::walksat(display);
+//        std::thread walksatThread(Display::walksat, display, api);
+//        walksatThread.join();
+        Display::walksat(display, api);
         std::cout << "Finished solving" << std::endl;
-    } else {
+    }
+    else {
         try {
+//            api->setGraphLevel(std::stoi(key));
             display->changeGraph(std::stoi(key));
         } catch (std::invalid_argument &e) {
         }

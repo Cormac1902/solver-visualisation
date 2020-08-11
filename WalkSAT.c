@@ -75,6 +75,9 @@ int hamming_flag = FALSE;
 
 static int VARIABLE_ASSIGNMENT_SOCKET_C = 29788;
 static int VARIABLE_ACTIVITY_SOCKET_C = 29789;
+static int START_INTERACTOR_SOCKET_C = 29790;
+static int API_RUNNING_SOCKET_C = 29792;
+static int START_INTERACTOR_ENUM = 2;
 
 static int (*pickcode[])(void) =
         {pickrandom, pickbest, picktabu,
@@ -89,12 +92,27 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     int a;
 
     context = zmq_ctx_new();
+
+    api_running_check = zmq_socket(context, ZMQ_REQ);
+    zmq_connect(api_running_check, PORT_STRING(API_RUNNING_SOCKET_C));
+
+    char buf[1];
+    zmq_send(api_running_check, "1", 1, 0);
+    zmq_recv(api_running_check, buf, 1, 0);
+
+    printf("API is running");
+    zmq_close (api_running_check);
+
     variable_activity_sender = zmq_socket(context, ZMQ_PUSH);
     zmq_connect(variable_activity_sender, PORT_STRING(VARIABLE_ACTIVITY_SOCKET_C));
+
     variable_assignment_sender = zmq_socket(context, ZMQ_PUSH);
     zmq_connect(variable_assignment_sender, PORT_STRING(VARIABLE_ASSIGNMENT_SOCKET_C));
 
-    int_to_send = malloc(LENGTH(num_atom) + 1);
+    start_interactor_sender = zmq_socket(context, ZMQ_PUSH);
+    zmq_connect(start_interactor_sender, PORT_STRING(START_INTERACTOR_SOCKET_C));
+
+    int_to_send = malloc(LENGTH(num_atom) + 2);
 
 #if BSD || LINUX || OSX
     ticks_per_second = sysconf(_SC_CLK_TCK);
@@ -136,11 +154,13 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
         }
         update_and_print_statistics_end_try();
     }
+    zmq_send(start_interactor_sender, INT_STRING(START_INTERACTOR_ENUM), LENGTH(START_INTERACTOR_ENUM), 0);
     expertime = elapsed_seconds();
     print_statistics_final();
 
     zmq_close(variable_activity_sender);
     zmq_close(variable_assignment_sender);
+    zmq_close(start_interactor_sender);
     zmq_ctx_destroy(context);
 
     return status_flag;
@@ -153,7 +173,7 @@ const char *INT_STRING(int i) {
 
 void send_variable_activity(int var) {
     zmq_send(variable_activity_sender, INT_STRING(var), LENGTH(var), 0);
-    zmq_send(variable_assignment_sender, INT_STRING(var), LENGTH(var), 0);
+    zmq_send(variable_assignment_sender, int_to_send, LENGTH(var), 0);
 }
 
 void flipatom(int toflip) {

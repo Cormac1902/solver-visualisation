@@ -11,12 +11,24 @@
 
 class APIHelper {
 public:
-    static std::string port_string(unsigned port) {
+    static std::string bind_string(unsigned port) {
         return prepend_string("tcp://*:", port);
+    }
+
+    static std::string connect_string(unsigned port) {
+        return prepend_string("tcp://localhost:", port);
     }
 
     static std::string prepend_string(const string& str, unsigned port) {
         return str + std::to_string(port);
+    }
+
+    static void bind(zmq::socket_t& socket, unsigned port) {
+        socket.bind(bind_string(port));
+    }
+
+    static void connect(zmq::socket_t& socket, unsigned port) {
+        socket.connect(connect_string(port));
     }
 
     template<typename T>
@@ -28,6 +40,14 @@ public:
         msgpack::unpack(result, buffer.data(), buffer.size());
 
         return result.get().as<T>();
+    }
+
+    static long unpack_long(zmq::message_t &message) {
+        try {
+            return stol(message.to_string());
+        } catch (std::invalid_argument &e) {
+            return unpack<long>(message);
+        }
     }
 
 };

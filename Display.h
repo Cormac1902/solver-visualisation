@@ -21,6 +21,8 @@
 
 using namespace CMSat;
 
+class API;
+
 class Display {
     std::mutex graph_mutex;
 
@@ -45,10 +47,12 @@ class Display {
 
     Vector3D min_p, max_p;
 
-    Interaction& interaction;
+    Interaction &interaction;
 
     zmq::context_t context;
     zmq::socket_t render_socket;
+    zmq::socket_t change_graph_socket;
+    zmq::socket_t api_running_socket;
 
     void display();
 
@@ -96,18 +100,25 @@ public:
             longest_clause(0),
             interaction(*new Interaction),
             context(1),
-            render_socket(context, ZMQ_PULL) {
+            render_socket(context, ZMQ_PULL),
+            change_graph_socket(context, ZMQ_REQ),
+            api_running_socket(context, ZMQ_REP) {
         interaction.setDisplay(this);
-        render_socket.bind(APIHelper::port_string(RENDER_SOCKET));
+        APIHelper::bind(render_socket, RENDER_SOCKET);
+        APIHelper::connect(change_graph_socket, CHANGE_GRAPH_SOCKET);
+        APIHelper::bind(api_running_socket, API_RUNNING_SOCKET);
+        /*render_socket.bind(APIHelper::bind_string(RENDER_SOCKET));
+        change_graph_socket.connect(APIHelper::connect_string(CHANGE_GRAPH_SOCKET));*/
     }
 
     static unsigned RENDER_SOCKET;
-    static unsigned EDGES_UPDATE;
-    static unsigned VERTICES_UPDATE;
+    static unsigned CHANGE_GRAPH_SOCKET;
+    static unsigned API_RUNNING_SOCKET;
+    enum RENDER_ENUM {
+        EDGES_UPDATE, VERTICES_UPDATE, START_INTERACTOR, STOP_INTERACTOR, CHANGE_GRAPH
+    };
 
     void init(char *filename);
-
-    void startDisplayInteractor();
 
     void addEdgesFromClause(vector<long> clause);
 
@@ -117,9 +128,21 @@ public:
 
     void assignVariable(unsigned long i, bool value, bool undef = false);
 
-    [[noreturn]] void run_render_socket();
+    unsigned int graphStackSize() { return graph_stack.size(); }
 
-    static int walksat(Display *display);
+    Interaction &getInteraction() { return interaction; }
+
+    void run_render_socket();
+
+    static int walksat(Display *display, API* api);
+
+    static RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
+            auto enumInt = APIHelper::unpack<unsigned int>(message);
+            if (enumInt >= '0') {
+                enumInt -= '0';
+            }
+        return static_cast<RENDER_ENUM>(enumInt);
+    }
 };
 
 

@@ -282,8 +282,10 @@ double nonsuc_mean_std_dev_avgfalse;
 double nonsuc_ratio_mean_avgfalse;
 
 void *context;
+void *api_running_check;
 void *variable_activity_sender;
 void *variable_assignment_sender;
+void *start_interactor_sender;
 
 char *int_to_send;
 
