@@ -172,13 +172,13 @@ public:
 
     void run_render_socket();
 
-    static int walksat(Display *display, API* api);
+    static int walksat(Display *display, API *api);
 
     static inline RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
-            auto enumInt = APIHelper::unpack<unsigned int>(message);
-            if (enumInt >= '0') {
-                enumInt -= '0';
-            }
+        auto enumInt = APIHelper::unpack<unsigned int>(message);
+        if (enumInt >= '0') {
+            enumInt -= '0';
+        }
         return static_cast<RENDER_ENUM>(enumInt);
     }
 };

@@ -22,8 +22,7 @@ void Interaction::OnKeyPress() {
 //        walksatThread.join();
         Display::walksat(display, api);
         std::cout << "Finished solving" << std::endl;
-    }
-    else {
+    } else {
         try {
 //            api->setGraphLevel(std::stoi(key));
             display->changeGraph(std::stoi(key));

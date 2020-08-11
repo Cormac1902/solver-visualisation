@@ -19,15 +19,15 @@ public:
         return prepend_string("tcp://localhost:", port);
     }
 
-    static std::string prepend_string(const string& str, unsigned port) {
+    static std::string prepend_string(const string &str, unsigned port) {
         return str + std::to_string(port);
     }
 
-    static void bind(zmq::socket_t& socket, unsigned port) {
+    static void bind(zmq::socket_t &socket, unsigned port) {
         socket.bind(bind_string(port));
     }
 
-    static void connect(zmq::socket_t& socket, unsigned port) {
+    static void connect(zmq::socket_t &socket, unsigned port) {
         socket.connect(connect_string(port));
     }
 

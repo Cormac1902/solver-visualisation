@@ -101,7 +101,7 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     zmq_recv(api_running_check, buf, 1, 0);
 
     printf("API is running");
-    zmq_close (api_running_check);
+    zmq_close(api_running_check);
 
     variable_activity_sender = zmq_socket(context, ZMQ_PUSH);
     zmq_connect(variable_activity_sender, PORT_STRING(VARIABLE_ACTIVITY_SOCKET_C));

@@ -24,7 +24,7 @@ void API::send_unsigned(unsigned int x, zmq::socket_t &socket) {
     try {
         socket.send(request, zmq::send_flags::none);
     } catch (zmq::error_t &e) {
-        std::cout << "Error sending " << x << " to " << socket <<  ": " << e.what() << std::endl;
+        std::cout << "Error sending " << x << " to " << socket << ": " << e.what() << std::endl;
     }
 }
 

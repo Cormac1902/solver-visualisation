@@ -258,7 +258,7 @@ void Display::solve() {
 
 }
 
-int Display::walksat(Display *display, API* api) {
+int Display::walksat(Display *display, API *api) {
     display->renderWindowInteractor->Delete();
 //    display->renderWindowInteractor->ExitCallback();
 
@@ -267,9 +267,9 @@ int Display::walksat(Display *display, API* api) {
     std::cout << "Solving..." << std::endl;
 
     auto walksatAsync = std::async(std::launch::async, solve_walksat, display->longest_clause,
-                  intArrayFromClauseVector(display->clauses, display->longest_clause),
-                  display->graph_stack.front()->nr_nodes(),
-                  display->clauses.size());
+                                   intArrayFromClauseVector(display->clauses, display->longest_clause),
+                                   display->graph_stack.front()->nr_nodes(),
+                                   display->clauses.size());
 
     /*std::thread walksatThread(solve_walksat,
                               display->longest_clause,
@@ -395,7 +395,7 @@ void Display::run_render_socket() {
 
         // Receive a request from client
         if (render_socket.recv(request)) {
-            switch(unpack_render_enum(request)) {
+            switch (unpack_render_enum(request)) {
                 case EDGES_UPDATE:
                     current_graph->getGraphToPolyData()->Modified();
                     break;
