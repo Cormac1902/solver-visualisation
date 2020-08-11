@@ -13,10 +13,6 @@ unsigned API::VARIABLE_ACTIVITY_SOCKET = 29789;
 
 std::mutex display_mutex;
 
-std::vector<long> API::unpack_vector(zmq::message_t &message) {
-    return APIHelper::unpack<std::vector<long>>(message);
-}
-
 void API::send_unsigned(unsigned int x, zmq::socket_t &socket) {
     msgpack::sbuffer buffer;
     msgpack::pack(buffer, x);
@@ -30,23 +26,6 @@ void API::send_unsigned(unsigned int x, zmq::socket_t &socket) {
     } catch (zmq::error_t &e) {
         std::cout << "Error sending " << x << " to " << socket <<  ": " << e.what() << std::endl;
     }
-}
-
-void API::send_render(Display::RENDER_ENUM opt) {
-    send_unsigned(static_cast<unsigned int>(opt), render_socket_push);
-
-/*    msgpack::sbuffer buffer;
-    msgpack::pack(buffer, static_cast<unsigned int>(opt));
-
-    zmq::message_t request(buffer.size());
-
-    memcpy(request.data(), buffer.data(), buffer.size());
-
-    try {
-        render_socket_push.send(request, zmq::send_flags::none);
-    } catch (zmq::error_t &e) {
-        std::cout << "Error" << std::endl;
-    }*/
 }
 
 [[noreturn]] void API::run_add_clause_socket() {

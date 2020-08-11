@@ -136,7 +136,7 @@ public:
 
     static int walksat(Display *display, API* api);
 
-    static RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
+    static inline RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
             auto enumInt = APIHelper::unpack<unsigned int>(message);
             if (enumInt >= '0') {
                 enumInt -= '0';

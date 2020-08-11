@@ -43,9 +43,9 @@ public:
 
     void set_weight(int i);
 
-    void set_occurrences(float i) { occurrences = i; }
+    inline void set_occurrences(float i) { occurrences = i; }
 
-    void increment_occurrences() { occurrences++; }
+    inline void increment_occurrences() { occurrences++; }
 
     bool add_neighbor(Node3D *n, EdgeAttribute a = NT_3_PLUS_CLAUSE);
     // returns true iff element was not already present

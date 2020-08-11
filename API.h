@@ -30,17 +30,21 @@ private:
     static unsigned VARIABLE_ASSIGNMENT_SOCKET;
     static unsigned VARIABLE_ACTIVITY_SOCKET;
 
-    static std::vector<long> unpack_vector(zmq::message_t &message);
+    static inline std::vector<long> unpack_vector(zmq::message_t &message) {
+        return APIHelper::unpack<std::vector<long>>(message);
+    }
 
     static void send_unsigned(unsigned int x, zmq::socket_t &socket);
 
-    void send_render(Display::RENDER_ENUM opt);
+    inline void send_render(Display::RENDER_ENUM opt) {
+        send_unsigned(static_cast<unsigned int>(opt), render_socket_push);
+    }
 
-    void send_edges_render() { send_render(Display::EDGES_UPDATE); }
+    inline void send_edges_render() { send_render(Display::EDGES_UPDATE); }
 
-    void send_vertices_render() { send_render(Display::VERTICES_UPDATE); }
+    inline void send_vertices_render() { send_render(Display::VERTICES_UPDATE); }
 
-    void send_change_graph() { send_render(Display::CHANGE_GRAPH); }
+    inline void send_change_graph() { send_render(Display::CHANGE_GRAPH); }
 
 public:
     explicit API(Display *displayPtr) : context(1),
@@ -92,9 +96,9 @@ public:
 
     [[noreturn]] void run_change_graph_socket();
 
-    void send_start_interactor() { send_render(Display::START_INTERACTOR); }
+    inline void send_start_interactor() { send_render(Display::START_INTERACTOR); }
 
-    void send_stop_interactor() { send_render(Display::STOP_INTERACTOR); }
+    inline void send_stop_interactor() { send_render(Display::STOP_INTERACTOR); }
 
     void run();
 };

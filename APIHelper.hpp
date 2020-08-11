@@ -32,7 +32,7 @@ public:
     }
 
     template<typename T>
-    static T unpack(zmq::message_t &message) {
+    static inline T unpack(zmq::message_t &message) {
         msgpack::sbuffer buffer;
         buffer.write(static_cast<const char *>(message.data()), message.size());
 
@@ -42,7 +42,7 @@ public:
         return result.get().as<T>();
     }
 
-    static long unpack_long(zmq::message_t &message) {
+    static inline long unpack_long(zmq::message_t &message) {
         try {
             return stol(message.to_string());
         } catch (std::invalid_argument &e) {

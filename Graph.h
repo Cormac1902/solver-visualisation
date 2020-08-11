@@ -85,11 +85,11 @@ private:
 
     [[nodiscard]] float get_scale(const Node3D &node) const;
 
-    [[nodiscard]] double node_occurrences_mean() const { return node_occurrences / (float) nr_nodes(); }
+    [[nodiscard]] inline double node_occurrences_mean() const { return node_occurrences / (float) nr_nodes(); }
 
-    [[nodiscard]] double average_absolute_variance() const { return absolute_variance / nr_nodes(); }
+    [[nodiscard]] inline double average_absolute_variance() const { return absolute_variance / nr_nodes(); }
 
-    [[nodiscard]] double node_occurrences_previous_mean(float x) const {
+    [[nodiscard]] inline double node_occurrences_previous_mean(float x) const {
         return (node_occurrences - x) / ((float) nr_nodes() - 1);
     }
 

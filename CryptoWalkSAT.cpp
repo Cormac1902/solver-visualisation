@@ -709,7 +709,7 @@ void CryptoWalkSAT::check_num_occurs() {
                     found = true;
                 }
             }
-            assert(found);
+            if (!found) assert(found);
         }
     }
 }
@@ -769,7 +769,8 @@ uint32_t CryptoWalkSAT::pickrnovelty() {
         }
     }
     assert(best_set);
-    assert(second_best_set);
+    if (!second_best_set) assert(second_best_set);
+
     if (bbest != youngest)
         return bbest;
 
