@@ -16,7 +16,7 @@ class API;
 class Interaction : public vtkInteractorStyleTrackballCamera {
 public:
     Display *display;
-    API *api;
+//    API *api;
 
     static Interaction *New();
 
@@ -24,9 +24,9 @@ public:
         display = displayRef;
     }
 
-    void setAPI(API *apiRef) {
+/*    void setAPI(API *apiRef) {
         api = apiRef;
-    }
+    }*/
 
 vtkTypeMacro(Interaction, vtkInteractorStyleTrackballCamera);
 

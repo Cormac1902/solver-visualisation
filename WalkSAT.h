@@ -307,8 +307,8 @@ static inline int ABS(int i) { return i < 0 ? -i : i; }
 
 static inline int LENGTH(int i) {
     if (i == 0) return 1;
-
-    return (int) floor(log10(abs(i))) + 1;
+    
+    return (int) floor(log10(abs(i))) + (i > 0 ? 1 : 2);
 }
 
 static inline int RANDMOD(int i) {

@@ -1,5 +1,5 @@
 #include "WalkSAT.h"
-#include <zmq.h>
+#include <czmq.h>
 
 /* walksat */
 /* Maintained by Henry Kautz <henry.kautz@gmail.com> */
@@ -100,7 +100,6 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     zmq_send(api_running_check, "1", 1, 0);
     zmq_recv(api_running_check, buf, 1, 0);
 
-    printf("API is running");
     zmq_close(api_running_check);
 
     variable_activity_sender = zmq_socket(context, ZMQ_PUSH);
@@ -112,7 +111,7 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     start_interactor_sender = zmq_socket(context, ZMQ_PUSH);
     zmq_connect(start_interactor_sender, PORT_STRING(START_INTERACTOR_SOCKET_C));
 
-    int_to_send = malloc(LENGTH(num_atom) + 2);
+    int_to_send = malloc(LENGTH(-num_atom) + 1);
 
 #if BSD || LINUX || OSX
     ticks_per_second = sysconf(_SC_CLK_TCK);
@@ -323,7 +322,7 @@ void flipatom(int toflip) {
         }
     }
 
-    send_variable_activity(toflip);
+    send_variable_activity(toflip * (atom[toflip] ? 1 : -1));
 }
 
 

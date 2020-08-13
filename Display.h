@@ -20,6 +20,8 @@
 #include "APIHelper.hpp"
 #include "vtkProperty.h"
 #include <vtkCamera.h>
+#include <thread>
+#include <future>
 
 using namespace CMSat;
 
@@ -34,22 +36,22 @@ class Display {
     vtkSmartPointer<vtkPolyDataMapper> edgeMapper;
     vtkSmartPointer<vtkActor> edgeActor;
 
+    vtkSmartPointer<vtkSphereSource> sphereSource;
+    vtkSmartPointer<vtkGlyph3D> glyph3D;
     vtkSmartPointer<vtkPolyDataMapper> vertexMapper;
     vtkSmartPointer<vtkActor> vertexActor;
-    vtkSmartPointer<vtkGlyph3D> glyph3D;
 
+    vtkSmartPointer<vtkCamera> camera;
     vtkSmartPointer<vtkRenderer> renderer;
     vtkSmartPointer<vtkRenderWindow> renderWindow;
     vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor;
-
-    vtkSmartPointer<vtkSphereSource> sphereSource;
+    Interaction *interaction;
 
     vector<vector<long>> clauses;
-    unsigned int longest_clause{};
+    unsigned longest_clause{};
+    bool rerender;
 
     Vector3D min_p, max_p;
-
-    Interaction &interaction;
 
     zmq::context_t context;
     zmq::socket_t render_socket;
@@ -57,6 +59,8 @@ class Display {
     zmq::socket_t api_running_socket;
 
     void display();
+
+    void run_rerender();
 
     static void setupNodes(Graph3D *g);
 
@@ -78,47 +82,92 @@ class Display {
 
     double kFromGraphLevel(unsigned graphLevel);
 
-    void solve();
+    inline int **intArrayFromClauseVector() { return intArrayFromClauseVector(clauses, longest_clause); }
 
     static vector<long> clauseFromCMSATClause(const vector<Lit> &cmsatClause);
 
     static int **intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause);
 
+    void renderSocketCheck();
+
+    void addEdgesFromClause(vector<long> clause);
+
+    void removeEdgesFromClause(vector<long> clause);
+
+    void increaseVariableActivity(unsigned long i);
+
+    void assignVariable(unsigned long i, bool value, bool undef = false);
+
+    template<typename T>
+    T solve(std::future<T> solverAsync);
+
+    future<int> solveWalksat();
+    future<lbool> solveCMSat();
+
+    static inline lbool solveCMSatStatic(SATSolver s) { return s.solve(); }
+
     friend class Interaction;
+    friend class API;
+
+public:
+    enum RENDER_ENUM {
+        EDGES_UPDATE, VERTICES_UPDATE, START_INTERACTOR, STOP_INTERACTOR, CHANGE_GRAPH
+    };
+
+    enum SOLVER_ENUM {
+        CMSAT = 'C',
+        MAPLE = 'G',
+        MINISAT = 'M',
+        WALKSAT = 'W'
+    };
+
+private:
+    RENDER_ENUM runRenderSocket();
+
+    static inline RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
+        auto enumInt = APIHelper::unpack<unsigned int>(message);
+        if (enumInt >= '0') {
+            enumInt -= '0';
+        }
+        return static_cast<RENDER_ENUM>(enumInt);
+    }
+
+    static inline SOLVER_ENUM solver_enum_from_char(char ch) {
+        return static_cast<SOLVER_ENUM>(ch);
+    }
 
 public:
     Display() :
             graph_stack({}),
             edgeMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
             edgeActor(vtkSmartPointer<vtkActor>::New()),
+            sphereSource(vtkSmartPointer<vtkSphereSource>::New()),
+            glyph3D(vtkSmartPointer<vtkGlyph3D>::New()),
             vertexMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
             vertexActor(vtkSmartPointer<vtkActor>::New()),
-            glyph3D(vtkSmartPointer<vtkGlyph3D>::New()),
+            camera(vtkSmartPointer<vtkCamera>::New()),
             renderer(vtkSmartPointer<vtkRenderer>::New()),
             renderWindow(vtkSmartPointer<vtkRenderWindow>::New()),
             renderWindowInteractor(vtkSmartPointer<vtkRenderWindowInteractor>::New()),
-            sphereSource(vtkSmartPointer<vtkSphereSource>::New()),
+            interaction(new Interaction),
             clauses({}),
             longest_clause(0),
-            interaction(*new Interaction),
+            rerender(true),
             context(1),
             render_socket(context, ZMQ_PULL),
             change_graph_socket(context, ZMQ_REQ),
             api_running_socket(context, ZMQ_REP) {
-        interaction.setDisplay(this);
+
         APIHelper::bind(render_socket, RENDER_SOCKET);
         APIHelper::connect(change_graph_socket, CHANGE_GRAPH_SOCKET);
         APIHelper::bind(api_running_socket, API_RUNNING_SOCKET);
 
-        edgeActor->SetMapper(edgeMapper);
-
-        edgeActor->GetProperty()->EdgeVisibilityOn();
-        edgeActor->GetProperty()->RenderLinesAsTubesOn();
-
         edgeMapper->InterpolateScalarsBeforeMappingOn();
         edgeMapper->ScalarVisibilityOn();
 
-        vertexActor->SetMapper(vertexMapper);
+        edgeActor->SetMapper(edgeMapper);
+        edgeActor->GetProperty()->EdgeVisibilityOn();
+        edgeActor->GetProperty()->RenderLinesAsTubesOn();
 
         sphereSource->SetThetaResolution(100);
         sphereSource->SetPhiResolution(100);
@@ -133,54 +182,39 @@ public:
         vertexMapper->SetScalarModeToUsePointFieldData();
         vertexMapper->SelectColorArray(1);
 
-        auto camera = vtkSmartPointer<vtkCamera>::New();
-        camera->SetPosition(0, 0, 20);
+        vertexActor->SetMapper(vertexMapper);
+
+        camera->SetPosition(0, 0, 10);
         camera->SetFocalPoint(0, 0, 0);
 
         renderer->SetActiveCamera(camera);
 
         renderWindow->AddRenderer(renderer);
 
-        renderWindow->SetSize(1920, 1080);
+        renderWindow->SetSize(1920 * 2, 1080 * 2);
         renderWindow->SetWindowName("Solver Visualisation");
         renderWindow->ShowCursor();
 
         renderer->AddActor(edgeActor);
         renderer->AddActor(vertexActor);
+
+        interaction->setDisplay(this);
+        interaction->SetCurrentRenderer(renderer);
+        renderWindowInteractor->SetInteractorStyle(interaction);
+        renderWindowInteractor->SetRenderWindow(renderWindow);
     }
 
     static unsigned RENDER_SOCKET;
     static unsigned CHANGE_GRAPH_SOCKET;
     static unsigned API_RUNNING_SOCKET;
-    enum RENDER_ENUM {
-        EDGES_UPDATE, VERTICES_UPDATE, START_INTERACTOR, STOP_INTERACTOR, CHANGE_GRAPH
-    };
 
     void init(char *filename);
 
-    void addEdgesFromClause(vector<long> clause);
-
-    void removeEdgesFromClause(vector<long> clause);
-
-    void increaseVariableActivity(unsigned long i);
-
-    void assignVariable(unsigned long i, bool value, bool undef = false);
-
     unsigned int graphStackSize() { return graph_stack.size(); }
 
-    Interaction &getInteraction() { return interaction; }
+    Interaction &getInteraction() { return *interaction; }
 
-    void run_render_socket();
-
-    static int walksat(Display *display, API *api);
-
-    static inline RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
-        auto enumInt = APIHelper::unpack<unsigned int>(message);
-        if (enumInt >= '0') {
-            enumInt -= '0';
-        }
-        return static_cast<RENDER_ENUM>(enumInt);
-    }
+    void solve(SOLVER_ENUM solver);
 };
 
 

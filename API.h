@@ -23,6 +23,7 @@ private:
             change_graph_socket;
 
     Display &display;
+    std::mutex display_mutex;
     unsigned int graph_level;
 
     static unsigned ADD_CLAUSE_SOCKET;
@@ -56,7 +57,7 @@ public:
                                         change_graph_socket(context, ZMQ_REP),
                                         display(*displayPtr),
                                         graph_level(display.graphStackSize()) {
-        display.getInteraction().setAPI(this);
+//        display.getInteraction().setAPI(this);
         APIHelper::bind(add_clause_socket, ADD_CLAUSE_SOCKET);
         APIHelper::bind(remove_clause_socket, REMOVE_CLAUSE_SOCKET);
         APIHelper::bind(variable_assignment_socket, VARIABLE_ASSIGNMENT_SOCKET);

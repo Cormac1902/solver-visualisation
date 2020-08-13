@@ -13,9 +13,6 @@
 #include "CryptoWalkSAT.h"
 #include "WalkSAT.h"
 
-#include <thread>
-#include <future>
-
 #include "API.h"
 
 #ifdef vtkGenericDataArray_h
@@ -44,18 +41,17 @@ void Display::display() {
 
     changeGraph(graphStackSize() - 1);
 
-//    std::scoped_lock lock{render_window_mutex};
-
     changeGraph(max((unsigned long) 0, graph_stack.size() - 5));
-//
-//    changeGraph(0);
-
-    interaction.SetCurrentRenderer(renderer);
-    renderWindowInteractor->SetInteractorStyle(&interaction);
-    renderWindowInteractor->SetRenderWindow(renderWindow);
 
     renderWindow->Render();
 
+    renderWindowInteractor->Start();
+
+//    changeGraph(0);
+
+//    sleep(5);
+
+//    walksat(this);
 }
 
 void Display::switchDisplay(Graph3D *g, double l) {
@@ -82,12 +78,11 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
     sphereSource->SetRadius(lineWidth * 3 / 1000);
 
-    current_graph = g;
-
     glyph3D->SetInputData(g->getVertexPolydata());
 
-    edgeMapper->Update();
-    vertexMapper->Update();
+//    renderWindow->Render();
+
+    current_graph = g;
 }
 
 void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
@@ -189,10 +184,7 @@ void Display::changeGraph(unsigned graphLevel) {
 
     switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
 
-//    renderWindow->Render();
-
 }
-
 
 void Display::positionGraph(unsigned int graphLevel) {
     double l = kFromGraphLevel(graphLevel);
@@ -214,18 +206,11 @@ double Display::kFromGraphLevel(unsigned int graphLevel) {
     return k * pow(f_k, graph_stack.size() - graphLevel - 2);
 }
 
-void Display::solve() {
-
-    renderWindowInteractor->Disable();
-
+future<lbool> Display::solveCMSat() {
     SATSolver s;
     vector<Lit> cmsatClause;
 
-//    s.set_num_threads(4);
-
-    //fill the solver, run solve_walksat, etc.
-
-    s.new_vars(graph_stack[0]->nr_nodes());
+    s.new_vars(graph_stack.front()->nr_nodes());
 
     for (auto &clause_it : clauses) {
         for (auto &var : clause_it) {
@@ -235,59 +220,58 @@ void Display::solve() {
         cmsatClause.clear();
     }
 
+    return std::async(std::launch::async, solveCMSatStatic, s);
+}
+
+template<typename T>
+T Display::solve(std::future<T> solverAsync) {
     std::cout << "Solving..." << std::endl;
 
-    s.solve();
+    run_rerender();
 
-//    vector<Lit> lits;
-//    bool ret = true;
-//    while (ret) {
-//        ret = s.get_next_small_clause(lits);
-//        if (ret) {
-//            //deal with clause_array in "lits"
-//            // add_to_my_db(lits);
-//            addEdgesFromClause(current_graph, clauseFromCMSATClause(lits));
-//        }
-//    }
+    solverAsync.wait();
 
     std::cout << "Finished solving" << std::endl;
 
-//    renderWindowInteractor->Enable();
-
-//    s.end_getting_small_clauses();
-
+    return solverAsync.get();
 }
 
-int Display::walksat(Display *display, API *api) {
-    display->renderWindowInteractor->Delete();
-//    display->renderWindowInteractor->ExitCallback();
+future<int> Display::solveWalksat() {
+    return std::async(std::launch::async,
+                            solve_walksat,
+                            longest_clause,
+                            intArrayFromClauseVector(),
+                            graph_stack.front()->nr_nodes(),
+                            clauses.size());
+//    std::cout << "Solving..." << std::endl;
+//
+//    auto walksatAsync = std::async(std::launch::async, solve_walksat, display->longest_clause,
+//                                   intArrayFromClauseVector(display->clauses, display->longest_clause),
+//                                   display->graph_stack.front()->nr_nodes(),
+//                                   display->clauses.size());
+//
+//    display->run_rerender();
+//
+//    auto ret = walksatAsync.get();
+//
+//    std::cout << "Finished solving" << std::endl;
+//
+//    return ret;
+}
 
-//    api->send_stop_interactor();
+void Display::run_rerender() {
+    renderWindowInteractor->ExitCallback();
 
-    std::cout << "Solving..." << std::endl;
+    auto renderSocketAsync = std::async(std::launch::async, &Display::runRenderSocket, this);
 
-    auto walksatAsync = std::async(std::launch::async, solve_walksat, display->longest_clause,
-                                   intArrayFromClauseVector(display->clauses, display->longest_clause),
-                                   display->graph_stack.front()->nr_nodes(),
-                                   display->clauses.size());
+    while (rerender) {
+        std::this_thread::sleep_for (std::chrono::milliseconds(25));
+        renderWindow->Render();
+    }
 
-    /*std::thread walksatThread(solve_walksat,
-                              display->longest_clause,
-                              intArrayFromClauseVector(display->clauses, display->longest_clause),
-                              display->graph_stack.front()->nr_nodes(),
-                              display->clauses.size());
-    walksatThread.join();*/
-
-    display->run_render_socket();
-
-//    auto renderSocket = std::async(std::launch::deferred, &Display::run_render_socket, display);
-//    renderSocket.get();
-
-//    display->renderWindowInteractor->Enable();
-
-//    display->startDisplayInteractor();
-
-    return walksatAsync.get();
+    if (renderSocketAsync.get() == START_INTERACTOR) {
+        renderWindowInteractor->Start();
+    }
 }
 
 int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause) {
@@ -322,6 +306,71 @@ vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
     return return_clause;
 }
 
+void Display::renderSocketCheck() {
+    while (true) {
+        zmq::message_t request;
+        if (api_running_socket.recv(request)) {
+            api_running_socket.send(request, zmq::send_flags::none);
+            return;
+        }
+    }
+}
+
+Display::RENDER_ENUM Display::runRenderSocket() {
+    auto socketCheck = std::async(std::launch::async, &Display::renderSocketCheck, this);
+
+    socketCheck.wait();
+
+    while (true) {
+        zmq::message_t request;
+        zmq::message_t reply;
+
+        // Receive a request from client
+        if (render_socket.recv(request)) {
+            switch (unpack_render_enum(request)) {
+                case EDGES_UPDATE:
+//                    current_graph->getGraphToPolyData()->Modified();
+//                    break;
+                case VERTICES_UPDATE:
+//                    current_graph->getVertexPolydata()->Modified();
+                    break;
+                case START_INTERACTOR:
+                    rerender = false;
+//                    renderWindowInteractor->Start();
+                    return START_INTERACTOR;
+                case STOP_INTERACTOR:
+                    rerender = true;
+                    renderWindowInteractor->ExitCallback();
+                    break;
+                case CHANGE_GRAPH:
+                    change_graph_socket.send(request, zmq::send_flags::none);
+                    if (change_graph_socket.recv(reply)) {
+                        changeGraph(APIHelper::unpack<unsigned int>(reply));
+                    }
+                    break;
+
+            }
+        }
+    }
+}
+
+void Display::solve(SOLVER_ENUM solver) {
+    switch (solver) {
+        case CMSAT:
+            solve(solveCMSat());
+            break;
+        case MAPLE:
+            cout << "Maple" << endl;
+            break;
+        case MINISAT:
+            cout << "MiniSAT" << endl;
+            break;
+        case WALKSAT:
+            solve(solveWalksat());
+            break;
+    }
+}
+
 // builds (global) stack of coarsened graphs
 void Display::init(char *filename) {
     auto *g = new Graph3D();
@@ -342,8 +391,7 @@ void Display::init(char *filename) {
         clauses = built.first;
         longest_clause = built.second;
     }
-    cout << "Built initial graph G=(V,E) with |V| = " << g->nr_nodes() << " and |E| = "
-         << g->nr_edges() << "." << endl;
+    cout << "Built initial graph G=(V,E) with |V| = " << g->nr_nodes() << " and |E| = " << g->nr_edges() << "." << endl;
 
     // check for multiple components
     vector<int> head_nodes;
@@ -377,45 +425,4 @@ void Display::init(char *filename) {
     display();
 
 //    run_render_socket();
-}
-
-void Display::run_render_socket() {
-    auto running_check = false;
-    while (!running_check) {
-        zmq::message_t request;
-        if (api_running_socket.recv(request)) {
-            api_running_socket.send(request, zmq::send_flags::none);
-            running_check = true;
-        }
-    }
-
-    while (true) {
-        zmq::message_t request;
-        zmq::message_t reply;
-
-        // Receive a request from client
-        if (render_socket.recv(request)) {
-            switch (unpack_render_enum(request)) {
-                case EDGES_UPDATE:
-                    current_graph->getGraphToPolyData()->Modified();
-                    break;
-                case VERTICES_UPDATE:
-                    current_graph->getVertexPolydata()->Modified();
-                    break;
-                case START_INTERACTOR:
-                    renderWindowInteractor->Start();
-                    return;
-                case STOP_INTERACTOR:
-                    renderWindowInteractor->ExitCallback();
-                    break;
-                case CHANGE_GRAPH:
-                    change_graph_socket.send(request, zmq::send_flags::none);
-                    if (change_graph_socket.recv(reply)) {
-                        changeGraph(APIHelper::unpack<unsigned int>(reply));
-                    }
-                    break;
-
-            }
-        }
-    }
 }

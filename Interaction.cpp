@@ -3,7 +3,6 @@
 //
 
 #include "Interaction.h"
-#include "Display.h"
 #include "API.h"
 #include "thread"
 
@@ -15,20 +14,28 @@ void Interaction::OnKeyPress() {
         key = key.substr(3, key.length() - 3);
     }
 
-    if (key == "s" || key == "S") {
-        display->solve();
+    if (key.length() == 1) {
+        auto solverEnum = (char)toupper(key.at(0));
+        if (isalpha(solverEnum)) {
+            display->solve(Display::solver_enum_from_char(solverEnum));
+        } else {
+            display->changeGraph(solverEnum - '0');
+        }
+    }
+
+    /*if (key == "s" || key == "S") {
+        display->solveCMSat();
     } else if (key == "w" || key == "W") {
 //        std::thread walksatThread(Display::walksat, display, api);
 //        walksatThread.join();
-        Display::walksat(display, api);
-        std::cout << "Finished solving" << std::endl;
+        display->solveWalksat();
     } else {
         try {
 //            api->setGraphLevel(std::stoi(key));
             display->changeGraph(std::stoi(key));
         } catch (std::invalid_argument &e) {
         }
-    }
+    }*/
 
     // Forward events
     vtkInteractorStyleTrackballCamera::OnKeyPress();

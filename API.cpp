@@ -11,8 +11,6 @@ unsigned API::REMOVE_CLAUSE_SOCKET = 29787;
 unsigned API::VARIABLE_ASSIGNMENT_SOCKET = 29788;
 unsigned API::VARIABLE_ACTIVITY_SOCKET = 29789;
 
-std::mutex display_mutex;
-
 void API::send_unsigned(unsigned int x, zmq::socket_t &socket) {
     msgpack::sbuffer buffer;
     msgpack::pack(buffer, x);
@@ -68,9 +66,10 @@ void API::send_unsigned(unsigned int x, zmq::socket_t &socket) {
                 var.first = APIHelper::unpack_long(request);
             }
 
+//            cout << var.first << endl;
             std::scoped_lock lock{display_mutex};
 
-            display.assignVariable(abs(var.first), var.first < 0, var.second);
+            display.assignVariable(abs(var.first), var.first > 0, var.second);
 
             send_vertices_render();
         }

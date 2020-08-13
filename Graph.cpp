@@ -124,8 +124,7 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
         }
     }
 
-//    graphToPolyData->Modified();
-//    graphToPolyData->Update();
+    graphToPolyData->Modified();
 }
 
 void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
@@ -153,8 +152,7 @@ void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
         }
     }
 
-//    graphToPolyData->Modified();
-//    graphToPolyData->Update();
+    graphToPolyData->Modified();
 }
 
 void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
@@ -625,19 +623,18 @@ void Graph3D::reColour() {
         edgeColours->SetTypedTuple(edge.second.first, edge.second.second.second.GetData());
     }
 
-//    graphToPolyData->Modified();
-//    graphToPolyData->Update();
+    graphToPolyData->Modified();
 }
 
 void Graph3D::increase_variable_activity(unsigned long i) {
     i = matchMap[i];
+//    cout << "g" <<  i << endl;
     nodes[i].increment_occurrences();
     online_absolute_variance(nodes[i]);
 
     reScale();
 
-//    vertexPolydata->Modified();
-//    vertexPolydata->GetPointData()->Update();
+    vertexPolydata->Modified();
 }
 
 void Graph3D::assign_variable_truth_value(unsigned long i, bool value, bool undef) {
@@ -648,8 +645,7 @@ void Graph3D::assign_variable_truth_value(unsigned long i, bool value, bool unde
         vertexColours->SetTypedTuple(i, (value ? positiveColour : negativeColour).GetData());
     }
 
-//    vertexPolydata->Modified();
-//    vertexPolydata->GetPointData()->Update();
+    vertexPolydata->Modified();
 }
 
 void Graph3D::reScale() {
