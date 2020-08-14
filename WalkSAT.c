@@ -88,7 +88,7 @@ static int (*pickcode[])(void) =
 /* Main                             */
 /************************************/
 
-int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_clause) {
+int solve_walksat(unsigned longest_cl, int **clauses, int num_atom, int num_clause) {
     int a;
 
     context = zmq_ctx_new();
@@ -118,9 +118,9 @@ int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_
     gettimeofday(&tv, &tzp);
     seed = (((tv.tv_sec & 0177) * 1000000) + tv.tv_usec);
 #elif WINDOWS
-    seed = (unsigned int)(timeGetTime());
+    seed = (unsigned)(timeGetTime());
 #elif POSIX
-    seed = (unsigned int)(time());
+    seed = (unsigned)(time());
 #endif
 //    parse_parameters(argc, argv);
     srandom(seed);
@@ -351,7 +351,7 @@ void parse_parameters(int argc, char *argv[]) {
             ++i;
         } else if (strcmp(argv[i], "-seed") == 0) {
             scanone(argc, argv, ++i, &temp);
-            seed = (unsigned int) temp;
+            seed = (unsigned) temp;
         } else if (strcmp(argv[i], "-status") == 0)
             status_flag = 1;
         else if (strcmp(argv[i], "-cutoff") == 0)
@@ -616,7 +616,7 @@ void init(void) {
 }
 
 
-void initprob(unsigned int longest_cl, int **clauses, int num_atom, int num_clause) {
+void initprob(unsigned longest_cl, int **clauses, int num_atom, int num_clause) {
     heuristic = BEST;
     base_cutoff = cutoff;
     if (numsol > numrun) numsol = numrun;

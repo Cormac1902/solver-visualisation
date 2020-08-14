@@ -28,6 +28,8 @@ using namespace CMSat;
 class API;
 
 class Display {
+    char* filename;
+
     std::mutex graph_mutex;
 
     vector<Graph3D *> graph_stack;
@@ -86,7 +88,7 @@ class Display {
 
     static vector<long> clauseFromCMSATClause(const vector<Lit> &cmsatClause);
 
-    static int **intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause);
+    static int **intArrayFromClauseVector(vector<vector<long>> clauses, unsigned longest_clause);
 
     void renderSocketCheck();
 
@@ -103,8 +105,10 @@ class Display {
 
     future<int> solveWalksat();
     future<lbool> solveCMSat();
+    future<int> solveMaple();
 
     static inline lbool solveCMSatStatic(SATSolver s) { return s.solve(); }
+    static int solveMapleStatic(const char* filenamePtr);
 
     friend class Interaction;
     friend class API;
@@ -125,7 +129,7 @@ private:
     RENDER_ENUM runRenderSocket();
 
     static inline RENDER_ENUM unpack_render_enum(zmq::message_t &message) {
-        auto enumInt = APIHelper::unpack<unsigned int>(message);
+        auto enumInt = APIHelper::unpack<unsigned>(message);
         if (enumInt >= '0') {
             enumInt -= '0';
         }
@@ -137,7 +141,8 @@ private:
     }
 
 public:
-    Display() :
+    explicit Display(char* filenamePtr = nullptr) :
+            filename(filenamePtr),
             graph_stack({}),
             edgeMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
             edgeActor(vtkSmartPointer<vtkActor>::New()),
@@ -208,9 +213,9 @@ public:
     static unsigned CHANGE_GRAPH_SOCKET;
     static unsigned API_RUNNING_SOCKET;
 
-    void init(char *filename);
+    void init();
 
-    unsigned int graphStackSize() { return graph_stack.size(); }
+    unsigned graphStackSize() { return graph_stack.size(); }
 
     Interaction &getInteraction() { return *interaction; }
 

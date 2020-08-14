@@ -101,12 +101,12 @@ void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttr
 }
 
 void Graph3D::add_edge_to_graph(
-        pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned int, vtkColor4ub>>> &edge) {
+        pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> &edge) {
     add_edge_to_graph(edge.first, edge.second);
 }
 
 void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices,
-                                pair<vtkIdType, pair<unsigned int, vtkColor4ub>> &colour) {
+                                pair<vtkIdType, pair<unsigned, vtkColor4ub>> &colour) {
     graph->AddEdge(vertices.first, vertices.second);
     set_colour(colour.second);
     colour.first = edgeColours->InsertNextTupleValue(colour.second.second.GetData());
@@ -174,13 +174,13 @@ void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
     }
 }
 
-pair<vector<vector<long>>, unsigned int> Graph3D::build_from_cnf(istream &is) {
+pair<vector<vector<long>>, unsigned> Graph3D::build_from_cnf(istream &is) {
     long p = -1;
     char c;
     bool positive = true;
     vector<long> clause;
     vector<vector<long>> clauses;
-    unsigned int longestClause = 0;
+    unsigned longestClause = 0;
     Node3D n;
 
     while (!is.eof()) {
@@ -220,7 +220,7 @@ pair<vector<vector<long>>, unsigned int> Graph3D::build_from_cnf(istream &is) {
         if (!clause.empty()) {
 
             clauses.push_back(clause);
-            longestClause = max(longestClause, (unsigned int) clause.size());
+            longestClause = max(longestClause, (unsigned) clause.size());
             // insert nodes
             for (long &i : clause) {
                 i = abs(i);
@@ -628,7 +628,6 @@ void Graph3D::reColour() {
 
 void Graph3D::increase_variable_activity(unsigned long i) {
     i = matchMap[i];
-//    cout << "g" <<  i << endl;
     nodes[i].increment_occurrences();
     online_absolute_variance(nodes[i]);
 
@@ -654,7 +653,7 @@ void Graph3D::reScale() {
     }
 }
 
-void Graph3D::set_colour(pair<unsigned int, vtkColor4ub> &colour) const {
+void Graph3D::set_colour(pair<unsigned, vtkColor4ub> &colour) const {
     colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication());
 }
 

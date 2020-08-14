@@ -11,7 +11,7 @@ unsigned API::REMOVE_CLAUSE_SOCKET = 29787;
 unsigned API::VARIABLE_ASSIGNMENT_SOCKET = 29788;
 unsigned API::VARIABLE_ACTIVITY_SOCKET = 29789;
 
-void API::send_unsigned(unsigned int x, zmq::socket_t &socket) {
+void API::send_unsigned(unsigned x, zmq::socket_t &socket) {
     msgpack::sbuffer buffer;
     msgpack::pack(buffer, x);
 

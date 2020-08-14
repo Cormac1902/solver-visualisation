@@ -24,7 +24,7 @@ private:
 
     Display &display;
     std::mutex display_mutex;
-    unsigned int graph_level;
+    unsigned graph_level;
 
     static unsigned ADD_CLAUSE_SOCKET;
     static unsigned REMOVE_CLAUSE_SOCKET;
@@ -35,10 +35,10 @@ private:
         return APIHelper::unpack<std::vector<long>>(message);
     }
 
-    static void send_unsigned(unsigned int x, zmq::socket_t &socket);
+    static void send_unsigned(unsigned x, zmq::socket_t &socket);
 
     inline void send_render(Display::RENDER_ENUM opt) {
-        send_unsigned(static_cast<unsigned int>(opt), render_socket_push);
+        send_unsigned(static_cast<unsigned>(opt), render_socket_push);
     }
 
     inline void send_edges_render() { send_render(Display::EDGES_UPDATE); }
@@ -57,19 +57,12 @@ public:
                                         change_graph_socket(context, ZMQ_REP),
                                         display(*displayPtr),
                                         graph_level(display.graphStackSize()) {
-//        display.getInteraction().setAPI(this);
         APIHelper::bind(add_clause_socket, ADD_CLAUSE_SOCKET);
         APIHelper::bind(remove_clause_socket, REMOVE_CLAUSE_SOCKET);
         APIHelper::bind(variable_assignment_socket, VARIABLE_ASSIGNMENT_SOCKET);
         APIHelper::bind(variable_activity_socket, VARIABLE_ACTIVITY_SOCKET);
         APIHelper::connect(render_socket_push, Display::RENDER_SOCKET);
         APIHelper::bind(change_graph_socket, Display::CHANGE_GRAPH_SOCKET);
-        /*add_clause_socket.bind(APIHelper::bind_string(ADD_CLAUSE_SOCKET));
-        remove_clause_socket.bind(APIHelper::bind_string(REMOVE_CLAUSE_SOCKET));
-        variable_assignment_socket.bind(APIHelper::bind_string(VARIABLE_ASSIGNMENT_SOCKET));
-        variable_activity_socket.bind(APIHelper::bind_string(VARIABLE_ACTIVITY_SOCKET));
-        render_socket_push.connect(APIHelper::connect_string(Display::RENDER_SOCKET));
-        change_graph_socket.bind(APIHelper::bind_string(Display::CHANGE_GRAPH_SOCKET));*/
     }
 
     ~API() {
@@ -82,7 +75,7 @@ public:
         zmq_ctx_destroy(&context);
     }
 
-    void setGraphLevel(unsigned int graphLevel) {
+    void setGraphLevel(unsigned graphLevel) {
         graph_level = graphLevel;
         send_change_graph();
     }

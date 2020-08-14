@@ -26,10 +26,6 @@ unsigned Display::RENDER_SOCKET = 29790;
 unsigned Display::CHANGE_GRAPH_SOCKET = 29791;
 unsigned Display::API_RUNNING_SOCKET = 29792;
 
-//unsigned Display::EDGES_UPDATE = 0;
-//unsigned Display::VERTICES_UPDATE = 1;
-//unsigned Display::START_INTERACTOR = 2;
-
 static bool draw_edges = true, adaptive_size = true, draw_only_2clauses = false; // run_anim = falseClauses
 
 static float min_line_width = 3, max_line_width = 12;
@@ -186,7 +182,7 @@ void Display::changeGraph(unsigned graphLevel) {
 
 }
 
-void Display::positionGraph(unsigned int graphLevel) {
+void Display::positionGraph(unsigned graphLevel) {
     double l = kFromGraphLevel(graphLevel);
     // std::cout << "k: " << l << std::endl;  OKAY
     graph_stack[graphLevel]->init_positions_from_graph(graph_stack[graphLevel + 1], l);
@@ -202,8 +198,21 @@ void Display::positionGraph(unsigned int graphLevel) {
     graph_stack[graphLevel]->rescale(2.0 / max_extent, shift);
 }
 
-double Display::kFromGraphLevel(unsigned int graphLevel) {
+double Display::kFromGraphLevel(unsigned graphLevel) {
     return k * pow(f_k, graph_stack.size() - graphLevel - 2);
+}
+
+template<typename T>
+T Display::solve(std::future<T> solverAsync) {
+    std::cout << "Solving..." << std::endl;
+
+    run_rerender();
+
+    solverAsync.wait();
+
+    std::cout << "Finished solving" << std::endl;
+
+    return solverAsync.get();
 }
 
 future<lbool> Display::solveCMSat() {
@@ -223,17 +232,14 @@ future<lbool> Display::solveCMSat() {
     return std::async(std::launch::async, solveCMSatStatic, s);
 }
 
-template<typename T>
-T Display::solve(std::future<T> solverAsync) {
-    std::cout << "Solving..." << std::endl;
+future<int> Display::solveMaple() {
+    return std::async(std::launch::async, solveMapleStatic, filename);
+}
 
-    run_rerender();
-
-    solverAsync.wait();
-
-    std::cout << "Finished solving" << std::endl;
-
-    return solverAsync.get();
+int Display::solveMapleStatic(const char* filenamePtr) {
+    std::string cmd = "glucose_release ";
+    cmd += filenamePtr;
+    return system(nullptr) ? system(cmd.c_str()) : 0;
 }
 
 future<int> Display::solveWalksat() {
@@ -243,20 +249,6 @@ future<int> Display::solveWalksat() {
                             intArrayFromClauseVector(),
                             graph_stack.front()->nr_nodes(),
                             clauses.size());
-//    std::cout << "Solving..." << std::endl;
-//
-//    auto walksatAsync = std::async(std::launch::async, solve_walksat, display->longest_clause,
-//                                   intArrayFromClauseVector(display->clauses, display->longest_clause),
-//                                   display->graph_stack.front()->nr_nodes(),
-//                                   display->clauses.size());
-//
-//    display->run_rerender();
-//
-//    auto ret = walksatAsync.get();
-//
-//    std::cout << "Finished solving" << std::endl;
-//
-//    return ret;
 }
 
 void Display::run_rerender() {
@@ -274,9 +266,9 @@ void Display::run_rerender() {
     }
 }
 
-int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned int longest_clause) {
+int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned longest_clause) {
     vector<long> clause_it;
-    unsigned int j;
+    unsigned j;
 
     auto noOfClauses = clauses.size();
 
@@ -317,9 +309,7 @@ void Display::renderSocketCheck() {
 }
 
 Display::RENDER_ENUM Display::runRenderSocket() {
-    auto socketCheck = std::async(std::launch::async, &Display::renderSocketCheck, this);
-
-    socketCheck.wait();
+    renderSocketCheck();
 
     while (true) {
         zmq::message_t request;
@@ -345,7 +335,7 @@ Display::RENDER_ENUM Display::runRenderSocket() {
                 case CHANGE_GRAPH:
                     change_graph_socket.send(request, zmq::send_flags::none);
                     if (change_graph_socket.recv(reply)) {
-                        changeGraph(APIHelper::unpack<unsigned int>(reply));
+                        changeGraph(APIHelper::unpack<unsigned>(reply));
                     }
                     break;
 
@@ -360,7 +350,7 @@ void Display::solve(SOLVER_ENUM solver) {
             solve(solveCMSat());
             break;
         case MAPLE:
-            cout << "Maple" << endl;
+            solve(solveMaple());
             break;
         case MINISAT:
             cout << "MiniSAT" << endl;
@@ -372,7 +362,7 @@ void Display::solve(SOLVER_ENUM solver) {
 }
 
 // builds (global) stack of coarsened graphs
-void Display::init(char *filename) {
+void Display::init() {
     auto *g = new Graph3D();
     graph_stack.push_back(g);
 
@@ -380,7 +370,7 @@ void Display::init(char *filename) {
     if (filename == nullptr)
         setupNodes(g);
     else {
-        pair<vector<vector<long>>, unsigned int> built;
+        pair<vector<vector<long>>, unsigned> built;
         if (strncmp("-", filename, 1) == 0) {
             built = g->build_from_cnf(cin);
         } else {

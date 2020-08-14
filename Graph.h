@@ -81,7 +81,7 @@ private:
 
     void change_edge_duplication(unsigned &duplication, bool increment = true);
 
-    void set_colour(pair<unsigned int, vtkColor4ub> &colour) const;
+    void set_colour(pair<unsigned, vtkColor4ub> &colour) const;
 
     [[nodiscard]] float get_scale(const Node3D &node) const;
 
@@ -149,7 +149,7 @@ public:
 
     void assign_variable_truth_value(unsigned long i, bool value, bool undef = false);
 
-    pair<vector<vector<long>>, unsigned int> build_from_cnf(istream &is); // read file in DIMACS format, build graph
+    pair<vector<vector<long>>, unsigned> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
     [[nodiscard]] int nr_nodes() const { return nodes.size(); }
@@ -166,7 +166,7 @@ public:
 
     [[nodiscard]] const vtkSmartPointer<vtkPolyData> &getVertexPolydata() const { return vertexPolydata; }
 
-    [[nodiscard]] unsigned int no_of_occurrences() const { return (unsigned int) node_occurrences; }
+    [[nodiscard]] unsigned no_of_occurrences() const { return (unsigned) node_occurrences; }
 
     // misc
     int independent_components(vector<int> *one_of_each_comp);

@@ -16,9 +16,9 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    auto display = std::make_unique<Display>();
+    auto display = std::make_unique<Display>(argv[1]);
 
-    std::thread t1(&Display::init, display.get(), argv[1]);
+    std::thread t1(&Display::init, display.get());
 
     auto api = std::make_unique<API>(display.get());
 

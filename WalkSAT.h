@@ -201,7 +201,7 @@ double adaptive_theta;
 
 /* Random seed */
 
-unsigned int seed;  /* Sometimes defined as an unsigned long int */
+unsigned seed;  /* Sometimes defined as an unsigned long int */
 
 #if BSD || LINUX || OSX
 struct timeval tv;
@@ -307,7 +307,7 @@ static inline int ABS(int i) { return i < 0 ? -i : i; }
 
 static inline int LENGTH(int i) {
     if (i == 0) return 1;
-    
+
     return (int) floor(log10(abs(i))) + (i > 0 ? 1 : 2);
 }
 
@@ -399,7 +399,7 @@ void scanoned(int argc, char *argv[], int i, double *varptr);
 
 void init(void);
 
-void initprob(unsigned int longest_cl, int **clauses, int num_atom, int num_clause);
+void initprob(unsigned longest_cl, int **clauses, int num_atom, int num_clause);
 
 void flipatom(int toflip);
 
@@ -443,7 +443,7 @@ void open_hamming_data(void);
 
 int calc_hamming_dist(const int atom[], const int hamming_target[], int numatom);
 
-int solve_walksat(unsigned int longest_cl, int **clauses, int num_atom, int num_clause);
+int solve_walksat(unsigned longest_cl, int **clauses, int num_atom, int num_clause);
 
 void send_variable_activity(int var);
 
