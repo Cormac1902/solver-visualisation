@@ -31,11 +31,11 @@ public:
     }
 };
 
-typedef vector<Node3D *> GridCube;
+typedef vector<Node3D*> GridCube;
 
 class SpaceGrid3D {
 private:
-    map<GridIndex, GridCube *> cubes;
+    map<GridIndex, GridCube> cubes;
     double side_length;
 
 public:
@@ -45,7 +45,7 @@ public:
 
     ~SpaceGrid3D();
 
-    void insert_node(Node3D *n);
+    void insert_node(Node3D &n);
     // Add node n to grid. (The position vector of node n must be set up properly.)
 
     vector<Node3D *> find_neighbors(Node3D *n);

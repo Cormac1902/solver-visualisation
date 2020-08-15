@@ -33,35 +33,18 @@ static int max_line_width_threshold = 250, min_line_width_threshold = 2500;
 
 // ----------------------------------------------------------------------
 
-void Display::display() {
+void Display::switchDisplay(Graph3D &g, double l) {
 
-    changeGraph(graphStackSize() - 1);
+    auto highestEdgeDuplication = g.highestEdgeDuplication();
 
-    changeGraph(max((unsigned long) 0, graph_stack.size() - 5));
-
-    renderWindow->Render();
-
-    renderWindowInteractor->Start();
-
-//    changeGraph(0);
-
-//    sleep(5);
-
-//    walksat(this);
-}
-
-void Display::switchDisplay(Graph3D *g, double l) {
-
-    auto highestEdgeDuplication = g->highestEdgeDuplication();
-
-    if (!g->get_drawn()) {
-        g->drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
+    if (!g.get_drawn()) {
+        g.drawPolyData(l, draw_edges, draw_only_2clauses, adaptive_size);
     }
 
-    edgeMapper->SetInputConnection(g->getGraphToPolyData()->GetOutputPort());
+    edgeMapper->SetInputConnection(g.getGraphToPolyData()->GetOutputPort());
 
-    if (g->highestEdgeDuplication() != highestEdgeDuplication) {
-        g->reColour();
+    if (g.highestEdgeDuplication() != highestEdgeDuplication) {
+        g.reColour();
     }
 
     auto numberOfLines = edgeMapper->GetInput()->GetNumberOfLines();
@@ -74,11 +57,9 @@ void Display::switchDisplay(Graph3D *g, double l) {
 
     sphereSource->SetRadius(lineWidth * 3 / 1000);
 
-    glyph3D->SetInputData(g->getVertexPolydata());
+    glyph3D->SetInputData(g.getVertexPolydata());
 
-//    renderWindow->Render();
-
-    current_graph = g;
+    current_graph = &g;
 }
 
 void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
@@ -134,14 +115,14 @@ void Display::assignVariable(unsigned long i, bool value, bool undef) {
     assignVariable(current_graph, i, value, undef);
 }
 
-void Display::setupNodes(Graph3D *g) {
+void Display::setupNodes(Graph3D& g) {
     Node3D n(1), m(2), o(3);
 
-    g->add_node(n);
-    g->add_node(m);
-    g->add_node(o);
-    g->insert_edge(1, 2);
-    g->insert_edge(1, 3);
+    g.add_node(n);
+    g.add_node(m);
+    g.add_node(o);
+    g.insert_edge(1, 2);
+    g.insert_edge(1, 3);
 }
 
 void Display::changeGraph(unsigned graphLevel) {
@@ -178,14 +159,14 @@ void Display::changeGraph(unsigned graphLevel) {
 
     std::cout << "Displaying " << graphMessage << std::endl;
 
-    switchDisplay(graph_stack[graphLevel], kFromGraphLevel(graphLevel));
+    switchDisplay(*graph_stack[graphLevel], kFromGraphLevel(graphLevel));
 
 }
 
 void Display::positionGraph(unsigned graphLevel) {
     double l = kFromGraphLevel(graphLevel);
     // std::cout << "k: " << l << std::endl;  OKAY
-    graph_stack[graphLevel]->init_positions_from_graph(graph_stack[graphLevel + 1], l);
+    graph_stack[graphLevel]->init_positions_from_graph(*graph_stack[graphLevel + 1], l);
     graph_stack[graphLevel]->compute_layout(l);
 
     pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
@@ -206,7 +187,7 @@ template<typename T>
 T Display::solve(std::future<T> solverAsync) {
     std::cout << "Solving..." << std::endl;
 
-    run_rerender();
+    runRerender();
 
     solverAsync.wait();
 
@@ -236,34 +217,40 @@ future<int> Display::solveMaple() {
     return std::async(std::launch::async, solveMapleStatic, filename);
 }
 
-int Display::solveMapleStatic(const char* filenamePtr) {
-    std::string cmd = "glucose_release ";
+int Display::solveMapleStatic(const char *filenamePtr) {
+    std::string cmd = "glucose_release '";
     cmd += filenamePtr;
+    cmd += "'";
     return system(nullptr) ? system(cmd.c_str()) : 0;
 }
 
 future<int> Display::solveWalksat() {
     return std::async(std::launch::async,
-                            solve_walksat,
-                            longest_clause,
-                            intArrayFromClauseVector(),
-                            graph_stack.front()->nr_nodes(),
-                            clauses.size());
+                      solve_walksat,
+                      longest_clause,
+                      intArrayFromClauseVector(),
+                      graph_stack.front()->nr_nodes(),
+                      clauses.size());
 }
 
-void Display::run_rerender() {
+void Display::runRerender() {
     renderWindowInteractor->ExitCallback();
 
     auto renderSocketAsync = std::async(std::launch::async, &Display::runRenderSocket, this);
 
     while (rerender) {
-        std::this_thread::sleep_for (std::chrono::milliseconds(25));
-        renderWindow->Render();
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
+        callRender();
     }
 
     if (renderSocketAsync.get() == START_INTERACTOR) {
         renderWindowInteractor->Start();
     }
+}
+
+void Display::callRender() {
+    std::scoped_lock lock{display_mutex};
+    renderWindow->Render();
 }
 
 int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned longest_clause) {
@@ -363,12 +350,12 @@ void Display::solve(SOLVER_ENUM solver) {
 
 // builds (global) stack of coarsened graphs
 void Display::init() {
-    auto *g = new Graph3D();
+    auto *g = new Graph3D;
     graph_stack.push_back(g);
 
     // build initial graph
     if (filename == nullptr)
-        setupNodes(g);
+        setupNodes(*g);
     else {
         pair<vector<vector<long>>, unsigned> built;
         if (strncmp("-", filename, 1) == 0) {
@@ -393,26 +380,30 @@ void Display::init() {
     }
 
     // build graph stack
-    Graph3D *a = g, *b;
     int level = 1;
-    while (a->nr_nodes() > 2) {
-        b = a->coarsen();
-        graph_stack.push_back(b);
-        cout << "Coarsened graph " << level << " consists of " << b->nr_nodes()
-             << " vertices and " << b->nr_edges() << " edge(s)." << endl;
-        a = b;
+    while (g->nr_nodes() > 2) {
+        graph_stack.push_back(g->coarsen());
+        g = graph_stack.back();
+        cout << "Coarsened graph " << level << " consists of " << g->nr_nodes()
+             << " vertices and " << g->nr_edges() << " edge(s)." << endl;
         level++;
     }
 
-    graph_stack.back()->calculate_absolute_variance();
+    g->calculate_absolute_variance();
 
     // compute (random) layout of coarsest graph (with 2 nodes)
-    graph_stack.back()->init_coarsest_graph_positions(k);
-    pair<Vector3D, Vector3D> ep = graph_stack.back()->compute_extremal_points();
+    g->init_coarsest_graph_positions(k);
+    pair<Vector3D, Vector3D> ep = g->compute_extremal_points();
     min_p = ep.first;
     max_p = ep.second;
 
     display();
+}
 
-//    run_render_socket();
+void Display::display() {
+    changeGraph(graphStackSize() - 1);
+
+    renderWindow->Render();
+
+    renderWindowInteractor->Start();
 }

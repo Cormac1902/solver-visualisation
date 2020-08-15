@@ -28,12 +28,13 @@ using namespace CMSat;
 class API;
 
 class Display {
-    char* filename;
+    char *filename;
 
     std::mutex graph_mutex;
+    std::mutex display_mutex;
 
-    vector<Graph3D *> graph_stack;
-    Graph3D *current_graph{};
+    vector<Graph3D*> graph_stack;
+    Graph3D *current_graph;
 
     vtkSmartPointer<vtkPolyDataMapper> edgeMapper;
     vtkSmartPointer<vtkActor> edgeActor;
@@ -47,7 +48,7 @@ class Display {
     vtkSmartPointer<vtkRenderer> renderer;
     vtkSmartPointer<vtkRenderWindow> renderWindow;
     vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor;
-    Interaction *interaction;
+    Interaction interaction;
 
     vector<vector<long>> clauses;
     unsigned longest_clause{};
@@ -60,13 +61,13 @@ class Display {
     zmq::socket_t change_graph_socket;
     zmq::socket_t api_running_socket;
 
-    void display();
+    void runRerender();
 
-    void run_rerender();
+    void callRender();
 
-    static void setupNodes(Graph3D *g);
+    static void setupNodes(Graph3D& g);
 
-    void switchDisplay(Graph3D *g, double l);
+    void switchDisplay(Graph3D& g, double l);
 
     void changeGraphFromClause(Graph3D *g, vector<long> clause, bool add = true);
 
@@ -104,13 +105,17 @@ class Display {
     T solve(std::future<T> solverAsync);
 
     future<int> solveWalksat();
+
     future<lbool> solveCMSat();
+
     future<int> solveMaple();
 
     static inline lbool solveCMSatStatic(SATSolver s) { return s.solve(); }
-    static int solveMapleStatic(const char* filenamePtr);
+
+    static int solveMapleStatic(const char *filenamePtr);
 
     friend class Interaction;
+
     friend class API;
 
 public:
@@ -141,9 +146,9 @@ private:
     }
 
 public:
-    explicit Display(char* filenamePtr = nullptr) :
+    explicit Display(char *filenamePtr = nullptr) :
             filename(filenamePtr),
-            graph_stack({}),
+            current_graph(nullptr),
             edgeMapper(vtkSmartPointer<vtkPolyDataMapper>::New()),
             edgeActor(vtkSmartPointer<vtkActor>::New()),
             sphereSource(vtkSmartPointer<vtkSphereSource>::New()),
@@ -154,8 +159,7 @@ public:
             renderer(vtkSmartPointer<vtkRenderer>::New()),
             renderWindow(vtkSmartPointer<vtkRenderWindow>::New()),
             renderWindowInteractor(vtkSmartPointer<vtkRenderWindowInteractor>::New()),
-            interaction(new Interaction),
-            clauses({}),
+            interaction(),
             longest_clause(0),
             rerender(true),
             context(1),
@@ -203,9 +207,9 @@ public:
         renderer->AddActor(edgeActor);
         renderer->AddActor(vertexActor);
 
-        interaction->setDisplay(this);
-        interaction->SetCurrentRenderer(renderer);
-        renderWindowInteractor->SetInteractorStyle(interaction);
+        interaction.setDisplay(this);
+        interaction.SetCurrentRenderer(renderer);
+        renderWindowInteractor->SetInteractorStyle(&interaction);
         renderWindowInteractor->SetRenderWindow(renderWindow);
     }
 
@@ -215,9 +219,13 @@ public:
 
     void init();
 
+    void display();
+
     unsigned graphStackSize() { return graph_stack.size(); }
 
-    Interaction &getInteraction() { return *interaction; }
+    Interaction &getInteraction() { return interaction; }
+
+    std::mutex &getDisplayMutex() { return display_mutex; }
 
     void solve(SOLVER_ENUM solver);
 };

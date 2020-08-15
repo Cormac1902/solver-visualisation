@@ -14,7 +14,7 @@
 #endif
 
 static double min_scale = .5, max_scale = 2;
-static int large_graph = 100;
+static unsigned large_graph = 100;
 
 void Graph3D::add_node(const Node3D &n) {
     assert(nodes.find(n.id()) == nodes.end()); // node not already present
@@ -67,6 +67,12 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
+    if (x == y) return;
+    if (x > y) {
+        auto z = x;
+        x = y;
+        y = z;
+    }
     auto edgeColourFind = edgeColourMap.find({x, y});
     auto newEdge = edgeColourFind == edgeColourMap.end();
     if (newEdge) {
@@ -119,10 +125,15 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
     }
     std::sort(clause.begin(), clause.end());
     for (auto i = clause.begin(); i < clause.end(); i++) {
+//        cout << *i << ": { ";
         for (auto j = i + 1; j != clause.end(); j++) {
+//            cout << *j << " ";
             add_graph_edge_from_ids(*i, *j, a);
         }
+//        cout << "}" << endl;
     }
+
+//    cout << "End" << endl;
 
     graphToPolyData->Modified();
 }
@@ -335,6 +346,7 @@ int Graph3D::independent_components(vector<int> *one_of_each_component) {
     return nr_components;
 }
 
+
 Graph3D *Graph3D::coarsen() {
     set<ExtNode3D>::iterator j;
     int curr_min_weight;
@@ -432,18 +444,18 @@ void Graph3D::init_coarsest_graph_positions(double k) {
 }
 
 // g is coarser than 'this'
-void Graph3D::init_positions_from_graph(Graph3D *g, double k) {
+void Graph3D::init_positions_from_graph(Graph3D &g, double k) {
     Vector3D offset;
     auto f_k = 0.001 * k;
 
     for (auto &i : matching) {
         // copy already computed positions
         if (i.first == i.second) {
-            nodes[i.first].set_pos(g->nodes[i.second].position());
+            nodes[i.first].set_pos(g.nodes[i.second].position());
         } else {
             offset = f_k * Vector3D::init_random().normalize();
-            nodes[i.first].set_pos(g->nodes[i.second].position() + offset);
-            nodes[i.second].set_pos(g->nodes[i.second].position() - offset);
+            nodes[i.first].set_pos(g.nodes[i.second].position() + offset);
+            nodes[i.second].set_pos(g.nodes[i.second].position() - offset);
         }
     }
 
@@ -468,7 +480,7 @@ void Graph3D::compute_layout(double k) {
     vector<Node3D *> grid_neighbors;
     SpaceGrid3D sg(2.0 * k);  // R = 2.0 * k
     for (auto &node : nodes)
-        sg.insert_node(&node.second);
+        sg.insert_node(node.second);
 #endif
 
     // iteratively compute layout

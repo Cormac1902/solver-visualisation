@@ -2,19 +2,19 @@
 
 SpaceGrid3D::~SpaceGrid3D() {
     // free cubes
-    for (auto &cube : cubes)
-        delete cube.second;
+//    for (auto &cube : cubes)
+//        delete cube.second;
 }
 
 
 // Add node n to grid. (The position vector of node n must be set up properly.)
 
-void SpaceGrid3D::insert_node(Node3D *n) {
-    const Vector3D &pos = n->position();
+void SpaceGrid3D::insert_node(Node3D &n) {
+    const Vector3D &pos = n.position();
     GridIndex gi = grid_index(pos);
-    if (cubes.find(gi) == cubes.end())
-        cubes[gi] = new GridCube();
-    cubes[gi]->push_back(n);
+//    if (cubes.find(gi) == cubes.end())
+//        cubes[gi] = new GridCube();
+    cubes[gi].push_back(&n);
 }
 
 
@@ -35,7 +35,7 @@ vector<Node3D *> SpaceGrid3D::find_neighbors(Node3D *n) {
             for (k = gi.c - 1; k <= gi.c + 1; k++) {
                 gj = GridIndex(i, j, k);
                 if (cubes.find(gj) != cubes.end())
-                    copy(cubes[gj]->begin(), cubes[gj]->end(), inserter(res, res.begin()));
+                    copy(cubes[gj].begin(), cubes[gj].end(), inserter(res, res.begin()));
             }
 
     return res;
@@ -43,13 +43,11 @@ vector<Node3D *> SpaceGrid3D::find_neighbors(Node3D *n) {
 
 
 ostream &operator<<(ostream &os, const SpaceGrid3D &sg) {
-    map<GridIndex, GridCube *>::const_iterator i;
-    vector<Node3D *>::iterator j;
 
-    for (i = sg.cubes.begin(); i != sg.cubes.end(); i++) {
-        os << "cube " << i->first << ":" << endl;
-        for (j = i->second->begin(); j != i->second->end(); j++)
-            os << "\t[" << (*j)->id() << ", " << (*j)->position() << "]" << endl;
+    for (const auto & cube : sg.cubes) {
+        os << "cube " << cube.first << ":" << endl;
+        for (const auto & j : cube.second)
+            os << "\t[" << j->id() << ", " << j->position() << "]" << endl;
     }
 
     return os;

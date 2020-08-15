@@ -20,22 +20,9 @@ void Interaction::OnKeyPress() {
             display->solve(Display::solver_enum_from_char(solverEnum));
         } else {
             display->changeGraph(solverEnum - '0');
+//            display->renderWindow->Render();
         }
     }
-
-    /*if (key == "s" || key == "S") {
-        display->solveCMSat();
-    } else if (key == "w" || key == "W") {
-//        std::thread walksatThread(Display::walksat, display, api);
-//        walksatThread.join();
-        display->solveWalksat();
-    } else {
-        try {
-//            api->setGraphLevel(std::stoi(key));
-            display->changeGraph(std::stoi(key));
-        } catch (std::invalid_argument &e) {
-        }
-    }*/
 
     // Forward events
     vtkInteractorStyleTrackballCamera::OnKeyPress();

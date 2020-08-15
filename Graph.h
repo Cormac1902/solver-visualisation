@@ -152,9 +152,9 @@ public:
     pair<vector<vector<long>>, unsigned> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
-    [[nodiscard]] int nr_nodes() const { return nodes.size(); }
+    [[nodiscard]] unsigned nr_nodes() const { return nodes.size(); }
 
-    [[nodiscard]] int nr_edges() const { return number_edges; }
+    [[nodiscard]] unsigned nr_edges() const { return number_edges; }
 
     [[nodiscard]] bool get_positioned() const { return positioned; }
 
@@ -173,7 +173,7 @@ public:
     // computes the number of independent components of the graph.
     // From each component the id of one node is returned.
 
-    Graph3D *coarsen();
+    Graph3D* coarsen();
     // Coarsen graph by matching adjacent nodes (reduces the number of vertices to the half).
 
     void init_positions_at_random();
@@ -182,7 +182,7 @@ public:
     void init_coarsest_graph_positions(double k);
     // Initialize positions of the 2 nodes in coarsest graph.
 
-    void init_positions_from_graph(Graph3D *g, double k);
+    void init_positions_from_graph(Graph3D &g, double k);
     // Initialize positions from coarsened graph g. Positions in g must have been
     // computed already.
 
