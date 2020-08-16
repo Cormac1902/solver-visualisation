@@ -61,7 +61,7 @@ class Display {
     zmq::socket_t change_graph_socket;
     zmq::socket_t api_running_socket;
 
-    void runRerender();
+    void runRerender(unsigned freq);
 
     void callRender();
 
@@ -102,7 +102,7 @@ class Display {
     void assignVariable(unsigned long i, bool value, bool undef = false);
 
     template<typename T>
-    T solve(std::future<T> solverAsync);
+    T solve(std::future<T> solverAsync, unsigned freq = 1000);
 
     future<int> solveWalksat();
 

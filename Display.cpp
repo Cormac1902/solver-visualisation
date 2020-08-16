@@ -184,10 +184,10 @@ double Display::kFromGraphLevel(unsigned graphLevel) {
 }
 
 template<typename T>
-T Display::solve(std::future<T> solverAsync) {
+T Display::solve(std::future<T> solverAsync, unsigned freq) {
     std::cout << "Solving..." << std::endl;
 
-    runRerender();
+    runRerender(freq);
 
     solverAsync.wait();
 
@@ -233,13 +233,13 @@ future<int> Display::solveWalksat() {
                       clauses.size());
 }
 
-void Display::runRerender() {
+void Display::runRerender(unsigned freq) {
     renderWindowInteractor->ExitCallback();
 
     auto renderSocketAsync = std::async(std::launch::async, &Display::runRenderSocket, this);
 
     while (rerender) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(25));
+        std::this_thread::sleep_for(std::chrono::milliseconds(freq));
         callRender();
     }
 
@@ -249,8 +249,9 @@ void Display::runRerender() {
 }
 
 void Display::callRender() {
-    std::scoped_lock lock{display_mutex};
+//    std::scoped_lock lock{display_mutex};
     renderWindow->Render();
+    cout << "Rendered" << endl;
 }
 
 int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned longest_clause) {
@@ -337,13 +338,13 @@ void Display::solve(SOLVER_ENUM solver) {
             solve(solveCMSat());
             break;
         case MAPLE:
-            solve(solveMaple());
+            solve(solveMaple(), 25);
             break;
         case MINISAT:
             cout << "MiniSAT" << endl;
             break;
         case WALKSAT:
-            solve(solveWalksat());
+            solve(solveWalksat(), 25);
             break;
     }
 }

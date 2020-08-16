@@ -16,11 +16,14 @@
 #include <vtkFloatArray.h>
 #include <vtkLookupTable.h>
 #include "Node.h"
+#include <mutex>
+#include "EdgeColour.h"
 
 using namespace std;
 
 class Graph3D {
 private:
+    std::mutex nodes_mutex;
     map<unsigned long, Node3D> nodes; // maps ids to nodes (ids are DIMACS variables)
     // NOTE: edges are stored inside the nodes
 
@@ -35,6 +38,7 @@ private:
 
     map<unsigned, unsigned> edgeDuplications; // tracks highest number of recurring edges
 
+    std::mutex vtk_graph_mutex;
     vtkSmartPointer<vtkMutableUndirectedGraph> graph;
     vtkSmartPointer<vtkPoints> points;
     vtkSmartPointer<vtkGraphToPolyData> graphToPolyData;
@@ -59,7 +63,8 @@ private:
 //    vtkSmartPointer<vtkLookupTable> vertexColours;
 
     // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
-    map<pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> edgeColourMap;
+    std::mutex edge_colours_mutex;
+    map<pair<unsigned long, unsigned long>, EdgeColour> edgeColourMap;
 
     void online_absolute_variance(Node3D &node);
 
@@ -71,17 +76,19 @@ private:
 
     void add_graph_edge(unsigned long x, ExtNode3D y);
 
-    void add_edge_to_graph(
-            pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> &edge);
-
-    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices,
-                           pair<vtkIdType, pair<unsigned, vtkColor4ub>> &colour);
+    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices);
 
     void remove_graph_edge(unsigned long x, unsigned long y);
 
-    void change_edge_duplication(unsigned &duplication, bool increment = true);
+    unsigned change_edge_duplication(unsigned duplication, bool increment = true);
 
-    void set_colour(pair<unsigned, vtkColor4ub> &colour) const;
+    inline void set_colour(const pair<unsigned long, unsigned long> vertices) {
+        set_colour(vertices.first, vertices.second);
+    }
+
+    inline void set_colour(unsigned long x, unsigned long y) {
+        edgeColourMap[{x, y}].setColour(highestEdgeDuplication());
+    }
 
     [[nodiscard]] float get_scale(const Node3D &node) const;
 
@@ -160,7 +167,7 @@ public:
 
     [[nodiscard]] bool get_drawn() const { return drawn; }
 
-    [[nodiscard]] float highestEdgeDuplication() const { return (float) edgeDuplications.end()->first; }
+    [[nodiscard]] float highestEdgeDuplication() const { return (float) (!edgeDuplications.empty() ? edgeDuplications.rbegin()->first : 1); }
 
     [[nodiscard]] const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
 

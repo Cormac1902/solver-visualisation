@@ -67,30 +67,31 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
-    if (x == y) return;
-    if (x > y) {
+    if (x == y) {
+        return;
+    } else if (x > y) {
         auto z = x;
         x = y;
         y = z;
     }
-    auto edgeColourFind = edgeColourMap.find({x, y});
-    auto newEdge = edgeColourFind == edgeColourMap.end();
+    std::scoped_lock lock(edge_colours_mutex);
+    auto newEdge = edgeColourMap.find({x, y}) == edgeColourMap.end();
     if (newEdge) {
-        edgeColourMap[{x, y}] = {0, {0, twoClauseColour}};
+        edgeColourMap[{x, y}].setColour(twoClauseColour);
     }
     auto &edgeColour = edgeColourMap[{x, y}];
-    change_edge_duplication(edgeColour.second.first);
+    edgeColour.setDuplication(change_edge_duplication(edgeColour.getDuplication()));
     if (newEdge
-        || edgeColour.second.second[0] != threePlusClauseColour[0]
-        || edgeColour.second.second[1] != threePlusClauseColour[1]
-        || edgeColour.second.second[2] != threePlusClauseColour[2]) {
-        edgeColour.second.second = a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour;
+        || edgeColour.getColour()[0] != threePlusClauseColour[0]
+        || edgeColour.getColour()[1] != threePlusClauseColour[1]
+        || edgeColour.getColour()[2] != threePlusClauseColour[2]) {
+        edgeColour.setColour(a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour);
     }
     if (newEdge) {
-        add_edge_to_graph({x, y}, edgeColour);
+        add_edge_to_graph({x, y});
     } else {
-        set_colour(edgeColour.second);
-        edgeColours->SetTypedTuple(edgeColour.second.first, edgeColour.second.second.GetData());
+        edgeColour.setColour(highestEdgeDuplication());
+        edgeColours->SetTypedTuple(edgeColour.getId(), edgeColour.getColour().GetData());
     }
 }
 
@@ -101,53 +102,49 @@ void Graph3D::add_graph_edge(unsigned long x, ExtNode3D y) {
 }
 
 void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a) {
+    std::scoped_lock lock(nodes_mutex);
     add_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
                    std::distance(std::begin(nodes), nodes.find(matchMap[y])),
                    a);
 }
 
-void Graph3D::add_edge_to_graph(
-        pair<const pair<unsigned long, unsigned long>, pair<vtkIdType, pair<unsigned, vtkColor4ub>>> &edge) {
-    add_edge_to_graph(edge.first, edge.second);
-}
-
-void Graph3D::add_edge_to_graph(pair<unsigned long, unsigned long> vertices,
-                                pair<vtkIdType, pair<unsigned, vtkColor4ub>> &colour) {
+void Graph3D::add_edge_to_graph(const pair<unsigned long, unsigned long> vertices) {
+    std::scoped_lock vtkLock(vtk_graph_mutex);
     graph->AddEdge(vertices.first, vertices.second);
-    set_colour(colour.second);
-    colour.first = edgeColours->InsertNextTupleValue(colour.second.second.GetData());
+    set_colour(vertices.first, vertices.second);
+    auto &edgeColour = edgeColourMap[vertices];
+    edgeColour.setId(edgeColours->InsertNextTupleValue(edgeColour.getColourData()));
 }
 
 void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
     auto a = (clause.size() == 2 ? NT_2_CLAUSE : NT_3_PLUS_CLAUSE);
+
     for (auto &var : clause) {
         var = abs(var);
     }
     std::sort(clause.begin(), clause.end());
     for (auto i = clause.begin(); i < clause.end(); i++) {
-//        cout << *i << ": { ";
         for (auto j = i + 1; j != clause.end(); j++) {
-//            cout << *j << " ";
             add_graph_edge_from_ids(*i, *j, a);
         }
-//        cout << "}" << endl;
     }
-
-//    cout << "End" << endl;
 
     graphToPolyData->Modified();
 }
 
 void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
-    pair<vtkIdType, pair<unsigned, vtkColor4ub>> &edgeColour = edgeColourMap[{x, y}];
-    if (edgeColour.second.first > 0) {
-        change_edge_duplication(edgeColour.second.first, false);
-        set_colour(edgeColour.second);
-        edgeColours->SetTypedTuple(edgeColour.first, edgeColour.second.second.GetData());
+    std::scoped_lock lock(edge_colours_mutex);
+    auto &edgeColour = edgeColourMap[{x, y}];
+    if (edgeColour.getDuplication() > 0) {
+        std::scoped_lock lockVtk(vtk_graph_mutex);
+        edgeColour.setDuplication(change_edge_duplication(edgeColour.getDuplication(), false));
+        set_colour(x, y);
+        edgeColours->SetTypedTuple(edgeColour.getId(), edgeColour.getColourData());
     }
 }
 
 void Graph3D::remove_graph_edge_from_ids(unsigned long x, unsigned long y) {
+    std::scoped_lock lock(nodes_mutex);
     remove_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
                       std::distance(std::begin(nodes), nodes.find(matchMap[y])));
 }
@@ -166,7 +163,7 @@ void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
     graphToPolyData->Modified();
 }
 
-void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
+unsigned Graph3D::change_edge_duplication(unsigned duplication, bool increment) {
     if (increment) {
         if (duplication > 0) {
             edgeDuplications[duplication]--;
@@ -183,6 +180,7 @@ void Graph3D::change_edge_duplication(unsigned &duplication, bool increment) {
     if (duplication > 0) {
         edgeDuplications[duplication]++;
     }
+    return duplication;
 }
 
 pair<vector<vector<long>>, unsigned> Graph3D::build_from_cnf(istream &is) {
@@ -630,9 +628,10 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 }
 
 void Graph3D::reColour() {
+    std::scoped_lock lock(edge_colours_mutex);
     for (auto &edge : edgeColourMap) {
-        set_colour(edge.second.second);
-        edgeColours->SetTypedTuple(edge.second.first, edge.second.second.second.GetData());
+        set_colour(edge.first);
+        edgeColours->SetTypedTuple(edge.second.getId(), edge.second.getColourData());
     }
 
     graphToPolyData->Modified();
@@ -663,10 +662,6 @@ void Graph3D::reScale() {
     for (auto i = 0; i < scales->GetNumberOfValues(); i++) {
         scales->SetValue(i, get_scale(nodes[i]));
     }
-}
-
-void Graph3D::set_colour(pair<unsigned, vtkColor4ub> &colour) const {
-    colour.second[3] = 255 * ((float) colour.first / highestEdgeDuplication());
 }
 
 float Graph3D::get_scale(const Node3D &node) const {
