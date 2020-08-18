@@ -10,7 +10,6 @@
 #include <utility>
 
 #include "Display.h"
-#include "CryptoWalkSAT.h"
 #include "WalkSAT.h"
 
 #include "API.h"
@@ -76,6 +75,8 @@ void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
     if (g->highestEdgeDuplication() != highestEdgeDuplication) {
         g->reColour();
     }
+
+    g->getGraphToPolyData()->Modified();
 }
 
 void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
@@ -99,6 +100,7 @@ void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
 
     g->increase_variable_activity(i);
 
+    g->getVertexPolydata()->Modified();
 }
 
 void Display::increaseVariableActivity(unsigned long i) {
@@ -109,6 +111,8 @@ void Display::assignVariable(Graph3D *g, unsigned long i, bool value, bool undef
     std::scoped_lock lock{graph_mutex};
 
     g->assign_variable_truth_value(i, value, undef);
+
+    g->getVertexPolydata()->Modified();
 }
 
 void Display::assignVariable(unsigned long i, bool value, bool undef) {
@@ -218,7 +222,7 @@ future<int> Display::solveMaple() {
 }
 
 int Display::solveMapleStatic(const char *filenamePtr) {
-    std::string cmd = "glucose_release '";
+    std::string cmd = "glucose_release -zmq '";
     cmd += filenamePtr;
     cmd += "'";
     return system(nullptr) ? system(cmd.c_str()) : 0;
@@ -249,9 +253,8 @@ void Display::runRerender(unsigned freq) {
 }
 
 void Display::callRender() {
-//    std::scoped_lock lock{display_mutex};
+    std::scoped_lock lock{display_mutex};
     renderWindow->Render();
-    cout << "Rendered" << endl;
 }
 
 int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned longest_clause) {
@@ -338,7 +341,7 @@ void Display::solve(SOLVER_ENUM solver) {
             solve(solveCMSat());
             break;
         case MAPLE:
-            solve(solveMaple(), 25);
+            solve(solveMaple(), 1000);
             break;
         case MINISAT:
             cout << "MiniSAT" << endl;
@@ -383,8 +386,8 @@ void Display::init() {
     // build graph stack
     int level = 1;
     while (g->nr_nodes() > 2) {
-        graph_stack.push_back(g->coarsen());
-        g = graph_stack.back();
+        g = g->coarsen();
+        graph_stack.push_back(g);
         cout << "Coarsened graph " << level << " consists of " << g->nr_nodes()
              << " vertices and " << g->nr_edges() << " edge(s)." << endl;
         level++;
@@ -394,7 +397,7 @@ void Display::init() {
 
     // compute (random) layout of coarsest graph (with 2 nodes)
     g->init_coarsest_graph_positions(k);
-    pair<Vector3D, Vector3D> ep = g->compute_extremal_points();
+    auto ep = g->compute_extremal_points();
     min_p = ep.first;
     max_p = ep.second;
 
@@ -402,7 +405,7 @@ void Display::init() {
 }
 
 void Display::display() {
-    changeGraph(graphStackSize() - 1);
+    changeGraph(min((int)graph_stack.size() - 1, 12));
 
     renderWindow->Render();
 

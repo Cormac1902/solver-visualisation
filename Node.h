@@ -5,6 +5,7 @@
 
 #include <set>
 #include "Vector.h"
+#include <vtkType.h>
 
 using namespace std;
 
@@ -21,6 +22,8 @@ private:
     unsigned long ident;
     int mark;    // mark bit for different purposes
 
+    vtkIdType vtkId;
+
     Vector3D node_pos;
 
     set<ExtNode3D> neighbor_nodes;
@@ -30,7 +33,7 @@ private:
     int c_weight; // used for graph coarsening (weight: number of merged nodes)
 
 public:
-    explicit Node3D(long id = 0) : ident(id), mark(0), occurrences(1), c_weight(1) {}
+    explicit Node3D(long id = 0) : ident(id), mark(0), vtkId(0), occurrences(1), c_weight(1) {}
 
     ~Node3D() = default;
 
@@ -61,6 +64,14 @@ public:
     [[nodiscard]] const set<ExtNode3D> &neighbors() const;
 
     [[nodiscard]] float no_of_occurrences() const { return occurrences; }
+
+    [[nodiscard]] vtkIdType getVtkId() const {
+        return vtkId;
+    }
+
+    void setVtkId(vtkIdType id) {
+        vtkId = id;
+    }
 
     friend class Graph3D;
 };

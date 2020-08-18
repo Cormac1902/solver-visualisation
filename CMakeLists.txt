@@ -12,7 +12,6 @@ set(SOURCE_FILES Vector.cpp
         cnf3d2.cpp
         Display.cpp
         API.cpp
-        CryptoWalkSAT.cpp
         EdgeColour.cpp
         WalkSAT.c)
 set(HEADERS Vector.h
@@ -22,7 +21,6 @@ set(HEADERS Vector.h
         Interaction.h
         Display.h
         API.h
-        CryptoWalkSAT.h
         EdgeColour.h
         APIHelper.hpp
         WalkSAT.h)

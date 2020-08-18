@@ -34,7 +34,7 @@ void API::send_unsigned(unsigned x, zmq::socket_t &socket) {
         if (add_clause_socket.recv(request)) {
             std::scoped_lock lock{display_mutex};
             display.addEdgesFromClause(unpack_vector(request));
-            send_edges_render();
+//            send_edges_render();
         }
     }
 }
@@ -48,7 +48,7 @@ void API::send_unsigned(unsigned x, zmq::socket_t &socket) {
         if (remove_clause_socket.recv(request)) {
             std::scoped_lock lock{display_mutex};
             display.removeEdgesFromClause(unpack_vector(request));
-            send_edges_render();
+//            send_edges_render();
         }
     }
 }
@@ -66,7 +66,6 @@ void API::send_unsigned(unsigned x, zmq::socket_t &socket) {
                 var.first = APIHelper::unpack_long(request);
             }
 
-//            cout << var.first << endl;
             std::scoped_lock lock{display_mutex};
 
             display.assignVariable(abs(var.first), var.first > 0, var.second);

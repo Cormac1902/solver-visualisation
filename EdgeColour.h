@@ -5,16 +5,18 @@
 #ifndef INC_3DVIS_EDGECOLOUR_H
 #define INC_3DVIS_EDGECOLOUR_H
 
-
 #include <vtkType.h>
+#include <vtkSmartPointer.h>
 #include <vtkColor.h>
+#include <vtkNamedColors.h>
 
 class EdgeColour {
     vtkIdType id;
     unsigned duplication;
     vtkColor4ub colour;
 public:
-    explicit EdgeColour(vtkColor4ub color4Ub = *new vtkColor4ub) : id(0), duplication(0), colour(color4Ub) {};
+    explicit EdgeColour() : id(0), duplication(0), colour() {
+    };
 
     [[nodiscard]] vtkIdType getId() const {
         return id;
@@ -32,20 +34,24 @@ public:
         duplication = duplicated;
     }
 
-    [[nodiscard]] vtkColor4ub &getColour() {
+    [[nodiscard]] vtkColor4ub getColour() {
         return colour;
     }
 
-    [[nodiscard]] const unsigned char* getColourData() {
+    [[nodiscard]] unsigned char* getColourData() {
         return colour.GetData();
     }
 
-    void setColour(const vtkColor4ub vtkColour) {
+    void setColour(vtkColor4ub vtkColour) {
         colour = vtkColour;
     }
 
     void setColour(const float highestEdgeDuplication) {
-        colour[3] = 255 * ((float) duplication / highestEdgeDuplication);
+        colour.SetAlpha(255 * ((float) duplication / highestEdgeDuplication));
+    }
+
+    [[nodiscard]] bool new_edge() const {
+        return duplication <= 1;
     }
 };
 

@@ -47,11 +47,10 @@ private:
     vtkSmartPointer<vtkUnsignedCharArray> vertexColours;
     vtkSmartPointer<vtkFloatArray> scales;
 
-    map<int, int> matching;  // for graph coarsening (collapsing edges): maps node id of one end
+    map<unsigned long, unsigned long> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
 
     map<unsigned long, vector<unsigned long>> allMatching;
-
     map<unsigned long, unsigned long> matchMap;
 
     vtkColor4ub twoClauseColour;
@@ -59,10 +58,10 @@ private:
 
     vtkColor4ub positiveColour;
     vtkColor4ub negativeColour;
+    vtkColor4ub undefColour;
 
 //    vtkSmartPointer<vtkLookupTable> vertexColours;
 
-    // <vertex, vertex, <insertionOrder, <occurrences, colour>>>
     std::mutex edge_colours_mutex;
     map<pair<unsigned long, unsigned long>, EdgeColour> edgeColourMap;
 
@@ -76,18 +75,83 @@ private:
 
     void add_graph_edge(unsigned long x, ExtNode3D y);
 
-    void add_edge_to_graph(pair<unsigned long, unsigned long> vertices);
+    inline void add_edge_to_graph(unsigned long x, unsigned long y) {
+        std::scoped_lock vtkLock(vtk_graph_mutex);
+        graph->AddEdge(x, y);
+    }
 
     void remove_graph_edge(unsigned long x, unsigned long y);
 
     unsigned change_edge_duplication(unsigned duplication, bool increment = true);
 
-    inline void set_colour(const pair<unsigned long, unsigned long> vertices) {
-        set_colour(vertices.first, vertices.second);
+    inline void set_colour(unsigned long x, unsigned long y) {
+        set_colour({x, y});
     }
 
-    inline void set_colour(unsigned long x, unsigned long y) {
-        edgeColourMap[{x, y}].setColour(highestEdgeDuplication());
+    inline void set_colour(const pair<unsigned long, unsigned long> vertices) {
+        std::scoped_lock lock(edge_colours_mutex);
+        set_colour(edgeColourMap[vertices]);
+    }
+
+    inline void set_colour(EdgeColour &e) const {
+        e.setColour(highestEdgeDuplication());
+        if (e.new_edge()) {
+            e.setId(edgeColours->InsertNextTypedTuple(e.getColourData()));
+        } else {
+            set_colour_tuple(e);
+        }
+    }
+
+    inline void set_two_or_three_clause_colour(unsigned long x, unsigned long y, EdgeAttribute a) {
+        set_two_or_three_clause_colour({x, y}, a);
+    }
+
+    inline void set_two_or_three_clause_colour(const pair<unsigned long, unsigned long> vertices, EdgeAttribute a) {
+        std::scoped_lock lock(edge_colours_mutex);
+        set_two_or_three_clause_colour(edgeColourMap[vertices], a);
+    }
+
+    inline void set_two_or_three_clause_colour(EdgeColour &e, EdgeAttribute a) {
+        if (e.getColour()[0] != threePlusClauseColour[0]
+            || e.getColour()[1] != threePlusClauseColour[1]
+            || e.getColour()[2] != threePlusClauseColour[2]) {
+            e.setColour(a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour);
+        }
+    }
+
+    inline void set_colour_tuple(unsigned long x, unsigned long y) {
+        set_colour_tuple({x, y});
+    }
+
+    inline void set_colour_tuple(const pair<unsigned long, unsigned long> vertices) {
+        std::scoped_lock lock(edge_colours_mutex);
+        set_colour_tuple(edgeColourMap[vertices]);
+    }
+
+    inline void set_colour_tuple(EdgeColour &e) const {
+        edgeColours->SetTypedTuple(e.getId(), e.getColourData());
+    }
+
+    inline bool new_edge(unsigned long x, unsigned long y) {
+        return new_edge({x, y});
+    }
+
+    inline bool new_edge(const pair<unsigned long, unsigned long> vertices) {
+        std::scoped_lock lock(edge_colours_mutex);
+        return edgeColourMap[vertices].new_edge();
+    }
+
+    inline void set_duplication(unsigned long x, unsigned long y, bool increment = true) {
+        set_duplication({x, y}, increment);
+    }
+
+    inline void set_duplication(const pair<unsigned long, unsigned long> vertices, bool increment = true) {
+        std::scoped_lock lock(edge_colours_mutex);
+        set_duplication(edgeColourMap[vertices], increment);
+    }
+
+    inline void set_duplication(EdgeColour &e, bool increment = true) {
+        e.setDuplication(change_edge_duplication(e.getDuplication(), increment));
     }
 
     [[nodiscard]] float get_scale(const Node3D &node) const;
@@ -117,15 +181,11 @@ public:
                 vertexColours(vtkSmartPointer<vtkUnsignedCharArray>::New()),
                 scales(vtkSmartPointer<vtkFloatArray>::New()),
                 allMatching({}),
-                twoClauseColour(),
-                threePlusClauseColour(),
-                positiveColour(),
-                negativeColour() {
-        auto namedColours = vtkSmartPointer<vtkNamedColors>::New();
-        twoClauseColour = namedColours->GetColor4ub("sky_blue_deep"); // Tomato
-        threePlusClauseColour = namedColours->GetColor4ub("Cyan"); // Mint
-        positiveColour = namedColours->GetColor4ub("Green");
-        negativeColour = namedColours->GetColor4ub("Red");
+                twoClauseColour(126, 197, 247),
+                threePlusClauseColour(189, 183, 128),
+                positiveColour(31, 120, 180),
+                negativeColour(213, 94, 0),
+                undefColour(255, 255, 255) {
 
         /*vertexColours = vtkSmartPointer<vtkLookupTable>::New();
         vertexColours->SetNumberOfTableValues(2);
@@ -167,7 +227,9 @@ public:
 
     [[nodiscard]] bool get_drawn() const { return drawn; }
 
-    [[nodiscard]] float highestEdgeDuplication() const { return (float) (!edgeDuplications.empty() ? edgeDuplications.rbegin()->first : 1); }
+    [[nodiscard]] float highestEdgeDuplication() const {
+        return (float) (!edgeDuplications.empty() ? edgeDuplications.rbegin()->first : 1);
+    }
 
     [[nodiscard]] const vtkSmartPointer<vtkGraphToPolyData> &getGraphToPolyData() const { return graphToPolyData; }
 
@@ -180,7 +242,7 @@ public:
     // computes the number of independent components of the graph.
     // From each component the id of one node is returned.
 
-    Graph3D* coarsen();
+    Graph3D *coarsen();
     // Coarsen graph by matching adjacent nodes (reduces the number of vertices to the half).
 
     void init_positions_at_random();

@@ -58,62 +58,34 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     if (ins_x) {
         number_edges++;
     }
-
-    /*auto neighbours_size = max(nodes[x].no_of_occurrences(), nodes[y].no_of_occurrences());
-
-    if (neighbours_size > largest_node) {
-        largest_node = neighbours_size;
-    }*/
 }
 
 void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
     if (x == y) {
         return;
     } else if (x > y) {
-        auto z = x;
-        x = y;
-        y = z;
+        swap(x, y);
     }
-    std::scoped_lock lock(edge_colours_mutex);
-    auto newEdge = edgeColourMap.find({x, y}) == edgeColourMap.end();
-    if (newEdge) {
-        edgeColourMap[{x, y}].setColour(twoClauseColour);
-    }
+    set_duplication(x, y);
+    edge_colours_mutex.lock();
     auto &edgeColour = edgeColourMap[{x, y}];
-    edgeColour.setDuplication(change_edge_duplication(edgeColour.getDuplication()));
-    if (newEdge
-        || edgeColour.getColour()[0] != threePlusClauseColour[0]
-        || edgeColour.getColour()[1] != threePlusClauseColour[1]
-        || edgeColour.getColour()[2] != threePlusClauseColour[2]) {
-        edgeColour.setColour(a == NT_3_PLUS_CLAUSE ? threePlusClauseColour : twoClauseColour);
+    edge_colours_mutex.unlock();
+    if (a == NT_3_PLUS_CLAUSE || edgeColour.new_edge()) {
+        set_two_or_three_clause_colour(edgeColour, a);
+        if (edgeColour.new_edge()) {
+            add_edge_to_graph(x, y);
+        }
     }
-    if (newEdge) {
-        add_edge_to_graph({x, y});
-    } else {
-        edgeColour.setColour(highestEdgeDuplication());
-        edgeColours->SetTypedTuple(edgeColour.getId(), edgeColour.getColour().GetData());
-    }
+    set_colour(edgeColour);
 }
 
 void Graph3D::add_graph_edge(unsigned long x, ExtNode3D y) {
-    add_graph_edge(x,
-                   std::distance(std::begin(nodes), nodes.find(matchMap[y.first->id()])),
-                   y.second);
+    add_graph_edge(x, std::distance(nodes.begin(), nodes.find(matchMap[y.first->id()])), y.second);
 }
 
 void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a) {
     std::scoped_lock lock(nodes_mutex);
-    add_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
-                   std::distance(std::begin(nodes), nodes.find(matchMap[y])),
-                   a);
-}
-
-void Graph3D::add_edge_to_graph(const pair<unsigned long, unsigned long> vertices) {
-    std::scoped_lock vtkLock(vtk_graph_mutex);
-    graph->AddEdge(vertices.first, vertices.second);
-    set_colour(vertices.first, vertices.second);
-    auto &edgeColour = edgeColourMap[vertices];
-    edgeColour.setId(edgeColours->InsertNextTupleValue(edgeColour.getColourData()));
+    add_graph_edge(nodes[matchMap[x]].getVtkId(), nodes[matchMap[y]].getVtkId(), a);
 }
 
 void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
@@ -129,24 +101,28 @@ void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
         }
     }
 
-    graphToPolyData->Modified();
+//    graphToPolyData->Modified();
 }
 
 void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
-    std::scoped_lock lock(edge_colours_mutex);
+    if (x == y) {
+        return;
+    } else if (x > y) {
+        swap(x, y);
+    }
+    edge_colours_mutex.lock();
     auto &edgeColour = edgeColourMap[{x, y}];
+    edge_colours_mutex.unlock();
     if (edgeColour.getDuplication() > 0) {
         std::scoped_lock lockVtk(vtk_graph_mutex);
-        edgeColour.setDuplication(change_edge_duplication(edgeColour.getDuplication(), false));
-        set_colour(x, y);
-        edgeColours->SetTypedTuple(edgeColour.getId(), edgeColour.getColourData());
+        set_duplication(edgeColour, false);
+        set_colour(edgeColour);
     }
 }
 
 void Graph3D::remove_graph_edge_from_ids(unsigned long x, unsigned long y) {
     std::scoped_lock lock(nodes_mutex);
-    remove_graph_edge(std::distance(std::begin(nodes), nodes.find(matchMap[x])),
-                      std::distance(std::begin(nodes), nodes.find(matchMap[y])));
+    remove_graph_edge(nodes[matchMap[x]].getVtkId(), nodes[matchMap[y]].getVtkId());
 }
 
 void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
@@ -160,7 +136,7 @@ void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
         }
     }
 
-    graphToPolyData->Modified();
+//    graphToPolyData->Modified();
 }
 
 unsigned Graph3D::change_edge_duplication(unsigned duplication, bool increment) {
@@ -348,32 +324,32 @@ int Graph3D::independent_components(vector<int> *one_of_each_component) {
 Graph3D *Graph3D::coarsen() {
     set<ExtNode3D>::iterator j;
     int curr_min_weight;
-    Node3D *curr_min_weight_node;
+    Node3D *curr_min_weight_node, *node_1, *node_2;
 
     // build matching
     for (auto &node : nodes) {
-        Node3D &node_1 = node.second;
-        if (node_1.mark != 0)
+        node_1 = &node.second;
+        if (node_1->mark != 0)
             continue;   // already paired
         curr_min_weight = INT_MAX;
         curr_min_weight_node = nullptr;
-        for (j = node_1.neighbors().begin(); j != node_1.neighbors().end(); j++) {
+        for (j = node_1->neighbors().begin(); j != node_1->neighbors().end(); j++) {
             // search 'best' matching neighbor, i.e. one with lowest weight
-            Node3D *node_2_ptr = j->first;
-            if (node_2_ptr->mark != 0)
+            node_2 = j->first;
+            if (node_2->mark != 0)
                 continue; // already paired
-            if (node_2_ptr->weight() < curr_min_weight) {
-                curr_min_weight = node_2_ptr->weight();
-                curr_min_weight_node = node_2_ptr;
+            if (node_2->weight() < curr_min_weight) {
+                curr_min_weight = node_2->weight();
+                curr_min_weight_node = node_2;
             }
         }
         if (curr_min_weight_node == nullptr)
-            curr_min_weight_node = &node_1; // no partner found: match node with itself
+            curr_min_weight_node = node_1; // no partner found: match node with itself
 
         // enter pairing
-        node_1.mark = 1;
+        node_1->mark = 1;
         curr_min_weight_node->mark = 1;
-        matching[node_1.id()] = curr_min_weight_node->id();
+        matching[node_1->id()] = curr_min_weight_node->id();
     }
 
     // remove markings
@@ -381,7 +357,7 @@ Graph3D *Graph3D::coarsen() {
         node.second.mark = 0;
 
     // build coarsened graph
-    map<int, int>::iterator k;
+    map<unsigned long, unsigned long>::iterator k;
 
     auto *result = new Graph3D();
     result->set_all_matching(allMatching);
@@ -570,10 +546,6 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 
         vertexColours->SetNumberOfComponents(3);
 
-//    vtkSmartPointer<vtkIntArray> edgeColours;
-        bool colourPoints = true;
-
-//    draw_only_2clauses = true;
 
         // Create a vtkCellArray container and store the lines in it
         if (draw_edges) {
@@ -587,23 +559,17 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 
         graph->SetNumberOfVertices(nodes.size());
 
-        for (auto i = nodes.begin(); i != nodes.end(); i++) {
-            const Node3D &node = i->second;
-            points->InsertNextPoint(node.position().x, node.position().y, node.position().z);
-//            cout << scale << endl;
-            scales->InsertNextValue(get_scale(node));
-
-            if (colourPoints) {
-                vertexColours->InsertNextTupleValue(
-                        (node.no_of_occurrences() == largest_node ? positiveColour : negativeColour).GetData());
-            }
+        Node3D *node;
+        for (auto &nodeIt : nodes) {
+            node = &nodeIt.second;
+            node->setVtkId(points->InsertNextPoint(node->position().x, node->position().y, node->position().z));
+            scales->InsertNextValue(get_scale(*node));
+            vertexColours->InsertNextTupleValue(undefColour.GetData());
             if (draw_edges) {
-                const Node3D &u = i->second;
-                auto nodeIndex = std::distance(std::begin(nodes), nodes.find(u.id()));
-                for (const auto &neighbor : u.neighbors()) {
-                    if (u.id() < neighbor.first->id()) { // draw edges only in direction of incr. ids; no self-edg.
+                for (const auto &neighbor : node->neighbors()) {
+                    if (node->id() < neighbor.first->id()) { // draw edges only in direction of incr. ids; no self-edg.
                         if (!draw_only_2clauses || neighbor.second != NT_3_PLUS_CLAUSE) {
-                            add_graph_edge(nodeIndex, neighbor);
+                            add_graph_edge(node->getVtkId(), neighbor);
                         }
                     }
                 }
@@ -630,11 +596,10 @@ void Graph3D::drawPolyData(double k, bool draw_edges, bool draw_only_2clauses, b
 void Graph3D::reColour() {
     std::scoped_lock lock(edge_colours_mutex);
     for (auto &edge : edgeColourMap) {
-        set_colour(edge.first);
-        edgeColours->SetTypedTuple(edge.second.getId(), edge.second.getColourData());
+        set_colour(edge.second);
     }
 
-    graphToPolyData->Modified();
+//    graphToPolyData->Modified();
 }
 
 void Graph3D::increase_variable_activity(unsigned long i) {
@@ -644,18 +609,18 @@ void Graph3D::increase_variable_activity(unsigned long i) {
 
     reScale();
 
-    vertexPolydata->Modified();
+//    vertexPolydata->Modified();
 }
 
 void Graph3D::assign_variable_truth_value(unsigned long i, bool value, bool undef) {
     i = matchMap[i];
     if (undef) {
-
+        vertexColours->SetTypedTuple(i, undefColour.GetData());
     } else {
         vertexColours->SetTypedTuple(i, (value ? positiveColour : negativeColour).GetData());
     }
 
-    vertexPolydata->Modified();
+//    vertexPolydata->Modified();
 }
 
 void Graph3D::reScale() {
