@@ -603,6 +603,10 @@ void Graph3D::reColour() {
 }
 
 void Graph3D::increase_variable_activity(unsigned long i) {
+    if ((nodes.find(matchMap[i]) == nodes.end())) {
+        cout << i << " " << matchMap[i] << endl;
+    }
+
     i = matchMap[i];
     nodes[i].increment_occurrences();
     online_absolute_variance(nodes[i]);
@@ -613,7 +617,11 @@ void Graph3D::increase_variable_activity(unsigned long i) {
 }
 
 void Graph3D::assign_variable_truth_value(unsigned long i, bool value, bool undef) {
-    i = matchMap[i];
+    if ((nodes.find(matchMap[i]) == nodes.end())) {
+        cout << i << " " << matchMap[i] << endl;
+    }
+
+    i = nodes[matchMap[i]].getVtkId();
     if (undef) {
         vertexColours->SetTypedTuple(i, undefColour.GetData());
     } else {
@@ -624,8 +632,8 @@ void Graph3D::assign_variable_truth_value(unsigned long i, bool value, bool unde
 }
 
 void Graph3D::reScale() {
-    for (auto i = 0; i < scales->GetNumberOfValues(); i++) {
-        scales->SetValue(i, get_scale(nodes[i]));
+    for (auto &node : nodes) {
+        scales->SetValue(node.second.getVtkId(), get_scale(node.second));
     }
 }
 

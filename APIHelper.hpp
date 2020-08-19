@@ -46,7 +46,7 @@ public:
         try {
             return stol(message.to_string());
         } catch (std::invalid_argument &e) {
-            return unpack<long>(message);
+            return unpack<pair<long, bool>>(message).first;
         }
     }
 
