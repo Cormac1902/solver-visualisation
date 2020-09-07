@@ -22,11 +22,11 @@ void Graph3D::add_node(const Node3D &n) {
     nodes[n.id()] = n;
 }
 
-void Graph3D::set_all_matching(map<unsigned long, vector<unsigned long>> prev) {
+void Graph3D::set_all_matching(std::map<unsigned long, std::vector<unsigned long>> prev) {
     allMatching = std::move(prev);
 }
 
-void Graph3D::set_match_map(map<unsigned long, unsigned long> prev) {
+void Graph3D::set_match_map(std::map<unsigned long, unsigned long> prev) {
     matchMap = std::move(prev);
 }
 
@@ -48,6 +48,7 @@ void Graph3D::insert_edge(unsigned long x, unsigned long y, EdgeAttribute a) {
 
     bool ins_x = nodes[x].add_neighbor(&nodes[y], a);
 
+    // TODO: Check
 #ifdef NDEBUG
     nodes[y].add_neighbor(&nodes[x], a);
 #else
@@ -64,7 +65,7 @@ void Graph3D::add_graph_edge(unsigned long x, unsigned long y, EdgeAttribute a) 
     if (x == y) {
         return;
     } else if (x > y) {
-        swap(x, y);
+        std::swap(x, y);
     }
     set_duplication(x, y);
     edge_colours_mutex.lock();
@@ -85,18 +86,18 @@ void Graph3D::add_graph_edge(unsigned long x, ExtNode3D y) {
 
 void Graph3D::add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a) {
     std::scoped_lock lock(nodes_mutex);
-    add_graph_edge(nodes[matchMap[x]].getVtkId(), nodes[matchMap[y]].getVtkId(), a);
+    add_graph_edge(nodes[x].getVtkId(), nodes[y].getVtkId(), a);
 }
 
-void Graph3D::add_graph_edges_from_clause(vector<long> clause) {
+void Graph3D::add_graph_edges_from_clause(const std::vector<long>& clause) {
     auto a = (clause.size() == 2 ? NT_2_CLAUSE : NT_3_PLUS_CLAUSE);
+    std::set<unsigned long> clauseSet;
 
     for (auto &var : clause) {
-        var = abs(var);
+        clauseSet.insert(matchMap[abs(var)]);
     }
-    std::sort(clause.begin(), clause.end());
-    for (auto i = clause.begin(); i < clause.end(); i++) {
-        for (auto j = i + 1; j != clause.end(); j++) {
+    for (auto i = clauseSet.begin(); i != clauseSet.end(); i++) {
+        for (auto j = std::next(i, 1); j != clauseSet.end(); j++) {
             add_graph_edge_from_ids(*i, *j, a);
         }
     }
@@ -108,7 +109,7 @@ void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
     if (x == y) {
         return;
     } else if (x > y) {
-        swap(x, y);
+        std::swap(x, y);
     }
     edge_colours_mutex.lock();
     auto &edgeColour = edgeColourMap[{x, y}];
@@ -122,16 +123,18 @@ void Graph3D::remove_graph_edge(unsigned long x, unsigned long y) {
 
 void Graph3D::remove_graph_edge_from_ids(unsigned long x, unsigned long y) {
     std::scoped_lock lock(nodes_mutex);
-    remove_graph_edge(nodes[matchMap[x]].getVtkId(), nodes[matchMap[y]].getVtkId());
+    remove_graph_edge(nodes[x].getVtkId(), nodes[y].getVtkId());
 }
 
-void Graph3D::remove_graph_edges_from_clause(vector<long> clause) {
+void Graph3D::remove_graph_edges_from_clause(const std::vector<long>& clause) {
+    std::set<unsigned long> clauseSet;
+
     for (auto &var : clause) {
-        var = abs(var);
+        clauseSet.insert(matchMap[abs(var)]);
     }
-    std::sort(clause.begin(), clause.end());
-    for (auto i = clause.begin(); i < clause.end(); i++) {
-        for (auto j = i + 1; j != clause.end(); j++) {
+
+    for (auto i = clauseSet.begin(); i != clauseSet.end(); i++) {
+        for (auto j = std::next(i, 1); j != clauseSet.end(); j++) {
             remove_graph_edge_from_ids(*i, *j);
         }
     }
@@ -146,7 +149,7 @@ unsigned Graph3D::change_edge_duplication(unsigned duplication, bool increment) 
         }
         duplication++;
     } else {
-        if (edgeDuplications[duplication] > 0) {
+        if (edgeDuplications[duplication] > 1) {
             edgeDuplications[duplication]--;
         } else {
             edgeDuplications.erase(duplication);
@@ -159,12 +162,12 @@ unsigned Graph3D::change_edge_duplication(unsigned duplication, bool increment) 
     return duplication;
 }
 
-pair<vector<vector<long>>, unsigned> Graph3D::build_from_cnf(istream &is) {
+std::pair<std::vector<std::vector<long>>, unsigned> Graph3D::build_from_cnf(istream &is) {
     long p = -1;
     char c;
     bool positive = true;
-    vector<long> clause;
-    vector<vector<long>> clauses;
+    std::vector<long> clause;
+    std::vector<std::vector<long>> clauses;
     unsigned longestClause = 0;
     Node3D n;
 
@@ -205,7 +208,7 @@ pair<vector<vector<long>>, unsigned> Graph3D::build_from_cnf(istream &is) {
         if (!clause.empty()) {
 
             clauses.push_back(clause);
-            longestClause = max(longestClause, (unsigned) clause.size());
+            longestClause = std::max(longestClause, (unsigned) clause.size());
             // insert nodes
             for (long &i : clause) {
                 i = abs(i);
@@ -277,10 +280,10 @@ void Graph3D::online_absolute_variance_remove(float x) {
 }
 
 // one_of_each_component is reset
-int Graph3D::independent_components(vector<int> *one_of_each_component) {
-    map<unsigned long, Node3D>::iterator first_unmarked = nodes.begin(), nmi;
+int Graph3D::independent_components(std::vector<int> *one_of_each_component) {
+    std::map<unsigned long, Node3D>::iterator first_unmarked = nodes.begin(), nmi;
     int nr_components = 0;
-    stack<Node3D *> node_stack;
+    std::stack<Node3D *> node_stack;
 
     one_of_each_component->clear();
     for (;;) {
@@ -322,7 +325,7 @@ int Graph3D::independent_components(vector<int> *one_of_each_component) {
 
 
 Graph3D *Graph3D::coarsen() {
-    set<ExtNode3D>::iterator j;
+    std::set<ExtNode3D>::iterator j;
     int curr_min_weight;
     Node3D *curr_min_weight_node, *node_1, *node_2;
 
@@ -357,7 +360,7 @@ Graph3D *Graph3D::coarsen() {
         node.second.mark = 0;
 
     // build coarsened graph
-    map<unsigned long, unsigned long>::iterator k;
+    std::map<unsigned long, unsigned long>::iterator k;
 
     auto *result = new Graph3D();
     result->set_all_matching(allMatching);
@@ -437,7 +440,7 @@ void Graph3D::init_positions_from_graph(Graph3D &g, double k) {
 }
 
 void Graph3D::compute_layout(double k) {
-    set<ExtNode3D>::iterator n;
+    std::set<ExtNode3D>::iterator n;
     bool converged = false;
     double f_r, f_r_aux, f_a, t;
     Vector3D delta, theta;
@@ -451,7 +454,7 @@ void Graph3D::compute_layout(double k) {
 
 #ifdef USE_SPACE_GRID
     // put nodes into space grid (with cube length 2k)
-    vector<Node3D *> grid_neighbors;
+    std::vector<Node3D *> grid_neighbors;
     SpaceGrid3D sg(2.0 * k);  // R = 2.0 * k
     for (auto &node : nodes)
         sg.insert_node(node.second);
@@ -488,7 +491,7 @@ void Graph3D::compute_layout(double k) {
 #endif
 
             // calculate (local) attractive/spring forces
-            const set<ExtNode3D> &neighbors = v.neighbors();
+            const std::set<ExtNode3D> &neighbors = v.neighbors();
             for (n = neighbors.begin(); n != neighbors.end(); n++) {
                 delta = n->first->position() - v.position();
                 double dn = delta.norm();
@@ -497,7 +500,7 @@ void Graph3D::compute_layout(double k) {
             }
 
             // reposition node v
-            delta = min(t, theta.norm()) * theta.normalize();
+            delta = std::min(t, theta.norm()) * theta.normalize();
             v.set_pos(v.position() + delta);
 
             if (delta.norm() > k * tol)
@@ -508,7 +511,7 @@ void Graph3D::compute_layout(double k) {
     }
 }
 
-pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
+std::pair<Vector3D, Vector3D> Graph3D::compute_extremal_points() {
     Vector3D curr_min(DBL_MAX, DBL_MAX, DBL_MAX), curr_max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
 
     for (auto &node : nodes) {
@@ -635,11 +638,11 @@ float Graph3D::get_scale(const Node3D &node) const {
                           / (average_absolute_variance() < 1 ? 1 : average_absolute_variance()))
                          / 4)
                  + 1;
-    return scale < min_scale ? min_scale : min(scale, max_scale);
+    return scale < min_scale ? min_scale : std::min(scale, max_scale);
 }
 
 ostream &operator<<(ostream &os, const Graph3D &g) {
-    set<ExtNode3D>::iterator j;
+    std::set<ExtNode3D>::iterator j;
 
     os << "Nodes:" << endl;
     os << "\t";
@@ -652,7 +655,7 @@ ostream &operator<<(ostream &os, const Graph3D &g) {
     os << "Edges:" << endl;
     for (const auto &node : g.nodes) {
         const Node3D *n = &node.second;
-        const set<ExtNode3D> &nbs = n->neighbors();
+        const std::set<ExtNode3D> &nbs = n->neighbors();
         os << "\t";
         for (j = nbs.begin(); j != nbs.end(); j++) {
             if (j != nbs.begin())

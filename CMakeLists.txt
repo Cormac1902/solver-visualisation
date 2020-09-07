@@ -13,6 +13,7 @@ set(SOURCE_FILES Vector.cpp
         Display.cpp
         API.cpp
         EdgeColour.cpp
+        WalkSATBasic.cpp
         WalkSAT.c)
 set(HEADERS Vector.h
         Node.h
@@ -23,6 +24,7 @@ set(HEADERS Vector.h
         API.h
         EdgeColour.h
         APIHelper.hpp
+        WalkSATBasic.h
         WalkSAT.h)
 set(CC_FLAGS "-O3 -Wall -DNDEBUG -DUSE_SPACE_GRID")
 

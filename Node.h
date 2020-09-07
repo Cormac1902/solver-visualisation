@@ -7,14 +7,12 @@
 #include "Vector.h"
 #include <vtkType.h>
 
-using namespace std;
-
 class Node3D;
 
 typedef enum {
     NT_3_PLUS_CLAUSE, NT_2_CLAUSE
 } EdgeAttribute;
-typedef pair<Node3D *, EdgeAttribute> ExtNode3D;
+typedef std::pair<Node3D *, EdgeAttribute> ExtNode3D;
 // extended node: node with additional edge attribute; used in neighbor set
 
 class Node3D {
@@ -26,7 +24,7 @@ private:
 
     Vector3D node_pos;
 
-    set<ExtNode3D> neighbor_nodes;
+    std::set<ExtNode3D> neighbor_nodes;
 
     float occurrences;
 
@@ -61,7 +59,7 @@ public:
     [[nodiscard]] int weight() const;
     // EdgeAttribute edge_attribute(Node3D* other_end) const;
 
-    [[nodiscard]] const set<ExtNode3D> &neighbors() const;
+    [[nodiscard]] const std::set<ExtNode3D> &neighbors() const;
 
     [[nodiscard]] float no_of_occurrences() const { return occurrences; }
 

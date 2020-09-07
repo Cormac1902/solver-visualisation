@@ -15,8 +15,7 @@ class EdgeColour {
     unsigned duplication;
     vtkColor4ub colour;
 public:
-    explicit EdgeColour() : id(0), duplication(0), colour() {
-    };
+    explicit EdgeColour() : id(0), duplication(0), colour() {};
 
     [[nodiscard]] vtkIdType getId() const {
         return id;
@@ -47,11 +46,11 @@ public:
     }
 
     void setColour(const float highestEdgeDuplication) {
-        colour.SetAlpha(255 * ((float) duplication / highestEdgeDuplication));
+        colour.SetAlpha(230 * ((float) duplication / highestEdgeDuplication));
     }
 
     [[nodiscard]] bool new_edge() const {
-        return duplication <= 1;
+        return id == 0;
     }
 };
 

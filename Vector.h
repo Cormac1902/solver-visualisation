@@ -6,8 +6,6 @@
 #include <cmath>
 #include <ostream>
 
-using namespace std;
-
 struct Vector3D {
 public:
     double x, y, z;
@@ -57,7 +55,7 @@ public:
         return Vector3D(k * a.x, k * a.y, k * a.z);
     }
 
-    friend ostream &operator<<(ostream &os, const Vector3D &a) {
+    friend std::ostream &operator<<(std::ostream &os, const Vector3D &a) {
         os << "(" << a.x << ", " << a.y << ", " << a.z << ")";
         return os;
     }

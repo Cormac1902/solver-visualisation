@@ -19,12 +19,10 @@
 #include <mutex>
 #include "EdgeColour.h"
 
-using namespace std;
-
 class Graph3D {
 private:
     std::mutex nodes_mutex;
-    map<unsigned long, Node3D> nodes; // maps ids to nodes (ids are DIMACS variables)
+    std::map<unsigned long, Node3D> nodes; // maps ids to nodes (ids are DIMACS variables)
     // NOTE: edges are stored inside the nodes
 
     int number_edges; // number of edges contained in graph
@@ -36,7 +34,7 @@ private:
     bool positioned; // whether graph has been positioned
     bool drawn; // whether graph has been drawn
 
-    map<unsigned, unsigned> edgeDuplications; // tracks highest number of recurring edges
+    std::map<unsigned, unsigned> edgeDuplications; // tracks highest number of recurring edges
 
     std::mutex vtk_graph_mutex;
     vtkSmartPointer<vtkMutableUndirectedGraph> graph;
@@ -47,11 +45,11 @@ private:
     vtkSmartPointer<vtkUnsignedCharArray> vertexColours;
     vtkSmartPointer<vtkFloatArray> scales;
 
-    map<unsigned long, unsigned long> matching;  // for graph coarsening (collapsing edges): maps node id of one end
+    std::map<unsigned long, unsigned long> matching;  // for graph coarsening (collapsing edges): maps node id of one end
     // of the collapsed edge to the other end's node id (or to itself)
 
-    map<unsigned long, vector<unsigned long>> allMatching;
-    map<unsigned long, unsigned long> matchMap;
+    std::map<unsigned long, std::vector<unsigned long>> allMatching;
+    std::map<unsigned long, unsigned long> matchMap;
 
     vtkColor4ub twoClauseColour;
     vtkColor4ub threePlusClauseColour;
@@ -63,7 +61,7 @@ private:
 //    vtkSmartPointer<vtkLookupTable> vertexColours;
 
     std::mutex edge_colours_mutex;
-    map<pair<unsigned long, unsigned long>, EdgeColour> edgeColourMap;
+    std::map<std::pair<unsigned long, unsigned long>, EdgeColour> edgeColourMap;
 
     void online_absolute_variance(Node3D &node);
 
@@ -88,7 +86,7 @@ private:
         set_colour({x, y});
     }
 
-    inline void set_colour(const pair<unsigned long, unsigned long> vertices) {
+    inline void set_colour(const std::pair<unsigned long, unsigned long> vertices) {
         std::scoped_lock lock(edge_colours_mutex);
         set_colour(edgeColourMap[vertices]);
     }
@@ -106,7 +104,7 @@ private:
         set_two_or_three_clause_colour({x, y}, a);
     }
 
-    inline void set_two_or_three_clause_colour(const pair<unsigned long, unsigned long> vertices, EdgeAttribute a) {
+    inline void set_two_or_three_clause_colour(const std::pair<unsigned long, unsigned long> vertices, EdgeAttribute a) {
         std::scoped_lock lock(edge_colours_mutex);
         set_two_or_three_clause_colour(edgeColourMap[vertices], a);
     }
@@ -123,7 +121,7 @@ private:
         set_colour_tuple({x, y});
     }
 
-    inline void set_colour_tuple(const pair<unsigned long, unsigned long> vertices) {
+    inline void set_colour_tuple(const std::pair<unsigned long, unsigned long> vertices) {
         std::scoped_lock lock(edge_colours_mutex);
         set_colour_tuple(edgeColourMap[vertices]);
     }
@@ -136,7 +134,7 @@ private:
         return new_edge({x, y});
     }
 
-    inline bool new_edge(const pair<unsigned long, unsigned long> vertices) {
+    inline bool new_edge(const std::pair<unsigned long, unsigned long> vertices) {
         std::scoped_lock lock(edge_colours_mutex);
         return edgeColourMap[vertices].new_edge();
     }
@@ -145,7 +143,7 @@ private:
         set_duplication({x, y}, increment);
     }
 
-    inline void set_duplication(const pair<unsigned long, unsigned long> vertices, bool increment = true) {
+    inline void set_duplication(const std::pair<unsigned long, unsigned long> vertices, bool increment = true) {
         std::scoped_lock lock(edge_colours_mutex);
         set_duplication(edgeColourMap[vertices], increment);
     }
@@ -206,17 +204,17 @@ public:
 
     void add_graph_edge_from_ids(unsigned long x, unsigned long y, EdgeAttribute a);
 
-    void add_graph_edges_from_clause(vector<long> clause);
+    void add_graph_edges_from_clause(const std::vector<long>& clause);
 
     void remove_graph_edge_from_ids(unsigned long x, unsigned long y);
 
-    void remove_graph_edges_from_clause(vector<long> clause);
+    void remove_graph_edges_from_clause(const std::vector<long>& clause);
 
     void increase_variable_activity(unsigned long i);
 
     void assign_variable_truth_value(unsigned long i, bool value, bool undef = false);
 
-    pair<vector<vector<long>>, unsigned> build_from_cnf(istream &is); // read file in DIMACS format, build graph
+    std::pair<std::vector<std::vector<long>>, unsigned> build_from_cnf(istream &is); // read file in DIMACS format, build graph
 
     // observables
     [[nodiscard]] unsigned nr_nodes() const { return nodes.size(); }
@@ -238,7 +236,7 @@ public:
     [[nodiscard]] unsigned no_of_occurrences() const { return (unsigned) node_occurrences; }
 
     // misc
-    int independent_components(vector<int> *one_of_each_comp);
+    int independent_components(std::vector<int> *one_of_each_comp);
     // computes the number of independent components of the graph.
     // From each component the id of one node is returned.
 
@@ -259,7 +257,7 @@ public:
     // Compute layout according to Walshaw's paper "A Multilevel Algorithm for
     // Force-Directed Graph Drawing" (JGAA 2003)
 
-    pair<Vector3D, Vector3D> compute_extremal_points();
+    std::pair<Vector3D, Vector3D> compute_extremal_points();
     // Compute bounding box (p,q) where p is the min. and q the max point.
 
     // Move all vertices from position p to position q = a * p + b for scalar a and vector b
@@ -275,9 +273,9 @@ public:
     // I/O
     friend ostream &operator<<(ostream &os, const Graph3D &g);
 
-    void set_all_matching(map<unsigned long, vector<unsigned long>> prev);
+    void set_all_matching(std::map<unsigned long, std::vector<unsigned long>> prev);
 
-    void set_match_map(map<unsigned long, unsigned long> prev);
+    void set_match_map(std::map<unsigned long, unsigned long> prev);
 
     void add_match(unsigned long node, unsigned long matched);
 };

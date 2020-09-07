@@ -58,10 +58,10 @@ void API::send_unsigned(unsigned x, zmq::socket_t &socket) {
         zmq::message_t request;
 
         if (variable_assignment_socket.recv(request)) {
-            pair<long, bool> var = {0, false};
+            std::pair<long, bool> var = {0, false};
 
             try {
-                var = APIHelper::unpack<pair<long, bool>>(request);
+                var = APIHelper::unpack<std::pair<long, bool>>(request);
             } catch (msgpack::v1::type_error &e) {
                 var.first = APIHelper::unpack_long(request);
             }
@@ -103,11 +103,11 @@ void API::run() {
     std::thread removeThread(&API::run_remove_clause_socket, this);
     std::thread varActivityThread(&API::run_increase_variable_activity_socket, this);
     std::thread assignVarThread(&API::run_assign_variable_truth_value, this);
-    std::thread graphLevelThread(&API::run_change_graph_socket, this);
+//    std::thread graphLevelThread(&API::run_change_graph_socket, this);
 
     addThread.join();
     removeThread.join();
     varActivityThread.join();
     assignVarThread.join();
-    graphLevelThread.join();
+//    graphLevelThread.join();
 }

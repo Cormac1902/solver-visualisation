@@ -19,7 +19,7 @@ public:
         return prepend_string("tcp://localhost:", port);
     }
 
-    static std::string prepend_string(const string &str, unsigned port) {
+    static std::string prepend_string(const std::string &str, unsigned port) {
         return str + std::to_string(port);
     }
 
@@ -46,7 +46,7 @@ public:
         try {
             return stol(message.to_string());
         } catch (std::invalid_argument &e) {
-            return unpack<pair<long, bool>>(message).first;
+            return unpack<std::pair<long, bool>>(message).first;
         }
     }
 

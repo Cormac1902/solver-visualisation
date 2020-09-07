@@ -50,7 +50,7 @@ class Display {
     vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor;
     Interaction interaction;
 
-    vector<vector<long>> clauses;
+    std::vector<std::vector<long>> clauses;
     unsigned longest_clause{};
     bool rerender;
 
@@ -69,11 +69,11 @@ class Display {
 
     void switchDisplay(Graph3D& g, double l);
 
-    void changeGraphFromClause(Graph3D *g, vector<long> clause, bool add = true);
+    void changeGraphFromClause(Graph3D *g, const vector<long>& clause, bool add = true);
 
-    void addEdgesFromClause(Graph3D *g, vector<long> clause);
+    void addEdgesFromClause(Graph3D *g, const vector<long>& clause);
 
-    void removeEdgesFromClause(Graph3D *g, vector<long> clause);
+    void removeEdgesFromClause(Graph3D *g, const vector<long>& clause);
 
     void increaseVariableActivity(Graph3D *g, unsigned long i);
 
@@ -93,9 +93,9 @@ class Display {
 
     void renderSocketCheck();
 
-    void addEdgesFromClause(vector<long> clause);
+    void addEdgesFromClause(const vector<long>& clause);
 
-    void removeEdgesFromClause(vector<long> clause);
+    void removeEdgesFromClause(const vector<long>& clause);
 
     void increaseVariableActivity(unsigned long i);
 
@@ -104,15 +104,23 @@ class Display {
     template<typename T>
     T solve(std::future<T> solverAsync, unsigned freq = 1000);
 
-    future<int> solveWalksat();
+    std::future<int> solveWalksat();
 
-    future<lbool> solveCMSat();
+    std::future<int> solveWalksatBasic();
 
-    future<int> solveMaple();
+    std::future<lbool> solveCMSat();
+
+    std::future<int> solveMaple();
+
+    std::future<int> solveMiniSAT();
+
+    unsigned int no_of_variables() { return graph_stack.front()->nr_nodes(); }
 
     static inline lbool solveCMSatStatic(SATSolver s) { return s.solve(); }
 
     static int solveMapleStatic(const char *filenamePtr);
+
+    static int solveMiniSATStatic(const char *filenamePtr);
 
     friend class Interaction;
 
@@ -124,6 +132,7 @@ public:
     };
 
     enum SOLVER_ENUM {
+        WALKSAT_BASIC = 'B',
         CMSAT = 'C',
         MAPLE = 'G',
         MINISAT = 'M',

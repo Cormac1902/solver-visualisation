@@ -13,6 +13,7 @@
 #include "WalkSAT.h"
 
 #include "API.h"
+#include "WalkSATBasic.h"
 
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple
@@ -48,7 +49,7 @@ void Display::switchDisplay(Graph3D &g, double l) {
 
     auto numberOfLines = edgeMapper->GetInput()->GetNumberOfLines();
 
-    auto lineWidth = min(max_line_width,
+    auto lineWidth = std::min(max_line_width,
                          ((float) (min_line_width_threshold - max_line_width_threshold) / numberOfLines) +
                          min_line_width);
 
@@ -56,43 +57,58 @@ void Display::switchDisplay(Graph3D &g, double l) {
 
     sphereSource->SetRadius(lineWidth * 3 / 1000);
 
+    auto nodes = g.nr_nodes();
+    auto resolution = 100;
+
+    if (nodes > 100) {
+        if (nodes < 1000) {
+            resolution = (int) (100 - ((9 * nodes) / 100));
+        } else {
+            resolution = std::max(5, (int)((40/ 3) - (nodes / 300)));
+        }
+    }
+
+    sphereSource->SetThetaResolution(resolution);
+    sphereSource->SetPhiResolution(resolution);
+
     glyph3D->SetInputData(g.getVertexPolydata());
 
     current_graph = &g;
 }
 
-void Display::changeGraphFromClause(Graph3D *g, vector<long> clause, bool add) {
+void Display::changeGraphFromClause(Graph3D *g, const vector<long>& clause, bool add) {
     std::scoped_lock lock{graph_mutex};
 
     auto highestEdgeDuplication = g->highestEdgeDuplication();
 
     if (add) {
-        g->add_graph_edges_from_clause(std::move(clause));
+        g->add_graph_edges_from_clause(clause);
     } else {
-        g->remove_graph_edges_from_clause(std::move(clause));
+        g->remove_graph_edges_from_clause(clause);
     }
 
     if (g->highestEdgeDuplication() != highestEdgeDuplication) {
+//        cout << "Recolouring" << endl;
         g->reColour();
     }
 
     g->getGraphToPolyData()->Modified();
 }
 
-void Display::addEdgesFromClause(Graph3D *g, vector<long> clause) {
-    changeGraphFromClause(g, std::move(clause));
+void Display::addEdgesFromClause(Graph3D *g, const vector<long>& clause) {
+    changeGraphFromClause(g, clause);
 }
 
-void Display::addEdgesFromClause(vector<long> clause) {
-    addEdgesFromClause(current_graph, std::move(clause));
+void Display::addEdgesFromClause(const vector<long>& clause) {
+    addEdgesFromClause(current_graph, clause);
 }
 
-void Display::removeEdgesFromClause(Graph3D *g, vector<long> clause) {
-    changeGraphFromClause(g, std::move(clause), false);
+void Display::removeEdgesFromClause(Graph3D *g, const vector<long>& clause) {
+    changeGraphFromClause(g, clause, false);
 }
 
-void Display::removeEdgesFromClause(vector<long> clause) {
-    removeEdgesFromClause(current_graph, std::move(clause));
+void Display::removeEdgesFromClause(const vector<long>& clause) {
+    removeEdgesFromClause(current_graph, clause);
 }
 
 void Display::increaseVariableActivity(Graph3D *g, unsigned long i) {
@@ -131,6 +147,8 @@ void Display::setupNodes(Graph3D& g) {
 
 void Display::changeGraph(unsigned graphLevel) {
 
+    auto start = std::chrono::system_clock::now();
+
     std::string graphMessage;
 
     if (graphLevel == 0) {
@@ -165,6 +183,12 @@ void Display::changeGraph(unsigned graphLevel) {
 
     switchDisplay(*graph_stack[graphLevel], kFromGraphLevel(graphLevel));
 
+    renderWindow->Render();
+
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - start;
+
+    std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
+
 }
 
 void Display::positionGraph(unsigned graphLevel) {
@@ -173,10 +197,10 @@ void Display::positionGraph(unsigned graphLevel) {
     graph_stack[graphLevel]->init_positions_from_graph(*graph_stack[graphLevel + 1], l);
     graph_stack[graphLevel]->compute_layout(l);
 
-    pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
+    std::pair<Vector3D, Vector3D> ep = graph_stack[graphLevel]->compute_extremal_points();
     min_p = ep.first;
     max_p = ep.second;
-    double max_extent = max(max_p.x - min_p.x, max(max_p.y - min_p.y, max_p.z - min_p.z));
+    double max_extent = std::max(max_p.x - min_p.x, std::max(max_p.y - min_p.y, max_p.z - min_p.z));
     //  cout << max_extent << " " << flush;  CHECK AGAIN
     // rescale to -10.0 .. +10.0 on all axes
     Vector3D shift = Vector3D(-1.0, -1.0, -1.0) - 2.0 / max_extent * min_p;
@@ -200,11 +224,11 @@ T Display::solve(std::future<T> solverAsync, unsigned freq) {
     return solverAsync.get();
 }
 
-future<lbool> Display::solveCMSat() {
+std::future<lbool> Display::solveCMSat() {
     SATSolver s;
     vector<Lit> cmsatClause;
 
-    s.new_vars(graph_stack.front()->nr_nodes());
+    s.new_vars(no_of_variables());
 
     for (auto &clause_it : clauses) {
         for (auto &var : clause_it) {
@@ -217,7 +241,7 @@ future<lbool> Display::solveCMSat() {
     return std::async(std::launch::async, solveCMSatStatic, s);
 }
 
-future<int> Display::solveMaple() {
+std::future<int> Display::solveMaple() {
     return std::async(std::launch::async, solveMapleStatic, filename);
 }
 
@@ -228,13 +252,30 @@ int Display::solveMapleStatic(const char *filenamePtr) {
     return system(nullptr) ? system(cmd.c_str()) : 0;
 }
 
-future<int> Display::solveWalksat() {
+std::future<int> Display::solveMiniSAT() {
+    return std::async(std::launch::async, solveMiniSATStatic, filename);
+}
+
+int Display::solveMiniSATStatic(const char *filenamePtr) {
+    std::string cmd = "minisat -zmq '";
+    cmd += filenamePtr;
+    cmd += "'";
+    return system(nullptr) ? system(cmd.c_str()) : 0;
+}
+
+std::future<int> Display::solveWalksat() {
     return std::async(std::launch::async,
                       solve_walksat,
                       longest_clause,
                       intArrayFromClauseVector(),
-                      graph_stack.front()->nr_nodes(),
+                      no_of_variables(),
                       clauses.size());
+}
+
+std::future<int> Display::solveWalksatBasic() {
+    WalkSATBasic walksat(clauses, no_of_variables());
+
+    return std::async(std::launch::async, &WalkSATBasic::run, walksat);
 }
 
 void Display::runRerender(unsigned freq) {
@@ -243,8 +284,8 @@ void Display::runRerender(unsigned freq) {
     auto renderSocketAsync = std::async(std::launch::async, &Display::runRenderSocket, this);
 
     while (rerender) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(freq));
         callRender();
+        std::this_thread::sleep_for(std::chrono::milliseconds(freq));
     }
 
     if (renderSocketAsync.get() == START_INTERACTOR) {
@@ -281,8 +322,7 @@ int **Display::intArrayFromClauseVector(vector<vector<long>> clauses, unsigned l
 }
 
 vector<long> Display::clauseFromCMSATClause(const vector<Lit> &cmsatClause) {
-    vector<long> return_clause;
-    return_clause.reserve(cmsatClause.size());
+    vector<long> return_clause(cmsatClause.size());
     for (auto &lit : cmsatClause) {
         return_clause.push_back(lit.var());
     }
@@ -344,16 +384,22 @@ void Display::solve(SOLVER_ENUM solver) {
             solve(solveMaple(), 1000);
             break;
         case MINISAT:
-            cout << "MiniSAT" << endl;
+            solve(solveMiniSAT(), 25);
             break;
         case WALKSAT:
-            solve(solveWalksat(), 25);
+            solve(solveWalksat(), 1000);
+            break;
+        case WALKSAT_BASIC:
+            solve(solveWalksatBasic(), 25);
             break;
     }
 }
 
 // builds (global) stack of coarsened graphs
 void Display::init() {
+
+    auto start = std::chrono::system_clock::now();
+
     auto *g = new Graph3D;
     graph_stack.push_back(g);
 
@@ -361,11 +407,11 @@ void Display::init() {
     if (filename == nullptr)
         setupNodes(*g);
     else {
-        pair<vector<vector<long>>, unsigned> built;
+        std::pair<vector<vector<long>>, unsigned> built;
         if (strncmp("-", filename, 1) == 0) {
             built = g->build_from_cnf(cin);
         } else {
-            ifstream is(filename);
+            std::ifstream is(filename);
             built = g->build_from_cnf(is);
             is.close();
         }
@@ -401,11 +447,15 @@ void Display::init() {
     min_p = ep.first;
     max_p = ep.second;
 
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - start;
+
+    std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
+
     display();
 }
 
 void Display::display() {
-    changeGraph(min((int)graph_stack.size() - 1, 12));
+    changeGraph(std::min((int)graph_stack.size() - 1, 12));
 
     renderWindow->Render();
 

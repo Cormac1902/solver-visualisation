@@ -10,8 +10,6 @@
 #include <map>
 #include "Node.h"
 
-using namespace std;
-
 class GridIndex {
 public:
     int a, b, c;  // coordinates of minimal corner in multiples of L
@@ -20,7 +18,7 @@ public:
 
     ~GridIndex() = default;
 
-    friend ostream &operator<<(ostream &os, const GridIndex &i) {
+    friend std::ostream &operator<<(std::ostream &os, const GridIndex &i) {
         os << "<" << i.a << ", " << i.b << ", " << i.c << ">";
         return os;
     }
@@ -31,11 +29,11 @@ public:
     }
 };
 
-typedef vector<Node3D*> GridCube;
+typedef std::vector<Node3D*> GridCube;
 
 class SpaceGrid3D {
 private:
-    map<GridIndex, GridCube> cubes;
+    std::map<GridIndex, GridCube> cubes;
     double side_length;
 
 public:
@@ -48,11 +46,11 @@ public:
     void insert_node(Node3D &n);
     // Add node n to grid. (The position vector of node n must be set up properly.)
 
-    vector<Node3D *> find_neighbors(Node3D *n);
+    std::vector<Node3D *> find_neighbors(Node3D *n);
     // Return all neighbors, i.e. nodes with distance at most 1 cube (also diagonal)
     // from node n (including node n itself).
 
-    friend ostream &operator<<(ostream &os, const SpaceGrid3D &sg);
+    friend std::ostream &operator<<(std::ostream &os, const SpaceGrid3D &sg);
 
     // ----- auxiliary functions -----
 

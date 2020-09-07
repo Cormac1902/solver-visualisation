@@ -13,8 +13,6 @@
 #define sleep(n)    Sleep(n)
 #endif
 
-using namespace std;
-
 int main(int argc, char *argv[]) {
     auto display = std::make_unique<Display>(argv[1]);
 
